@@ -118,7 +118,7 @@ export default function About() {
             w-[calc(4000.182434128488*var(--spacing))]
             rotate-[35.22deg]
             opacity-[0.18]
-            blur-[10px]
+            blur-[4px]
 
             max-[820px]:top-1/2
             max-[820px]:left-1/2
