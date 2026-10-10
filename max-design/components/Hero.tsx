@@ -14,7 +14,7 @@ import PillMedia from "./PillMedia";
                "LEAVE", the pill, "A LASTING" and "MARK!" each get their own line.
     - paragraph: clamp(17px, 4.6vw, 30px)
     - Let's Connect: full width (max 360px), slightly bigger (--k:1.1px) for easy tapping
-    - video: full width, 4:3, rounded corners
+    - video: full width, 16:9 (same shape as the video, so nothing is cropped), rounded corners
 */
 
 /** Home artboard (1920 x 1017). Children (the navbar) sit on top of the texture. */
@@ -68,7 +68,7 @@ export default function Hero() {
       />
 
       {/* Same media div + HeroVideo, wrapped by ScrollGrow */}
-      <ScrollGrow className="absolute top-[calc(551*var(--u))] left-[calc(894*var(--u))] h-[calc(465.75*var(--u))] w-[calc(930*var(--u))] overflow-hidden bg-[#330101] [@media(max-width:900px)]:relative [@media(max-width:900px)]:top-auto [@media(max-width:900px)]:left-auto [@media(max-width:900px)]:mt-[36px] [@media(max-width:900px)]:aspect-[4/3] [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:w-full [@media(max-width:900px)]:rounded-[12px]">
+      <ScrollGrow className="absolute top-[calc(551*var(--u))] left-[calc(894*var(--u))] h-[calc(523.13*var(--u))] w-[calc(930*var(--u))] overflow-hidden bg-[#330101] [@media(max-width:900px)]:relative [@media(max-width:900px)]:top-auto [@media(max-width:900px)]:left-auto [@media(max-width:900px)]:mt-[36px] [@media(max-width:900px)]:aspect-[930/523.13] [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:w-full [@media(max-width:900px)]:rounded-[12px]">
         <HeroVideo
           className="absolute inset-0 block h-full w-full object-cover"
           sources={[
