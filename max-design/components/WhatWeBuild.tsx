@@ -102,7 +102,7 @@ function ArrowPill({ active }: { active: boolean }) {
       <span className="grid h-[calc(38*var(--spacing))] w-[calc(38*var(--spacing))] shrink-0 place-items-center rounded-full bg-[#ff1e2d] max-[820px]:h-[calc(30*var(--spacing))] max-[820px]:w-[calc(30*var(--spacing))]">
         {/*
           The arrow points up-right at rest. When the row is active it turns
-          -90deg to point up-left. For a plain right arrow use `rotate-45`.
+          45deg clockwise so it points straight right.
         */}
         <svg
           data-active={active}
@@ -112,7 +112,7 @@ function ArrowPill({ active }: { active: boolean }) {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           aria-hidden="true"
-          className="origin-center transition-transform duration-300 ease-out data-[active=true]:-rotate-90"
+          className="origin-center transition-transform duration-300 ease-out data-[active=true]:rotate-45"
         >
           <path
             d="M12.48 0L13.44 0.99L13.33 1.1C10.56 4.01 10.66 7.98 12.49 9.87L11.52 10.86C10.01 9.3 9.47 6.87 10.01 4.46L1.95 12.64L1 11.65L9.06 3.47C6.7 4 4.34 3.43 2.83 1.87L3.8 0.88C5.65 0.88 9.6 2.92 12.48 0Z"
