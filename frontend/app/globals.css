@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@theme {
+  --spacing: calc(100vw / 1920);
+}
+
+@media (max-width: 820px) {
+  :root {
+    --spacing: calc(100vw / 390);
+  }
+}
+
+:root {
+  --color-ink: #111111;
+  --color-accent: #e71117;
+  --color-bg: #ffffff;
+  --font-sans: var(--font-poppins), "Poppins", system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
