@@ -94,7 +94,7 @@ function Counter({
 */
 export default function About() {
   return (
-    <section className="relative isolate h-1108 w-full overflow-hidden bg-black text-white max-[820px]:flex max-[820px]:h-auto max-[820px]:flex-col max-[820px]:gap-28 max-[820px]:px-20 max-[820px]:pt-32 max-[820px]:pb-48">
+    <section className="relative isolate h-1108 w-full  overflow-hidden bg-black text-white max-[820px]:flex max-[820px]:h-auto max-[820px]:flex-col max-[820px]:gap-28 max-[820px]:px-20 max-[820px]:pt-32 max-[820px]:pb-48">
       {/* ───── Background: rotated red glass panels ───── */}
       <div
         aria-hidden="true"
@@ -134,7 +134,7 @@ export default function About() {
             alt=""
             fill
             sizes="(max-width: 820px) 2667px, 4000px"
-            quality={80}
+            quality={75}
             className="object-cover"
           />
         </div>
