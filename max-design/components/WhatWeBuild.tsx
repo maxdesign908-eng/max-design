@@ -135,7 +135,7 @@ export default function WhatWeBuild() {
       {/* Frame: 1730 x 1032, 1px border (very faint, as in the design) */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-66 left-95 z-0 h-1032 w-1730 rounded-[calc(28*var(--spacing))] border border-white/[0.07] max-[820px]:hidden"
+        className="pointer-events-none absolute top-66 left-95 z-0 h-1032 w-1730 max-[820px]:hidden"
       />
 
       {/* Heading */}
