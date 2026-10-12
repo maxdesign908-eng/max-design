@@ -9,6 +9,7 @@ import Image from "next/image";
     To change the order, just move lines in this list.
   - Each logo frame is w x 79 (Figma px), 66px gap between frames, centred vertically.
   - The list is rendered twice and slid left by exactly one list width, so the loop is seamless.
+  - dy (optional, Figma px) nudges one logo down if its picture sits too high.
   - Hover pauses it; with "reduce motion" on, it stays still.
 
   Sizes are N * var(--s): 1 Figma px (scales with the page like the hero). On <= 900px the strip is
@@ -33,7 +34,7 @@ const logos = [
   { name: "Pixelette Technologies", file: "pixelette-technologies", w: 154 },
   { name: "Ossujiyassan", file: "ossujiyassan", w: 199 },
   { name: "SYD'S House Cleaning", file: "syds-house-cleaning", w: 70 },
-  { name: "Xloop Cloud", file: "x-loop-cloud", w: 180 },
+  { name: "Xloop Cloud", file: "x-loop-cloud", w: 180, dy: 5 },
   { name: "Leafrooms", file: "leafrooms", w: 154 },
   { name: "Kora Constructions", file: "kora", w: 145 },
   { name: "Oh Belly", file: "oh-belly", w: 80 },
@@ -60,7 +61,7 @@ export default function LogoMarquee() {
             {/* two copies of the list; moving -50% = exactly one list */}
             <ul className="m-0 flex h-full w-max list-none items-center p-0 will-change-transform animate-[logoMarquee_60s_linear_infinite] hover:[animation-play-state:paused] motion-reduce:animate-none">
               {[0, 1].flatMap((copy) =>
-                logos.map(({ name, file, w }) => (
+                logos.map(({ name, file, w, dy = 0 }) => (
                   <li
                     key={`${copy}-${file}`}
                     aria-hidden={copy === 1 ? true : undefined}
@@ -68,6 +69,8 @@ export default function LogoMarquee() {
                     style={{
                       width: `calc(${w} * var(--s))`,
                       height: "calc(79 * var(--s))",
+                      // optical fix: moves one logo down (Figma px), e.g. Xloop Cloud sat slightly high
+                      transform: dy ? `translateY(calc(${dy} * var(--s)))` : undefined,
                     }}
                   >
                     <Image
