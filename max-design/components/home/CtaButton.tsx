@@ -14,6 +14,9 @@ type Props = {
   on desktop, 1px on mobile). Set --k on the button itself to make it bigger/smaller,
   e.g. className="[--k:1.1px]". Outside HomeStage it falls back to plain px.
 
+  The red fill is positioned inside the button with `contain: layout` (not `relative`), so the button
+  can still be absolute / static / relative through className (Hero uses absolute on desktop, static on mobile).
+
   HOVER (and keyboard focus): a red fill rises from the bottom with a soft curved edge.
   While it is red, the small dot and the arrow circle turn white and the arrow turns red,
   so they stay visible. With "reduce motion" the colour changes instantly, no sliding.
@@ -22,7 +25,7 @@ export default function CtaButton({ href, label, width, className }: Props) {
   return (
     <a
       href={href}
-      className={`group relative isolate flex h-[calc(56*var(--k,1px))] w-[calc(var(--w)*var(--k,1px))] flex-none items-center overflow-hidden rounded-[999px] border-[length:calc(0.573*var(--k,1px))] border-solid border-white pr-[calc(10.46*var(--k,1px))] pl-[calc(14.33*var(--k,1px))] text-white whitespace-nowrap no-underline transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(color:--color-accent) ${className ?? ""}`}
+      className={`group isolate flex [contain:layout] h-[calc(56*var(--k,1px))] w-[calc(var(--w)*var(--k,1px))] flex-none items-center overflow-hidden rounded-[999px] border-[length:calc(0.573*var(--k,1px))] border-solid border-white pr-[calc(10.46*var(--k,1px))] pl-[calc(14.33*var(--k,1px))] text-white whitespace-nowrap no-underline transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(color:--color-accent) ${className ?? ""}`}
       style={{ "--w": width } as CSSProperties}
     >
       {/* red fill that rises from the bottom (taller than the button so the curved top edge stays above it) */}

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef } from "react";
+import CtaButton from "./CtaButton";
 
 /*
   Counter updates the DOM directly inside requestAnimationFrame instead of
@@ -175,57 +176,15 @@ export default function About() {
           stand out, and leave a lasting impression.
         </p>
 
-        {/* More About Us */}
-        <a
+        {/* More About Us: the shared CtaButton (red fill rises on hover), Figma 197 x 56.
+            --k = 1 Figma px here, so the button scales together with the rest of this block.
+            On mobile it is 0.857 x (48 px high), like the old button. */}
+        <CtaButton
           href="#about"
-          className="
-            box-border
-            inline-flex
-            h-56
-            w-240
-            shrink-0
-            items-center
-            rounded-full
-            border-[0.57px]
-            border-white/35
-            px-[calc(14.9*var(--spacing))]
-            text-[calc(17*var(--spacing))]
-            text-white
-            transition-colors
-            hover:border-[#ff1e2d]
-            focus-visible:outline-2
-            focus-visible:outline-offset-3
-            focus-visible:outline-[#ff1e2d]
-
-            max-[820px]:h-48
-            max-[820px]:w-200
-            max-[820px]:text-[calc(14*var(--spacing))]
-          "
-        >
-          {/* Left red dot */}
-          <i className="h-7 w-7 shrink-0 rounded-full bg-[#ff1e2d] max-[820px]:h-6 max-[820px]:w-6" />
-
-          {/* Text */}
-          <span className="ml-[calc(9.17*var(--spacing))] whitespace-nowrap">
-            More About Us
-          </span>
-
-          {/* Arrow */}
-          <span className="ml-auto grid h-[calc(38*var(--spacing))] min-h-[calc(38*var(--spacing))] w-[calc(38*var(--spacing))] min-w-[calc(38*var(--spacing))] shrink-0 place-items-center rounded-full bg-[#ff1e2d]">
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 14 14"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12.48 0L13.44 0.99L13.33 1.1C10.56 4.01 10.66 7.98 12.49 9.87L11.52 10.86C10.01 9.3 9.47 6.87 10.01 4.46L1.95 12.64L1 11.65L9.06 3.47C6.7 4 4.34 3.43 2.83 1.87L3.8 0.88C5.65 0.88 9.6 2.92 12.48 0Z"
-                fill="white"
-              />
-            </svg>
-          </span>
-        </a>
+          label="More About Us"
+          width={197}
+          className="shrink-0 [--k:var(--spacing)] max-[820px]:[--k:calc(0.857*var(--spacing))]"
+        />
       </div>
 
       <div className="absolute top-806 left-839 z-10 flex gap-48 max-[820px]:relative max-[820px]:top-0 max-[820px]:left-0 max-[820px]:gap-22">
