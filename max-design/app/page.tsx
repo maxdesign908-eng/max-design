@@ -1,33 +1,33 @@
-import About from "@/components/About";
-import Contact from "@/components/Contact";
-import CustomCursor from "@/components/CustomCursor";
-import Faq from "@/components/Faq";
-import Footer from "@/components/Footer";
-import Hero, { HomeStage } from "@/components/Hero";
-import LogoMarquee from "@/components/LogoMarquee";
-import Navbar from "@/components/Navbar";
-import Portfolio from "@/components/Portfolio";
-import Testimonials from "@/components/Testimonials";
-import WhatWeBuild from "@/components/WhatWeBuild";
+
+import About from "@/components/home/About";
+import Contact from "@/components/home/Contact";
+import Faq from "@/components/home/Faq";
+import Footer from "@/components/home/Footer";
+import Hero, { HomeStage } from "@/components/home/Hero";
+import LogoMarquee from "@/components/home/LogoMarquee";
+import Navbar from "@/components/home/Navbar";
+import Portfolio from "@/components/home/Portfolio";
+import Testimonials from "@/components/home/Testimonials";
+import WhatWeBuild from "@/components/home/WhatWeBuild";
 
 export default function Home() {
   return (
     <>
-      <CustomCursor />
+        
       <HomeStage>
         <Navbar />
         <Hero />
       </HomeStage>
+
       <main id="main">
         <LogoMarquee />
         <WhatWeBuild />
         <About />
         <Portfolio />
-        
-        <Testimonials/>
-        <Faq/>
-        <Contact/>
-        <Footer/>
+        <Testimonials />
+        <Faq />
+        <Contact />
+        <Footer />
       </main>
     </>
   );

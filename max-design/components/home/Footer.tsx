@@ -12,7 +12,8 @@ import Image from "next/image";
     the moving logo goes under them.
   - --u uses cqw (the width of the <section>) and not vw, so a scrollbar never causes sideways scroll.
 
-  Numbers taken from your Figma values (positions are inside the 880 high frame):
+  Numbers taken from your Figma values (positions are inside the 880 high frame; the copyright line and the frame height move down by --ext
+  because Company now has 7 links, the design has 4):
     MAX picture ..... left 97, 818 wide (your 819 x 205 export, converted to webp)
     "design" ........ Poppins ExtraLight 311.96, line-height 100%, tracking -8%, left 916.84
     divider ......... top 351, left 95, 1727 wide, 1px, white 26%
@@ -27,9 +28,12 @@ import Image from "next/image";
 */
 
 const COMPANY = [
-  { label: "About", href: "#about" },
+  { label: "Home", href: "#home" },
   { label: "Services", href: "#services" },
-  { label: "Careers", href: "#careers" },
+  { label: "Protfolio", href: "#portfolio" },
+  { label: "About", href: "#about" },
+  { label: "Blogs", href: "#blogs" },
+  { label: "Contact", href: "#contact" },
   { label: "Privacy Policy", href: "#privacy" },
 ];
 
@@ -45,6 +49,7 @@ const CSS = `
     --u: calc(min(100cqw, 1920px) / 1920);
     --pad: 0px;
     --top: calc(80 * var(--u));                      /* empty space above the wordmark */
+    --ext: calc(156 * var(--u));                     /* extra height for the 7 links in Company (3 more than the design: 3 x 52) */
     --m: var(--u);                                   /* wordmark unit */
     --h: max(20px, calc(32 * var(--u)));             /* column titles */
     --hl: max(26px, calc(39 * var(--u)));
@@ -57,7 +62,7 @@ const CSS = `
     width: 100%;
     max-width: 1920px;
     margin: 0 auto;
-    height: calc(880 * var(--u) + var(--top));
+    height: calc(880 * var(--u) + var(--top) + var(--ext));
     overflow: hidden;
     background: #000;
     color: #fff;
@@ -95,7 +100,7 @@ const CSS = `
   /* moving logo (same video + blend as the About section) */
   .ft-logo { position: absolute; top: calc(397 * var(--u) + var(--top)); left: calc(1372 * var(--u)); width: calc(300 * var(--u)); height: calc(300 * var(--u)); object-fit: contain; mix-blend-mode: screen; pointer-events: none; z-index: 1; }
 
-  .ft-copy { position: absolute; top: calc(795 * var(--u) + var(--top)); left: calc(95 * var(--u)); margin: 0; height: calc(24 * var(--u)); min-height: 20px; display: flex; align-items: center; font-size: var(--c); line-height: 1; letter-spacing: -0.08em; font-weight: 400; white-space: nowrap; }
+  .ft-copy { position: absolute; top: calc(795 * var(--u) + var(--top) + var(--ext)); left: calc(95 * var(--u)); margin: 0; height: calc(24 * var(--u)); min-height: 20px; display: flex; align-items: center; font-size: var(--c); line-height: 1; letter-spacing: -0.08em; font-weight: 400; white-space: nowrap; }
   .ft-copy b { font-weight: 700; }
 
   .ft a:focus-visible { outline: 2px solid #ff1e2d; outline-offset: 3px; }
@@ -104,6 +109,7 @@ const CSS = `
     .ft {
       --pad: clamp(16px, 5cqw, 48px);
       --top: 0px;
+      --ext: 0px;
       --m: calc((100cqw - 2 * var(--pad)) / 1724);
       --h: 20px; --hl: 28px; --l: 16px; --ll: 26px; --c: 13px; --i: 28px;
       height: auto;
