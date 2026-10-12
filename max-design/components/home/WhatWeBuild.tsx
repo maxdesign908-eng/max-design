@@ -29,7 +29,7 @@ const SERVICES: Service[] = [
     text: "Clear, usable interfaces for apps and products, designed around how people actually use them.",
     image: "/images/services/ui-ux-design.webp",
     alt: "Two phone screens of a rewards app showing points and transactions",
-    href: "/services/ui-ux-design",
+    href: "/ui-ux-design",
   },
   {
     label: "Social Media",
@@ -37,7 +37,7 @@ const SERVICES: Service[] = [
     text: "Scroll-stopping posts and campaigns that keep your brand consistent on every platform.",
     image: "/images/services/social-media.webp",
     alt: "Three poster designs on a wall about data security",
-    href: "/services/social-media",
+    href: "/social-media",
   },
   {
     label: "Video Editing",
@@ -45,7 +45,7 @@ const SERVICES: Service[] = [
     text: "Sharp, well-paced edits for ads, reels and brand films, from rough cut to final export.",
     image: "/images/services/video-editing.webp",
     alt: "A video editing timeline on a monitor",
-    href: "/services/video-editing",
+    href: "/video-editing",
   },
   {
     label: "AI-Powered Ad Creatives",
@@ -53,7 +53,7 @@ const SERVICES: Service[] = [
     text: "Fast, eye-catching ad visuals built with AI and finished by designers.",
     image: "/images/services/ai-ad-creatives.webp",
     alt: "A person in an orange robe standing on giant watermelons",
-    href: "/services/ai-ad-creatives",
+    href: "/ai-ad-creatives",
   },
   {
     label: "Website Design & Development",
@@ -61,7 +61,7 @@ const SERVICES: Service[] = [
     text: "High-performing digital experiences built for modern brands.",
     image: "/images/services/web-development.webp",
     alt: "A laptop showing a finance dashboard",
-    href: "/services/web-development",
+    href: "/web-development",
   },
 ];
 

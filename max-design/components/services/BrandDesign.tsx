@@ -61,7 +61,7 @@ export default function BrandDesign() {
                 Build A Brand People Remember.
               </h1>
               <Image
-                src="/images/brand/chrome-shape.webp"
+                src="/images/services/chrome-shape.webp"
                 alt=""
                 width={260}
                 height={259}
@@ -75,7 +75,7 @@ export default function BrandDesign() {
           {/* ───────── hero picture (1920 x 800, picture shifted up 110) ───────── */}
           <div className="relative mt-[calc(36*var(--u))] h-[calc(800*var(--u))] w-full overflow-hidden [@media(max-width:900px)]:mt-[28px] [@media(max-width:900px)]:h-[clamp(230px,68vw,520px)]">
             <Image
-              src="/images/brand/brand-design-hero.webp"
+              src="/images/services/brand-design-hero.webp"
               alt="Golden Blood hair care brand identity and packaging"
               width={2576}
               height={1717}
