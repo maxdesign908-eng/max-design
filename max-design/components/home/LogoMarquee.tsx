@@ -14,7 +14,7 @@ import Image from "next/image";
 
   Sizes are N * var(--s): 1 Figma px (scales with the page like the hero). On <= 900px the strip is
   full width (same side padding as the hero) with smaller logos.
-  Put <LogoMarquee /> right under the hero (after the video). Top gap 51 = 2220 - 2169 (end of hero).
+  Put <LogoMarquee /> right under the hero (after the video). Top gap 51 = 2220 - 2169 (end of hero). Bottom gap is the same (51; 32 on phones).
 */
 const logos = [
   { name: "Roche Melgar", file: "roche-melgar", w: 262 },
@@ -54,7 +54,7 @@ export default function LogoMarquee() {
         }
       `}</style>
 
-      <div className="mx-auto w-full max-w-[1920px] pt-[calc(51*var(--s))] [--s:calc(min(100cqw,1920px)_/_1920)] [@media(max-width:900px)]:pt-[32px] [@media(max-width:900px)]:[--pad:clamp(16px,5vw,96px)] [@media(max-width:900px)]:[--s:clamp(0.45px,calc(100cqw_/_720),0.9px)]">
+      <div className="mx-auto w-full max-w-[1920px] pt-[calc(51*var(--s))] pb-[calc(51*var(--s))] [--s:calc(min(100cqw,1920px)_/_1920)] [@media(max-width:900px)]:pt-[32px] [@media(max-width:900px)]:pb-[32px] [@media(max-width:900px)]:[--pad:clamp(16px,5vw,96px)] [@media(max-width:900px)]:[--s:clamp(0.45px,calc(100cqw_/_720),0.9px)]">
         {/* The bar */}
         <div className="relative ml-[calc(90*var(--s))] h-[calc(114*var(--s))] w-[calc(1730*var(--s))] overflow-hidden rounded-[calc(307*var(--s))] border border-white/[0.28] bg-[#FFFFFF0A] [@media(max-width:900px)]:ml-[var(--pad)] [@media(max-width:900px)]:w-[calc(100%_-_2_*_var(--pad))]">
           {/* start offset (first logo sits 43 Figma px from the left edge) */}

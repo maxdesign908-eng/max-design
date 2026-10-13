@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { Fragment, useEffect, useRef, useState } from "react";
 
 /*
   Brand Design service page (Figma 1920 wide). Everything below the navbar.
@@ -30,12 +33,90 @@ const BADGE =
 /* side padding of every block: 97 Figma px on desktop, fluid on phones */
 const SIDE = "px-[calc(97*var(--u))] [@media(max-width:900px)]:px-[var(--pad)]";
 
-function Star() {
+/* ───────── animation helpers (all in this file) ─────────
+   useInView : true once the element has been scrolled into view (stays true).
+   Words     : splits a text into words. "mask" = every word slides up out of a hidden strip,
+               "fade" = every word fades up. Words come in one after another (step ms apart).
+   Nothing moves when the visitor has "reduce motion" turned on. */
+function useInView<T extends HTMLElement>(threshold = 0.2) {
+  const ref = useRef<T>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { threshold },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [threshold]);
+  return [ref, inView] as const;
+}
+
+function Words({
+  text,
+  mode = "mask",
+  delay = 0,
+  step = 70,
+}: {
+  text: string;
+  mode?: "mask" | "fade";
+  delay?: number;
+  step?: number;
+}) {
+  const [ref, inView] = useInView<HTMLSpanElement>(0.2);
+  const words = text.split(" ");
+  return (
+    <span ref={ref} aria-label={text}>
+      {words.map((w, i) => (
+        <Fragment key={i}>
+          {mode === "mask" ? (
+            <span
+              aria-hidden="true"
+              className="-mt-[0.14em] -mb-[0.16em] inline-block overflow-hidden pt-[0.14em] pb-[0.16em] align-top"
+            >
+              <span
+                style={{ transitionDelay: inView ? `${delay + i * step}ms` : "0ms" }}
+                className={`inline-block origin-bottom-left transition-[translate,rotate] duration-[1300ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
+                  inView ? "translate-y-0 rotate-0" : "translate-y-[125%] rotate-[5deg]"
+                }`}
+              >
+                {w}
+              </span>
+            </span>
+          ) : (
+            <span
+              aria-hidden="true"
+              style={{ transitionDelay: inView ? `${delay + i * step}ms` : "0ms" }}
+              className={`inline-block transition-[opacity,translate] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+                inView ? "translate-y-0 opacity-100" : "translate-y-[0.6em] opacity-0"
+              }`}
+            >
+              {w}
+            </span>
+          )}
+          {i < words.length - 1 ? " " : null}
+        </Fragment>
+      ))}
+    </span>
+  );
+}
+
+function Star({ on = true }: { on?: boolean }) {
   return (
     <svg
       aria-hidden="true"
       viewBox="0 0 13 13"
-      className="mr-[calc(5.5*var(--u))] h-[calc(13*var(--u))] w-[calc(13*var(--u))] flex-none [@media(max-width:900px)]:mr-[6px] [@media(max-width:900px)]:h-[12px] [@media(max-width:900px)]:w-[12px]"
+      className={`transition-[rotate,scale] duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${on ? "rotate-0 scale-100" : "-rotate-180 scale-0"} mr-[calc(5.5*var(--u))] h-[calc(13*var(--u))] w-[calc(13*var(--u))] flex-none [@media(max-width:900px)]:mr-[6px] [@media(max-width:900px)]:h-[12px] [@media(max-width:900px)]:w-[12px]`}
     >
       <path
         fill="currentColor"
@@ -45,9 +126,52 @@ function Star() {
   );
 }
 
+function TagRow({ row, rowIndex }: { row: string[]; rowIndex: number }) {
+  const [ref, inView] = useInView<HTMLUListElement>(0.3);
+  return (
+    <ul
+      ref={ref}
+      className="m-0 flex list-none flex-wrap gap-x-[calc(24*var(--u))] gap-y-[12px] p-0 [@media(max-width:900px)]:gap-x-[20px]"
+    >
+      {row.map((tag, i) => (
+        <li
+          key={tag}
+          style={{ transitionDelay: inView ? `${rowIndex * 300 + i * 130}ms` : "0ms" }}
+          className={`flex h-[calc(32*var(--u))] items-center text-[length:calc(16*var(--u))] leading-[calc(32*var(--u))] tracking-[-0.04em] whitespace-nowrap text-white/[0.48] transition-[opacity,translate] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:text-[length:clamp(13px,3.4vw,16px)] [@media(max-width:900px)]:leading-[1.6] ${
+            inView ? "translate-x-0 opacity-100" : "-translate-x-[calc(30*var(--u))] opacity-0"
+          }`}
+        >
+          <Star on={inView} />
+          {tag}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export default function Aiadcreatives() {
+  const [stepsRef, stepsIn] = useInView<HTMLOListElement>(0.2);
   return (
     <div className="@container w-full bg-black text-white">
+      {/* chrome logo: one full 360deg turn every 12 seconds, nothing when "reduce motion" is on */}
+      <style>{`
+        @keyframes chromeSpin {
+          to { transform: rotate(360deg); }
+        }
+        @keyframes imgSettle {
+          from { scale: 1.14; }
+          to   { scale: 1; }
+        }
+        @keyframes cardIn {
+          from { opacity: 0; transform: translateY(70px) scale(0.93); }
+          to   { opacity: 1; transform: none; }
+        }
+        @keyframes textUp {
+          from { opacity: 0; transform: translateY(22px); }
+          to   { opacity: 1; transform: none; }
+        }
+      `}</style>
+
       <div className="mx-auto w-full max-w-[1920px] [--k:var(--u)] [--u:calc(min(100cqw,1920px)_/_1920)] [@media(max-width:900px)]:[--k:1px] [@media(max-width:900px)]:[--pad:clamp(16px,5vw,96px)]">
 
         <main>
@@ -57,7 +181,7 @@ export default function Aiadcreatives() {
           >
             <div className="relative flex h-[calc(121*var(--u))] items-start border-b border-white/[0.26] [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:items-center [@media(max-width:900px)]:justify-between [@media(max-width:900px)]:gap-[16px] [@media(max-width:900px)]:pb-[22px]">
               <h1 className="m-0 w-[calc(1136*var(--u))] text-[length:calc(80*var(--u))] leading-[0.96] font-medium tracking-[-0.08em] text-white [@media(max-width:900px)]:w-auto [@media(max-width:900px)]:text-[length:clamp(30px,7.4vw,64px)] [@media(max-width:900px)]:leading-[1.08]">
-                Creative Ads, Powered by AI
+                <Words text="Creative Ads, Powered by AI" delay={150} step={110} />
               </h1>
               <Image
                 src="/images/services/chrome-shape.webp"
@@ -66,7 +190,7 @@ export default function Aiadcreatives() {
                 height={259}
                 unoptimized
                 priority
-                className="absolute top-[calc(-14*var(--u))] left-[calc(1620.5*var(--u))] block h-[calc(106.2*var(--u))] w-[calc(106.6*var(--u))] [@media(max-width:900px)]:static [@media(max-width:900px)]:h-[clamp(52px,12vw,96px)] [@media(max-width:900px)]:w-[clamp(52px,12vw,96px)] [@media(max-width:900px)]:flex-none"
+                className="animate-[chromeSpin_12s_linear_infinite] will-change-transform motion-reduce:animate-none absolute top-[calc(-14*var(--u))] left-[calc(1620.5*var(--u))] block h-[calc(106.2*var(--u))] w-[calc(106.6*var(--u))] [@media(max-width:900px)]:static [@media(max-width:900px)]:h-[clamp(52px,12vw,96px)] [@media(max-width:900px)]:w-[clamp(52px,12vw,96px)] [@media(max-width:900px)]:flex-none"
               />
             </div>
           </section>
@@ -82,7 +206,7 @@ export default function Aiadcreatives() {
               height={1717}
             
               
-              className="absolute top-[calc(-110*var(--u))] left-0 block h-auto w-full [@media(max-width:900px)]:top-0 [@media(max-width:900px)]:h-full [@media(max-width:900px)]:object-cover [@media(max-width:900px)]:object-[50%_55%]"
+              className="animate-[imgSettle_2s_cubic-bezier(0.16,1,0.3,1)_both] motion-reduce:animate-none absolute top-[calc(-110*var(--u))] left-0 block h-auto w-full [@media(max-width:900px)]:top-0 [@media(max-width:900px)]:h-full [@media(max-width:900px)]:object-cover [@media(max-width:900px)]:object-[50%_55%]"
             />
           </div>
 
@@ -90,34 +214,21 @@ export default function Aiadcreatives() {
           <p
             className={`${SIDE} m-0 mt-[calc(36*var(--u))] text-[length:calc(32*var(--u))] leading-[1.5] font-normal tracking-[-0.04em] text-white [@media(max-width:900px)]:mt-[32px] [@media(max-width:900px)]:text-[length:clamp(17px,4.4vw,28px)]`}
           >
-           We create high-impact AI-powered ad creatives that help brands produce more engaging, scroll-stopping content at scale. By combining AI technology with creative strategy, visual design, and human direction, we develop ad creatives built to capture attention, communicate value, and drive action across digital platforms.
+            <Words mode="fade" step={22} text="We create high-impact AI-powered ad creatives that help brands produce more engaging, scroll-stopping content at scale. By combining AI technology with creative strategy, visual design, and human direction, we develop ad creatives built to capture attention, communicate value, and drive action across digital platforms." />
           </p>
 
           {/* ───────── Our Expertise ───────── */}
           <section className={`${SIDE} mt-[calc(90*var(--u))] [@media(max-width:900px)]:mt-[56px]`}>
             <h2 className="m-0 h-[calc(70*var(--u))] text-[length:calc(48*var(--u))] leading-[calc(72*var(--u))] font-medium tracking-[-0.08em] text-[#E71117] [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:text-[length:clamp(30px,7vw,44px)] [@media(max-width:900px)]:leading-[1.2]">
-              Our Expertise
+              <Words text="Our Expertise" step={120} />
             </h2>
             <p className="m-0 text-[length:calc(24*var(--u))] leading-[2] font-normal tracking-[-0.04em] text-white [@media(max-width:900px)]:mt-[14px] [@media(max-width:900px)]:text-[length:clamp(16px,4vw,22px)] [@media(max-width:900px)]:leading-[1.6]">
-              Our AI-powered advertising services combine creative thinking with intelligent tools to produce high-quality visual content faster and more efficiently. From concept development and AI-generated visuals to social media ads and campaign variations, we create distinctive creatives tailored to your brand, audience, and marketing goals.
+              <Words mode="fade" step={20} text="Our AI-powered advertising services combine creative thinking with intelligent tools to produce high-quality visual content faster and more efficiently. From concept development and AI-generated visuals to social media ads and campaign variations, we create distinctive creatives tailored to your brand, audience, and marketing goals." />
             </p>
 
             <div className="mt-[calc(24*var(--u))] flex flex-col gap-[calc(28*var(--u))] [@media(max-width:900px)]:mt-[24px] [@media(max-width:900px)]:gap-[12px]">
               {TAGS.map((row, i) => (
-                <ul
-                  key={i}
-                  className="m-0 flex list-none flex-wrap gap-x-[calc(24*var(--u))] gap-y-[12px] p-0 [@media(max-width:900px)]:gap-x-[20px]"
-                >
-                  {row.map((tag) => (
-                    <li
-                      key={tag}
-                      className="flex h-[calc(32*var(--u))] items-center text-[length:calc(16*var(--u))] leading-[calc(32*var(--u))] tracking-[-0.04em] whitespace-nowrap text-white/[0.48] [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:text-[length:clamp(13px,3.4vw,16px)] [@media(max-width:900px)]:leading-[1.6]"
-                    >
-                      <Star />
-                      {tag}
-                    </li>
-                  ))}
-                </ul>
+                <TagRow key={i} row={row} rowIndex={i} />
               ))}
             </div>
           </section>
@@ -125,18 +236,23 @@ export default function Aiadcreatives() {
           {/* ───────── How We Work ───────── */}
           <section className={`${SIDE} mt-[calc(120*var(--u))] pb-[calc(120*var(--u))] [@media(max-width:900px)]:mt-[72px] [@media(max-width:900px)]:pb-[72px]`}>
             <h2 className="m-0 text-center text-[length:calc(80*var(--u))] leading-[1.12] font-medium tracking-[-0.04em] text-white [@media(max-width:900px)]:text-[length:clamp(36px,10vw,64px)]">
-              How We Work
+              <Words text="How We Work" step={120} />
             </h2>
             <p className="mx-auto mt-[calc(18.2*var(--u))] mb-0 w-[calc(1300*var(--u))] max-w-full text-center text-[length:calc(32*var(--u))] leading-[1.5] font-normal tracking-[-0.04em] text-white [@media(max-width:900px)]:mt-[16px] [@media(max-width:900px)]:w-full [@media(max-width:900px)]:text-[length:clamp(16px,4.2vw,24px)]">
-             Our AI creative process combines strategy, technology, and human creative direction to produce ads that are distinctive, relevant, and ready to perform.
+              <Words mode="fade" step={30} text="Our AI creative process combines strategy, technology, and human creative direction to produce ads that are distinctive, relevant, and ready to perform." />
             </p>
 
-            <ol className="m-0 mt-[calc(80*var(--u))] grid list-none grid-cols-4 gap-[calc(24*var(--u))] p-0 [@media(max-width:900px)]:mt-[36px] [@media(max-width:900px)]:grid-cols-2 [@media(max-width:900px)]:gap-[16px] [@media(max-width:560px)]:grid-cols-1">
-              {STEPS.map(({ n, title, lines }) => (
+            <ol ref={stepsRef} className="m-0 mt-[calc(80*var(--u))] grid list-none grid-cols-4 gap-[calc(24*var(--u))] p-0 [@media(max-width:900px)]:mt-[36px] [@media(max-width:900px)]:grid-cols-2 [@media(max-width:900px)]:gap-[16px] [@media(max-width:560px)]:grid-cols-1">
+              {STEPS.map(({ n, title, lines }, idx) => (
                 /* each card is a container: all its inner sizes are N * var(--cu) = card width / 413.5 */
                 <li
                   key={n}
-                  className="@container relative aspect-[413.5/358.78] min-w-0 rounded-[10px] bg-white/[0.047] shadow-[inset_0_-6px_10px_-6px_rgba(255,255,255,0.10)]"
+                  style={{ animationDelay: `${idx * 160}ms` }}
+                  className={`group @container relative aspect-[413.5/358.78] min-w-0 rounded-[10px] bg-white/[0.047] shadow-[inset_0_-6px_10px_-6px_rgba(255,255,255,0.10)] transition-[translate,scale,background-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[calc(14*var(--u))] hover:scale-[1.025] hover:bg-white/[0.075] hover:shadow-[inset_0_-6px_10px_-6px_rgba(255,255,255,0.16),0_28px_50px_-18px_rgba(231,17,23,0.35)] motion-reduce:transition-none ${
+                    stepsIn
+                      ? "animate-[cardIn_1.1s_cubic-bezier(0.16,1,0.3,1)_both] motion-reduce:animate-none"
+                      : "opacity-0"
+                  }`}
                 >
                   {/* outline: a little brighter along the top */}
                   <span
@@ -150,7 +266,7 @@ export default function Aiadcreatives() {
                       aria-hidden="true"
                       viewBox="0 0 413.5 358.78"
                       preserveAspectRatio="none"
-                      className="pointer-events-none absolute inset-0 h-full w-full"
+                      className="pointer-events-none absolute inset-0 h-full w-full origin-[81%_21.5%] transition-[scale,rotate] duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-110 group-hover:rotate-6 motion-reduce:transition-none"
                     >
                       <path
                         d={BADGE}
@@ -159,15 +275,15 @@ export default function Aiadcreatives() {
                       />
                     </svg>
 
-                    <span className="absolute top-[calc(47*var(--cu))] left-[calc(315*var(--cu))] flex h-[calc(50*var(--cu))] w-[calc(49*var(--cu))] items-center justify-center text-[length:calc(49.66*var(--cu))] leading-none font-medium tracking-[-0.01em] text-white">
+                    <span className="absolute top-[calc(47*var(--cu))] left-[calc(315*var(--cu))] flex transition-[scale] duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-110 motion-reduce:transition-none h-[calc(50*var(--cu))] w-[calc(49*var(--cu))] items-center justify-center text-[length:calc(49.66*var(--cu))] leading-none font-medium tracking-[-0.01em] text-white">
                       {n}
                     </span>
 
-                    <h3 className="absolute top-[calc(228.3*var(--cu))] left-[calc(19*var(--cu))] m-0 flex h-[calc(36*var(--cu))] items-center text-[length:calc(48*var(--cu))] leading-[calc(36*var(--cu))] font-medium tracking-[-0.0833em] whitespace-nowrap text-white">
+                    <h3 style={{ animationDelay: `${idx * 160 + 450}ms` }} className={`${stepsIn ? "animate-[textUp_0.9s_cubic-bezier(0.22,1,0.36,1)_both] motion-reduce:animate-none" : "opacity-0"} absolute top-[calc(228.3*var(--cu))] left-[calc(19*var(--cu))] m-0 flex h-[calc(36*var(--cu))] items-center text-[length:calc(48*var(--cu))] leading-[calc(36*var(--cu))] font-medium tracking-[-0.0833em] whitespace-nowrap text-white`}>
                       {title}
                     </h3>
 
-                    <p className="absolute top-[calc(281*var(--cu))] left-[calc(19*var(--cu))] m-0 text-[length:calc(18*var(--cu))] leading-[1.7] tracking-[-0.0444em] whitespace-nowrap text-white/[0.37]">
+                    <p style={{ animationDelay: `${idx * 160 + 650}ms` }} className={`${stepsIn ? "animate-[textUp_0.9s_cubic-bezier(0.22,1,0.36,1)_both] motion-reduce:animate-none" : "opacity-0"} absolute top-[calc(281*var(--cu))] left-[calc(19*var(--cu))] m-0 text-[length:calc(18*var(--cu))] leading-[1.7] tracking-[-0.0444em] whitespace-nowrap text-white/[0.37]`}>
                       {lines.map((line, i) => (
                         <span key={i} className="block">
                           {line}

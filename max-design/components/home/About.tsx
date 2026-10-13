@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import CtaButton from "./CtaButton";
 
 /*
@@ -94,8 +94,38 @@ function Counter({
   `static` on mobile is `relative` instead, so z-index still applies to it.
 */
 export default function About() {
+  // entrance animation: plays once, when the section is scrolled into view
+  const sectionRef = useRef<HTMLElement>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.15 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // fade + rise, with a delay (ms) so the pieces come in one after another
+  const rise = (delay: number) => ({
+    style: { transitionDelay: inView ? `${delay}ms` : "0ms" },
+    className: `transition-[opacity,translate] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+      inView ? "translate-y-0 opacity-100" : "translate-y-[calc(36*var(--spacing))] opacity-0"
+    }`,
+  });
+
   return (
-    <section className="relative isolate h-1108 w-full  overflow-hidden bg-black text-white max-[820px]:flex max-[820px]:h-auto max-[820px]:flex-col max-[820px]:gap-28 max-[820px]:px-20 max-[820px]:pt-32 max-[820px]:pb-48">
+    <section ref={sectionRef} className="relative isolate h-1108 w-full  overflow-hidden bg-black text-white max-[820px]:flex max-[820px]:h-auto max-[820px]:flex-col max-[820px]:gap-28 max-[820px]:px-20 max-[820px]:pt-32 max-[820px]:pb-48">
       {/* ───── Background: rotated red glass panels ───── */}
       <div
         aria-hidden="true"
@@ -143,7 +173,15 @@ export default function About() {
 
       {/* ───── Content ───── */}
       <h1 className="absolute top-140 left-111 z-10 w-982 text-[calc(80*var(--spacing))] leading-[1.12] font-medium tracking-[-0.04em] max-[820px]:relative max-[820px]:top-0 max-[820px]:left-0 max-[820px]:w-auto max-[820px]:pr-[calc(110*var(--spacing))] max-[820px]:text-[calc(40*var(--spacing))]">
-        Design solutions for startups and growing brands.
+        <span className="block overflow-hidden">
+          <span
+            className={`block transition-[translate] duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
+              inView ? "translate-y-0" : "translate-y-[105%]"
+            }`}
+          >
+            Design solutions for startups and growing brands.
+          </span>
+        </span>
       </h1>
 
       {/* Logo: object-contain + kept fully inside the section so it never gets cut.
@@ -158,19 +196,28 @@ export default function About() {
         aria-hidden="true"
       />
 
-      <div className="absolute top-480 left-111 z-10 h-464 w-560 overflow-hidden max-[820px]:relative max-[820px]:top-0 max-[820px]:left-0 max-[820px]:h-260 max-[820px]:w-full">
+      <div
+        className={`absolute top-480 left-111 z-10 h-464 w-560 overflow-hidden transition-[opacity,translate] delay-200 duration-[1000ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none max-[820px]:relative max-[820px]:top-0 max-[820px]:left-0 max-[820px]:h-260 max-[820px]:w-full ${
+          inView ? "translate-y-0 opacity-100" : "translate-y-[calc(48*var(--spacing))] opacity-0"
+        }`}
+      >
         <Image
           src="/images/head.jpg"
           alt="Silhouette of a head lit by red light"
           fill
           sizes="(max-width: 820px) 100vw, 30vw"
           priority
-          className="object-cover object-[center_20%]"
+          className={`object-cover object-[center_20%] transition-[scale] duration-[1600ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
+            inView ? "scale-100" : "scale-[1.15]"
+          }`}
         />
       </div>
 
       <div className="absolute top-478 left-839 z-10 flex h-247 w-972 flex-col items-start gap-48 max-[820px]:relative max-[820px]:top-0 max-[820px]:left-0 max-[820px]:h-auto max-[820px]:w-auto max-[820px]:gap-24">
-        <p className="text-[calc(32*var(--spacing))] leading-[calc(48*var(--spacing))] font-normal tracking-[-0.04em] max-[820px]:text-[calc(16*var(--spacing))] max-[820px]:leading-[1.85] max-[820px]:tracking-normal">
+        <p
+          style={rise(350).style}
+          className={`${rise(350).className} text-[calc(32*var(--spacing))] leading-[calc(48*var(--spacing))] font-normal tracking-[-0.04em] max-[820px]:text-[calc(16*var(--spacing))] max-[820px]:leading-[1.85] max-[820px]:tracking-normal`}
+        >
           At Max Design, we turn ideas into powerful visual experiences. With
           strategy, creativity, and innovation, we create brands that connect,
           stand out, and leave a lasting impression.
@@ -179,16 +226,18 @@ export default function About() {
         {/* More About Us: the shared CtaButton (red fill rises on hover), Figma 197 x 56.
             --k = 1 Figma px here, so the button scales together with the rest of this block.
             On mobile it is 0.857 x (48 px high), like the old button. */}
-        <CtaButton
-          href="#about"
-          label="More About Us"
-          width={197}
-          className="shrink-0 [--k:var(--spacing)] max-[820px]:[--k:calc(0.857*var(--spacing))]"
-        />
+        <div {...rise(550)}>
+          <CtaButton
+            href="#about"
+            label="More About Us"
+            width={197}
+            className="shrink-0 [--k:var(--spacing)] max-[820px]:[--k:calc(0.857*var(--spacing))]"
+          />
+        </div>
       </div>
 
       <div className="absolute top-806 left-839 z-10 flex gap-48 max-[820px]:relative max-[820px]:top-0 max-[820px]:left-0 max-[820px]:gap-22">
-        <div>
+        <div {...rise(700)}>
           <strong className="block text-[calc(72*var(--spacing))] leading-[1.1] font-medium max-[820px]:text-[calc(34*var(--spacing))]">
             <Counter end={30} suffix="+" />
           </strong>
@@ -197,7 +246,7 @@ export default function About() {
           </span>
         </div>
 
-        <div>
+        <div {...rise(820)}>
           <strong className="block text-[calc(72*var(--spacing))] leading-[1.1] font-medium max-[820px]:text-[calc(34*var(--spacing))]">
             <Counter end={5} suffix="K+" />
           </strong>
@@ -206,7 +255,7 @@ export default function About() {
           </span>
         </div>
 
-        <div>
+        <div {...rise(940)}>
           <strong className="block text-[calc(72*var(--spacing))] leading-[1.1] font-medium max-[820px]:text-[calc(34*var(--spacing))]">
             <Counter end={100} suffix="+" />
           </strong>

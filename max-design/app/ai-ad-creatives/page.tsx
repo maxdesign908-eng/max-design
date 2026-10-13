@@ -1,7 +1,7 @@
+import Contact from "@/components/home/Contact";
 import Footer from "@/components/home/Footer";
 import Navbar from "@/components/home/Navbar";
 import Aiadcreatives from "@/components/services/Aiadcreatives";
-import ContactService from "@/components/services/ContactService";
 
 
 
@@ -14,7 +14,7 @@ export default function ServicesPage() {
 
       <main className="min-h-screen bg-black text-white">
         <Aiadcreatives/>
-         <ContactService/>
+         <Contact/>
          <Footer />
       </main>
     </>

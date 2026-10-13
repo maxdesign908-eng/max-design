@@ -1,7 +1,7 @@
+import Contact from "@/components/home/Contact";
 import Footer from "@/components/home/Footer";
 import Navbar from "@/components/home/Navbar";
 
-import ContactService from "@/components/services/ContactService";
 import UiDesign from "@/components/services/UIDesign";
 
 export default function ServicesPage() {
@@ -13,7 +13,7 @@ export default function ServicesPage() {
 
       <main className="min-h-screen bg-black text-white">
         <UiDesign/>
-         <ContactService/>
+         <Contact/>
          <Footer />
       </main>
     </>

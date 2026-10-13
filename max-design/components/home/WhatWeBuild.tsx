@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Service = {
   label: string;
@@ -121,8 +121,31 @@ function ArrowPill({ active }: { active: boolean }) {
 export default function WhatWeBuild() {
   const [active, setActive] = useState(0);
 
+  // entrance animation: starts once, when the section is scrolled into view
+  const sectionRef = useRef<HTMLElement>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.15 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="services"
       className="relative isolate h-1164 w-full overflow-hidden bg-black text-white max-[820px]:flex max-[820px]:h-auto max-[820px]:flex-col max-[820px]:gap-32 max-[820px]:px-20 max-[820px]:py-48"
     >
@@ -135,10 +158,22 @@ export default function WhatWeBuild() {
       {/* Heading */}
       <div className="absolute top-66 left-[calc(425.5*var(--spacing))] z-10 flex h-204 w-1069 flex-col items-center gap-18 text-center max-[820px]:relative max-[820px]:top-0 max-[820px]:left-0 max-[820px]:h-auto max-[820px]:w-auto max-[820px]:gap-12">
         <h2 className="h-90 w-1069 text-[calc(80*var(--spacing))] leading-[1.12] font-medium tracking-[-0.04em] max-[820px]:h-auto max-[820px]:w-auto max-[820px]:text-[calc(34*var(--spacing))]">
-          What We build
+          <span className="block overflow-hidden">
+            <span
+              className={`block transition-[translate] duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
+                inView ? "translate-y-0" : "translate-y-[105%]"
+              }`}
+            >
+              What We build
+            </span>
+          </span>
         </h2>
 
-        <p className="h-56 w-763 text-[calc(22*var(--spacing))] leading-[calc(28*var(--spacing))] font-normal text-white/90 max-[820px]:h-auto max-[820px]:w-auto max-[820px]:text-[calc(15*var(--spacing))] max-[820px]:leading-[1.6]">
+        <p
+          className={`h-56 w-763 transition-[opacity,translate] delay-300 duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+            inView ? "translate-y-0 opacity-100" : "translate-y-[calc(24*var(--spacing))] opacity-0"
+          } text-[calc(22*var(--spacing))] leading-[calc(28*var(--spacing))] font-normal text-white/90 max-[820px]:h-auto max-[820px]:w-auto max-[820px]:text-[calc(15*var(--spacing))] max-[820px]:leading-[1.6]`}
+        >
           Everything a growing brand needs under one roof, built by people who
           actually use this stuff daily.
         </p>
@@ -155,7 +190,10 @@ export default function WhatWeBuild() {
             return (
               <li
                 key={service.label}
-                className={`min-h-0 ${
+                style={{ transitionDelay: inView ? `${450 + i * 110}ms` : "0ms" }}
+                className={`min-h-0 transition-[opacity,translate] duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+                  inView ? "translate-x-0 opacity-100" : "-translate-x-[calc(40*var(--spacing))] opacity-0"
+                } ${
                   isLast ? "flex-[1.2]" : "flex-1"
                 } ${isLast ? "" : "border-b border-white/10"}`}
               >
@@ -185,7 +223,9 @@ export default function WhatWeBuild() {
                     max-[820px]:text-[calc(20*var(--spacing))]
                   "
                 >
-                  <span>{service.label}</span>
+                  <span className="transition-[translate] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[active=true]:translate-x-[calc(12*var(--spacing))] motion-reduce:transition-none">
+                    {service.label}
+                  </span>
                   <ArrowPill active={isActive} />
                 </Link>
               </li>
@@ -197,7 +237,9 @@ export default function WhatWeBuild() {
         <div
           id="service-card"
           aria-live="polite"
-          className="relative h-748 min-w-0 flex-1 overflow-hidden rounded-[calc(24*var(--spacing))] border border-[#262626] bg-black max-[820px]:h-auto max-[820px]:flex-none max-[820px]:p-16"
+          className={`relative h-748 min-w-0 flex-1 overflow-hidden rounded-[calc(24*var(--spacing))] border border-[#262626] bg-black transition-[opacity,translate] delay-500 duration-[1000ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none max-[820px]:h-auto max-[820px]:flex-none max-[820px]:p-16 ${
+            inView ? "translate-y-0 opacity-100" : "translate-y-[calc(40*var(--spacing))] opacity-0"
+          }`}
         >
           {/* Title + subtitle */}
           <div className="absolute top-46 right-24 left-24 grid h-84 max-[820px]:relative max-[820px]:top-0 max-[820px]:right-0 max-[820px]:left-0 max-[820px]:h-auto">
@@ -205,10 +247,10 @@ export default function WhatWeBuild() {
               <div
                 key={service.label}
                 aria-hidden={i !== active}
-                className={`col-start-1 row-start-1 transition-opacity duration-300 ${
+                className={`col-start-1 row-start-1 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
                   i === active
-                    ? "opacity-100"
-                    : "pointer-events-none opacity-0"
+                    ? "translate-y-0 opacity-100 delay-100"
+                    : "pointer-events-none translate-y-[calc(14*var(--spacing))] opacity-0"
                 }`}
               >
                 <h3 className="text-[calc(34*var(--spacing))] leading-[1.15] font-medium tracking-[-0.03em] max-[820px]:text-[calc(22*var(--spacing))]">
@@ -232,8 +274,8 @@ export default function WhatWeBuild() {
                 fill
                 sizes="(max-width: 820px) 100vw, 860px"
                 priority={i === 0}
-                className={`object-cover transition-opacity duration-500 ease-out ${
-                  i === active ? "opacity-100" : "opacity-0"
+                className={`object-cover transition-[opacity,scale] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+                  i === active ? "scale-100 opacity-100" : "scale-[1.07] opacity-0"
                 }`}
               />
             ))}

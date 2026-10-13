@@ -78,6 +78,7 @@ const CSS = `
     --pr: calc(32 * var(--u));                   /* right padding */
     --ih: max(64px, calc(126 * var(--u)));       /* closed box height */
     --tilt: 45deg;                               /* arrow turn when open */
+    --pull: calc(28 * var(--u));                 /* answer moves up toward the question (smaller gap) */
     --tx: calc(var(--pl) + var(--is) + var(--ig)); /* where the text starts */
   }
   @media (max-width: 899px) {
@@ -90,6 +91,7 @@ const CSS = `
       --ig: 14px;
       --pr: 16px;
       --ih: 68px;
+      --pull: 8px;
     }
   }
 `;
@@ -123,7 +125,7 @@ export default function Faq() {
     >
       <style>{CSS}</style>
 
-      <div className="faq mx-auto w-full max-w-[1920px] px-[calc(97*var(--u))] py-[calc(120*var(--u))] max-[899px]:px-[clamp(16px,5cqw,48px)] max-[899px]:py-[56px]">
+      <div className="faq mx-auto w-full max-w-[1920px] px-[calc(97*var(--u))] pt-[calc(120*var(--u))] pb-[calc(80*var(--u))] max-[899px]:px-[clamp(16px,5cqw,48px)] max-[899px]:pt-[56px] max-[899px]:pb-[36px]">
         {/* ───────── heading (660 x 168) ───────── */}
         <h2
           id={`${uid}-title`}
@@ -171,7 +173,7 @@ export default function Faq() {
                     className="flex min-h-[var(--ih)] w-full cursor-pointer items-center gap-[var(--ig)] rounded-[inherit] bg-transparent py-[12px] pr-[var(--pr)] pl-[var(--pl)] text-left text-[length:var(--qs)] leading-[1.3] font-normal tracking-[-0.04em] text-white outline-none focus-visible:outline-2 focus-visible:-outline-offset-[2px] focus-visible:outline-[#ff1e2d]"
                   >
                     {/* red round icon: the arrow turns when the box is open */}
-                    <span className="grid h-[var(--is)] w-[var(--is)] shrink-0 place-items-center rounded-full bg-[#ff1e2d]">
+                    <span className="grid h-[var(--is)] w-[var(--is)] shrink-0 place-items-center rounded-full bg-[#ff1e2d] transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-data-[open=true]:scale-110 motion-reduce:transition-none">
                       <span className="grid h-full w-full place-items-center transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] group-data-[open=true]:rotate-[var(--tilt)] motion-reduce:transition-none">
                         <ArrowIcon />
                       </span>
@@ -185,10 +187,10 @@ export default function Faq() {
                   id={panelId}
                   role="region"
                   aria-labelledby={buttonId}
-                  className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] group-data-[open=true]:grid-rows-[1fr] motion-reduce:transition-none"
+                  className="grid grid-rows-[0fr] transition-[grid-template-rows,margin] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] group-data-[open=true]:mt-[calc(-1*var(--pull))] group-data-[open=true]:grid-rows-[1fr] motion-reduce:transition-none"
                 >
                   <div className="min-h-0 overflow-hidden">
-                    <p className="m-0 translate-y-[8px] pr-[calc(var(--pr)_+_12*var(--u))] pb-[calc(38*var(--u))] pl-[var(--tx)] text-[length:var(--as)] leading-[1.5] font-normal text-white/70 opacity-0 transition-[opacity,translate] duration-500 ease-out group-data-[open=true]:translate-y-0 group-data-[open=true]:opacity-100 group-data-[open=true]:delay-150 motion-reduce:transition-none max-[899px]:pb-[22px]">
+                    <p className="m-0 translate-y-[14px] blur-[4px] pr-[calc(var(--pr)_+_12*var(--u))] pb-[calc(38*var(--u))] pl-[var(--tx)] text-[length:var(--as)] leading-[1.5] font-normal text-white/70 opacity-0 transition-[opacity,translate,filter] duration-600 ease-out group-data-[open=true]:translate-y-0 group-data-[open=true]:opacity-100 group-data-[open=true]:blur-0 group-data-[open=true]:delay-150 motion-reduce:transition-none max-[899px]:pb-[22px]">
                       {item.a}
                     </p>
                   </div>

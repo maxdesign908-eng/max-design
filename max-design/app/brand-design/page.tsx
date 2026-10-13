@@ -1,3 +1,4 @@
+import Contact from "@/components/home/Contact";
 import Footer from "@/components/home/Footer";
 import Navbar from "@/components/home/Navbar";
 import BrandDesign from "@/components/services/BrandDesign";
@@ -13,7 +14,7 @@ export default function ServicesPage() {
 
       <main className="min-h-screen bg-black text-white">
         <BrandDesign/>
-         <ContactService/>
+         <Contact/>
          <Footer />
       </main>
     </>

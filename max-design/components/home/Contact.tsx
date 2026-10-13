@@ -429,6 +429,12 @@ export default function Contact({
     <section id="contact" className="@container w-full bg-black text-white">
       <style>{CSS}</style>
 
+      {/* empty space above the block (108 Figma px, scales with the page) */}
+      <div
+        aria-hidden="true"
+        className="h-[calc(50*min(100cqw,1920px)/1920)] max-[899px]:h-[72px]"
+      />
+
       <div className="ct relative isolate w-full overflow-hidden">
         {/* ───────── background: red glass, turned 180deg, blurred ───────── */}
         <div

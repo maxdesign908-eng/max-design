@@ -1,7 +1,8 @@
+import Contact from "@/components/home/Contact";
 import Footer from "@/components/home/Footer";
 import Navbar from "@/components/home/Navbar";
 
-import ContactService from "@/components/services/ContactService";
+
 import Videoediting from "@/components/services/Videoediting";
 
 
@@ -14,7 +15,7 @@ export default function ServicesPage() {
 
       <main className="min-h-screen bg-black text-white">
          <Videoediting/>
-         <ContactService/>
+         <Contact/>
          <Footer />
       </main>
     </>
