@@ -13,15 +13,14 @@ import Image from "next/image";
 */
 
 const STEPS = [
-  { n: "01", title: "Discover", lines: ["Understand your brand, audience,", "goals, and market."] },
-  { n: "02", title: "Strategize", lines: ["Define your brand positioning, personality,", "and creative direction."] },
-  { n: "03", title: "Design", lines: ["Create a distinctive visual identity built", "around your brand."] },
-  { n: "04", title: "Launch & Refine", lines: ["Polish every detail and deliver a", "complete brand system."] },
+  { n: "01", title: "Discover", lines: ["Understand your brand, audience, campaign", "goals, and creative requirements."] },
+  { n: "02", title: "Concept", lines: ["Develop compelling concepts and creative", "directions for your campaign."] },
+  { n: "03", title: "Create", lines: ["Use AI-powered tools and design expertise to", "produce high-quality ad creatives."] },
+  { n: "04", title: "Launch & Refine", lines: ["Polish the final assets, create variations,", "and deliver platform-ready creatives."] },
 ];
 
 const TAGS: string[][] = [
-  ["Brand strategy & positioning", "Logo & visual identity design", "Typography & color systems", "Brand guidelines", "Brand Pitch Decks"],
-  ["Business stationery & brand collateral", "Social media & marketing assets", "Packaging & product identity", "Presentation Slides"],
+  ["AI-Generated Ad Creatives", "AI Product & Lifestyle Visuals", "Social Media Ad Design", "AI Image Generation", "Ad Variations & Creative Testing"],
 ];
 
 /* the red rounded badge (same shape as your cursor), traced from Figma, 13.48deg, 2.989x */
@@ -58,7 +57,7 @@ export default function Aiadcreatives() {
           >
             <div className="relative flex h-[calc(121*var(--u))] items-start border-b border-white/[0.26] [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:items-center [@media(max-width:900px)]:justify-between [@media(max-width:900px)]:gap-[16px] [@media(max-width:900px)]:pb-[22px]">
               <h1 className="m-0 w-[calc(1136*var(--u))] text-[length:calc(80*var(--u))] leading-[0.96] font-medium tracking-[-0.08em] text-white [@media(max-width:900px)]:w-auto [@media(max-width:900px)]:text-[length:clamp(30px,7.4vw,64px)] [@media(max-width:900px)]:leading-[1.08]">
-                Build A Brand People Remember.
+                Creative Ads, Powered by AI
               </h1>
               <Image
                 src="/images/services/chrome-shape.webp"
@@ -91,11 +90,7 @@ export default function Aiadcreatives() {
           <p
             className={`${SIDE} m-0 mt-[calc(36*var(--u))] text-[length:calc(32*var(--u))] leading-[1.5] font-normal tracking-[-0.04em] text-white [@media(max-width:900px)]:mt-[32px] [@media(max-width:900px)]:text-[length:clamp(17px,4.4vw,28px)]`}
           >
-            We build distinctive brand identities that give businesses a clear voice, a memorable
-            visual presence, and a strong foundation for growth. From brand strategy and positioning
-            to logo design, visual systems, and brand guidelines, every element is carefully crafted
-            to make your brand feel consistent, intentional, and recognizable across every
-            touchpoint.
+           We create high-impact AI-powered ad creatives that help brands produce more engaging, scroll-stopping content at scale. By combining AI technology with creative strategy, visual design, and human direction, we develop ad creatives built to capture attention, communicate value, and drive action across digital platforms.
           </p>
 
           {/* ───────── Our Expertise ───────── */}
@@ -104,11 +99,7 @@ export default function Aiadcreatives() {
               Our Expertise
             </h2>
             <p className="m-0 text-[length:calc(24*var(--u))] leading-[2] font-normal tracking-[-0.04em] text-white [@media(max-width:900px)]:mt-[14px] [@media(max-width:900px)]:text-[length:clamp(16px,4vw,22px)] [@media(max-width:900px)]:leading-[1.6]">
-              Our Brand Design service is focused on creating identities that look distinctive,
-              communicate clearly, and connect with the right audience. We combine strategy and
-              visual design to build brands that are not only visually strong, but also meaningful
-              and practical. From defining your brand direction to creating the final visual system,
-              every detail is designed to give your business a confident and consistent presence.
+              Our AI-powered advertising services combine creative thinking with intelligent tools to produce high-quality visual content faster and more efficiently. From concept development and AI-generated visuals to social media ads and campaign variations, we create distinctive creatives tailored to your brand, audience, and marketing goals.
             </p>
 
             <div className="mt-[calc(24*var(--u))] flex flex-col gap-[calc(28*var(--u))] [@media(max-width:900px)]:mt-[24px] [@media(max-width:900px)]:gap-[12px]">
@@ -137,8 +128,7 @@ export default function Aiadcreatives() {
               How We Work
             </h2>
             <p className="mx-auto mt-[calc(18.2*var(--u))] mb-0 w-[calc(1300*var(--u))] max-w-full text-center text-[length:calc(32*var(--u))] leading-[1.5] font-normal tracking-[-0.04em] text-white [@media(max-width:900px)]:mt-[16px] [@media(max-width:900px)]:w-full [@media(max-width:900px)]:text-[length:clamp(16px,4.2vw,24px)]">
-              Our brand design process combines strategy, creativity, and thoughtful execution to
-              create distinctive identities aligned with your business, audience, and goals.
+             Our AI creative process combines strategy, technology, and human creative direction to produce ads that are distinctive, relevant, and ready to perform.
             </p>
 
             <ol className="m-0 mt-[calc(80*var(--u))] grid list-none grid-cols-4 gap-[calc(24*var(--u))] p-0 [@media(max-width:900px)]:mt-[36px] [@media(max-width:900px)]:grid-cols-2 [@media(max-width:900px)]:gap-[16px] [@media(max-width:560px)]:grid-cols-1">

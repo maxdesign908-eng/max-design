@@ -13,15 +13,15 @@ import Image from "next/image";
 */
 
 const STEPS = [
-  { n: "01", title: "Discover", lines: ["Understand your brand, audience,", "goals, and market."] },
-  { n: "02", title: "Strategize", lines: ["Define your brand positioning, personality,", "and creative direction."] },
-  { n: "03", title: "Design", lines: ["Create a distinctive visual identity built", "around your brand."] },
-  { n: "04", title: "Launch & Refine", lines: ["Polish every detail and deliver a", "complete brand system."] },
+  { n: "01", title: "Discover", lines: ["Understand your brand, audience, goals,", "and social media requirements."] },
+  { n: "02", title: "Plan", lines: ["Define your content direction, themes,", "visual style, and platform strategy."] },
+  { n: "03", title: "Design", lines: ["Design engaging posts, videos, campaigns,", "and creative assets aligned with your brand."] },
+  { n: "04", title: "Launch & Refine", lines: ["Polish the content and deliver consistent,", "platform-ready social media assets."] },
 ];
 
 const TAGS: string[][] = [
-  ["Brand strategy & positioning", "Logo & visual identity design", "Typography & color systems", "Brand guidelines", "Brand Pitch Decks"],
-  ["Business stationery & brand collateral", "Social media & marketing assets", "Packaging & product identity", "Presentation Slides"],
+  ["Social Media Strategy", "Account Setup & Optimization", "Social Media Management", "Content Planning & Creation", "Reels & Short-Form Content"],
+  ["Meta Ads Management", "Social Media Ad Creatives"],
 ];
 
 /* the red rounded badge (same shape as your cursor), traced from Figma, 13.48deg, 2.989x */
@@ -57,8 +57,8 @@ export default function Socialmedia() {
             className={`${SIDE} mt-[calc(180*var(--u))] [@media(max-width:900px)]:mt-[32px]`}
           >
             <div className="relative flex h-[calc(121*var(--u))] items-start border-b border-white/[0.26] [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:items-center [@media(max-width:900px)]:justify-between [@media(max-width:900px)]:gap-[16px] [@media(max-width:900px)]:pb-[22px]">
-              <h1 className="m-0 w-[calc(1136*var(--u))] text-[length:calc(80*var(--u))] leading-[0.96] font-medium tracking-[-0.08em] text-white [@media(max-width:900px)]:w-auto [@media(max-width:900px)]:text-[length:clamp(30px,7.4vw,64px)] [@media(max-width:900px)]:leading-[1.08]">
-                Build A Brand People Remember.
+              <h1 className="m-0 w-[calc(1250*var(--u))] text-[length:calc(80*var(--u))] leading-[0.96] font-medium tracking-[-0.08em] text-white [@media(max-width:900px)]:w-auto [@media(max-width:900px)]:text-[length:clamp(30px,7.4vw,64px)] [@media(max-width:900px)]:leading-[1.08]">
+                Social Presence That Gets Noticed
               </h1>
               <Image
                 src="/images/services/chrome-shape.webp"
@@ -89,11 +89,7 @@ export default function Socialmedia() {
           <p
             className={`${SIDE} m-0 mt-[calc(36*var(--u))] text-[length:calc(32*var(--u))] leading-[1.5] font-normal tracking-[-0.04em] text-white [@media(max-width:900px)]:mt-[32px] [@media(max-width:900px)]:text-[length:clamp(17px,4.4vw,28px)]`}
           >
-            We build distinctive brand identities that give businesses a clear voice, a memorable
-            visual presence, and a strong foundation for growth. From brand strategy and positioning
-            to logo design, visual systems, and brand guidelines, every element is carefully crafted
-            to make your brand feel consistent, intentional, and recognizable across every
-            touchpoint.
+            We create strategic social media content that helps brands build a recognizable presence, connect with their audience, and stay consistently relevant. From content strategy and creative design to short-form videos and campaign assets, our social media services combine creativity and strategy to turn attention into meaningful engagement.
           </p>
 
           {/* ───────── Our Expertise ───────── */}
@@ -102,11 +98,7 @@ export default function Socialmedia() {
               Our Expertise
             </h2>
             <p className="m-0 text-[length:calc(24*var(--u))] leading-[2] font-normal tracking-[-0.04em] text-white [@media(max-width:900px)]:mt-[14px] [@media(max-width:900px)]:text-[length:clamp(16px,4vw,22px)] [@media(max-width:900px)]:leading-[1.6]">
-              Our Brand Design service is focused on creating identities that look distinctive,
-              communicate clearly, and connect with the right audience. We combine strategy and
-              visual design to build brands that are not only visually strong, but also meaningful
-              and practical. From defining your brand direction to creating the final visual system,
-              every detail is designed to give your business a confident and consistent presence.
+              Our social media services are designed to create a consistent and engaging brand presence across every platform. We combine content strategy, visual design, copy, and creative direction to produce content that reflects your brand and connects with your audience.
             </p>
 
             <div className="mt-[calc(24*var(--u))] flex flex-col gap-[calc(28*var(--u))] [@media(max-width:900px)]:mt-[24px] [@media(max-width:900px)]:gap-[12px]">
@@ -135,8 +127,7 @@ export default function Socialmedia() {
               How We Work
             </h2>
             <p className="mx-auto mt-[calc(18.2*var(--u))] mb-0 w-[calc(1300*var(--u))] max-w-full text-center text-[length:calc(32*var(--u))] leading-[1.5] font-normal tracking-[-0.04em] text-white [@media(max-width:900px)]:mt-[16px] [@media(max-width:900px)]:w-full [@media(max-width:900px)]:text-[length:clamp(16px,4.2vw,24px)]">
-              Our brand design process combines strategy, creativity, and thoughtful execution to
-              create distinctive identities aligned with your business, audience, and goals.
+              Our social media process combines strategy, creative planning, and consistent execution to build a stronger digital presence for your brand.
             </p>
 
             <ol className="m-0 mt-[calc(80*var(--u))] grid list-none grid-cols-4 gap-[calc(24*var(--u))] p-0 [@media(max-width:900px)]:mt-[36px] [@media(max-width:900px)]:grid-cols-2 [@media(max-width:900px)]:gap-[16px] [@media(max-width:560px)]:grid-cols-1">

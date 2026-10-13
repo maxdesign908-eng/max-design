@@ -13,15 +13,15 @@ import Image from "next/image";
 */
 
 const STEPS = [
-  { n: "01", title: "Discover", lines: ["Understand your brand, audience,", "goals, and market."] },
-  { n: "02", title: "Strategize", lines: ["Define your brand positioning, personality,", "and creative direction."] },
-  { n: "03", title: "Design", lines: ["Create a distinctive visual identity built", "around your brand."] },
-  { n: "04", title: "Launch & Refine", lines: ["Polish every detail and deliver a", "complete brand system."] },
+  { n: "01", title: "Discover", lines: ["Understand your users, goals, and", "project requirements."] },
+  { n: "02", title: "Plan", lines: ["Map user journeys, structure, and", "key interactions."] },
+  { n: "03", title: "Design", lines: ["Create intuitive interfaces with", "a clear visual system."] },
+  { n: "04", title: "Launch & Refine", lines: ["Polish the experience and", "deliver the final design."] },
 ];
 
 const TAGS: string[][] = [
-  ["Brand strategy & positioning", "Logo & visual identity design", "Typography & color systems", "Brand guidelines", "Brand Pitch Decks"],
-  ["Business stationery & brand collateral", "Social media & marketing assets", "Packaging & product identity", "Presentation Slides"],
+  ["Website Strategy & Planning", "Responsive Web Design", "Front-End Development", "Custom Website Development", "Website Performance Optimization"],
+  ["E-commerce Website Design", "Back-End Development", "✦ Website Maintenance & Support"],
 ];
 
 /* the red rounded badge (same shape as your cursor), traced from Figma, 13.48deg, 2.989x */
@@ -57,8 +57,8 @@ export default function Webdevelopment() {
             className={`${SIDE} mt-[calc(180*var(--u))] [@media(max-width:900px)]:mt-[32px]`}
           >
             <div className="relative flex h-[calc(121*var(--u))] items-start border-b border-white/[0.26] [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:items-center [@media(max-width:900px)]:justify-between [@media(max-width:900px)]:gap-[16px] [@media(max-width:900px)]:pb-[22px]">
-              <h1 className="m-0 w-[calc(1136*var(--u))] text-[length:calc(80*var(--u))] leading-[0.96] font-medium tracking-[-0.08em] text-white [@media(max-width:900px)]:w-auto [@media(max-width:900px)]:text-[length:clamp(30px,7.4vw,64px)] [@media(max-width:900px)]:leading-[1.08]">
-                Build A Brand People Remember.
+              <h1 className="m-0 w-[calc(1250*var(--u))] text-[length:calc(80*var(--u))] leading-[0.96] font-medium tracking-[-0.08em] text-white [@media(max-width:900px)]:w-auto [@media(max-width:900px)]:text-[length:clamp(30px,7.4vw,64px)] [@media(max-width:900px)]:leading-[1.08]">
+                Digital Experiences Built to Perform
               </h1>
               <Image
                 src="/images/services/chrome-shape.webp"
@@ -89,11 +89,7 @@ export default function Webdevelopment() {
           <p
             className={`${SIDE} m-0 mt-[calc(36*var(--u))] text-[length:calc(32*var(--u))] leading-[1.5] font-normal tracking-[-0.04em] text-white [@media(max-width:900px)]:mt-[32px] [@media(max-width:900px)]:text-[length:clamp(17px,4.4vw,28px)]`}
           >
-            We build distinctive brand identities that give businesses a clear voice, a memorable
-            visual presence, and a strong foundation for growth. From brand strategy and positioning
-            to logo design, visual systems, and brand guidelines, every element is carefully crafted
-            to make your brand feel consistent, intentional, and recognizable across every
-            touchpoint.
+           We design and develop modern, high-performing websites that combine compelling visuals, intuitive user experiences, and reliable technology. From business websites and landing pages to e-commerce platforms and custom web solutions, we create digital experiences built to engage users and support your business goals.
           </p>
 
           {/* ───────── Our Expertise ───────── */}
@@ -102,11 +98,7 @@ export default function Webdevelopment() {
               Our Expertise
             </h2>
             <p className="m-0 text-[length:calc(24*var(--u))] leading-[2] font-normal tracking-[-0.04em] text-white [@media(max-width:900px)]:mt-[14px] [@media(max-width:900px)]:text-[length:clamp(16px,4vw,22px)] [@media(max-width:900px)]:leading-[1.6]">
-              Our Brand Design service is focused on creating identities that look distinctive,
-              communicate clearly, and connect with the right audience. We combine strategy and
-              visual design to build brands that are not only visually strong, but also meaningful
-              and practical. From defining your brand direction to creating the final visual system,
-              every detail is designed to give your business a confident and consistent presence.
+           Our website design and development services bring strategy, design, and technology together to create websites that look exceptional and work seamlessly. We focus on responsive design, intuitive navigation, performance, and scalable development to ensure your website delivers a consistent experience across every device.
             </p>
 
             <div className="mt-[calc(24*var(--u))] flex flex-col gap-[calc(28*var(--u))] [@media(max-width:900px)]:mt-[24px] [@media(max-width:900px)]:gap-[12px]">
