@@ -6,76 +6,60 @@ type Props = { sources: { src: string; type: string }[]; poster: string; classNa
 
 /**
  * Decorative looping clip. Stays on the poster frame for reduced-motion users.
- * Added: sound is ON by default, plus a small mute / unmute button in the bottom-right corner.
- * Browsers often block autoplay with sound; if that happens the clip plays muted and the sound
- * comes on at the visitor's first click, tap or key press (a browser rule no code can skip).
+ * Added: the clip starts muted; the small button in the bottom-right corner turns the sound on / off.
+ * The clip pauses (and the sound stops) when it is scrolled out of view or the tab is hidden.
  *
  * The video keeps exactly the same className as before. It now sits inside a wrapper that fills
  * the same box (absolute inset-0), so the button is always in the corner of the video itself.
  */
 export default function HeroVideo({ sources, poster, className }: Props) {
   const ref = useRef<HTMLVideoElement>(null);
-  const [muted, setMuted] = useState(false);
-  const stopUnlock = useRef<() => void>(() => {});
+  const [muted, setMuted] = useState(true);
 
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
+
+    let visible = true;
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    // Browsers may block autoplay with sound. So: try with sound first; if the browser says no,
-    // play muted and turn the sound on at the visitor's first click / tap / key press anywhere.
-    const start = async () => {
-      if (query.matches) {
-        video.pause();
-        return;
-      }
-      video.muted = false;
-      video.volume = 1;
-      setMuted(false);
-      try {
-        await video.play();
-      } catch {
-        video.muted = true;
-        setMuted(true);
-        void video.play().catch(() => {});
+    // the button always shows the real state of the video
+    const onVolume = () => setMuted(video.muted);
+    video.addEventListener("volumechange", onVolume);
+    setMuted(video.muted);
 
-        const events = ["pointerdown", "keydown", "touchend"] as const;
-        const unlock = (e: Event) => {
-          // a click on the mute button itself is handled by the button
-          if ((e.target as Element | null)?.closest?.("[data-hero-mute]")) return;
-          video.muted = false;
-          video.volume = 1;
-          setMuted(false);
-          void video.play().catch(() => {});
-          stopUnlock.current();
-        };
-        stopUnlock.current = () => {
-          events.forEach((ev) => window.removeEventListener(ev, unlock));
-          stopUnlock.current = () => {};
-        };
-        events.forEach((ev) => window.addEventListener(ev, unlock, { passive: true }));
-      }
+    const resume = () => {
+      if (visible && !document.hidden && !query.matches) void video.play().catch(() => {});
     };
-
-    void start();
-
-    const sync = () => (query.matches ? video.pause() : void video.play().catch(() => {}));
+    const sync = () => (query.matches ? video.pause() : resume());
+    sync();
     query.addEventListener("change", sync);
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible) resume();
+        else video.pause();
+      },
+      { threshold: 0.15 },
+    );
+    io.observe(video);
+    const onVisibility = () => (document.hidden ? video.pause() : resume());
+    document.addEventListener("visibilitychange", onVisibility);
+
     return () => {
+      io.disconnect();
+      video.removeEventListener("volumechange", onVolume);
+      document.removeEventListener("visibilitychange", onVisibility);
       query.removeEventListener("change", sync);
-      stopUnlock.current();
     };
   }, []);
 
   function toggleSound() {
     const video = ref.current;
     if (!video) return;
-    stopUnlock.current(); // the visitor chose, stop waiting for a first click
-    const next = !video.muted;
-    video.muted = next;
-    if (!next) video.volume = 1;
-    setMuted(next);
+    video.muted = !video.muted;
+    if (!video.muted) video.volume = 1;
     if (video.paused && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       void video.play().catch(() => {});
     }
@@ -88,6 +72,7 @@ export default function HeroVideo({ sources, poster, className }: Props) {
         className={className}
         poster={poster}
         autoPlay
+        muted
         loop
         playsInline
         preload="auto"
@@ -101,7 +86,6 @@ export default function HeroVideo({ sources, poster, className }: Props) {
 
       <button
         type="button"
-        data-hero-mute
         onClick={toggleSound}
         aria-label={muted ? "Unmute video" : "Mute video"}
         aria-pressed={!muted}
