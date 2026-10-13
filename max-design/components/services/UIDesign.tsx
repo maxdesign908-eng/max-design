@@ -73,17 +73,18 @@ export default function UiDesign() {
           </section>
 
           {/* ───────── hero picture (1920 x 800, picture shifted up 110) ───────── */}
-          <div className="relative mt-[calc(36*var(--u))] h-[calc(800*var(--u))] w-full overflow-hidden [@media(max-width:900px)]:mt-[28px] [@media(max-width:900px)]:h-[clamp(230px,68vw,520px)]">
-            <Image
-              src="/images/services/ui-design.webp"
-              alt="Golden Blood hair care brand identity and packaging"
-              width={2576}
-              height={1717}
-              unoptimized
-              priority
-              className="absolute top-[calc(-110*var(--u))] left-0 block h-auto w-full [@media(max-width:900px)]:top-0 [@media(max-width:900px)]:h-full [@media(max-width:900px)]:object-cover [@media(max-width:900px)]:object-[50%_55%]"
-            />
-          </div>
+     
+<div className="relative mt-[calc(36*var(--u))] h-[calc(800*var(--u))] w-full overflow-hidden [@media(max-width:900px)]:mt-[28px] [@media(max-width:900px)]:h-[clamp(230px,68vw,520px)]">
+  <Image
+    src="/images/services/ui-ux-design-hero.webp"
+    alt="Golden Blood hair care brand identity and packaging"
+    width={2576}
+    height={1717}
+    unoptimized
+    priority
+   className="absolute top-[calc(-20*var(--u))] left-0 block h-auto w-[110%] max-w-none [@media(max-width:900px)]:top-0 [@media(max-width:900px)]:h-full [@media(max-width:900px)]:w-full [@media(max-width:900px)]:object-cover [@media(max-width:900px)]:object-[50%_55%]"
+  />
+</div>
 
           {/* ───────── intro paragraph ───────── */}
           <p
