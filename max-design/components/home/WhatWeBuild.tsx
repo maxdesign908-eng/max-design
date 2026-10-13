@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from "next/image";
@@ -65,27 +64,40 @@ const SERVICES: Service[] = [
   },
 ];
 
+/* Same hover effect as the CTA button: a red fill rises from the bottom of the pill (no red outline),
+   the dot and the arrow circle turn white, the arrow turns red and tilts 45deg. */
 function ArrowPill({ active }: { active: boolean }) {
   return (
     <span
       data-active={active}
       className="
-        flex h-[calc(50*var(--spacing))]
+        isolate flex h-[calc(50*var(--spacing))]
         w-[calc(88*var(--spacing))]
-        shrink-0 items-center justify-between
+        shrink-0 items-center justify-between overflow-hidden [contain:layout]
         rounded-full border-[0.57px] border-white/25
         pr-[calc(6*var(--spacing))]
         pl-[calc(16*var(--spacing))]
-        transition-colors duration-300
-        data-[active=true]:border-[#ff1e2d]
         max-[820px]:h-[calc(40*var(--spacing))]
         max-[820px]:w-[calc(70*var(--spacing))]
         max-[820px]:pl-[calc(12*var(--spacing))]
       "
     >
-      <i className="h-7 w-7 shrink-0 rounded-full bg-[#ff1e2d] max-[820px]:h-6 max-[820px]:w-6" />
+      {/* red fill rising from the bottom */}
+      <span
+        aria-hidden="true"
+        data-active={active}
+        className="pointer-events-none absolute top-0 left-0 z-0 h-[140%] w-full translate-y-[72%] rounded-[50%_50%_0_0/28%_28%_0_0] bg-[#ff1e2d] transition-transform duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] data-[active=true]:-translate-y-[28.6%]"
+      />
 
-      <span className="grid h-[calc(38*var(--spacing))] w-[calc(38*var(--spacing))] shrink-0 place-items-center rounded-full bg-[#ff1e2d] max-[820px]:h-[calc(30*var(--spacing))] max-[820px]:w-[calc(30*var(--spacing))]">
+      <i
+        data-active={active}
+        className="relative z-10 h-7 w-7 shrink-0 rounded-full bg-[#ff1e2d] transition-colors duration-300 data-[active=true]:bg-white max-[820px]:h-6 max-[820px]:w-6"
+      />
+
+      <span
+        data-active={active}
+        className="relative z-10 grid h-[calc(38*var(--spacing))] w-[calc(38*var(--spacing))] shrink-0 place-items-center rounded-full bg-[#ff1e2d] text-white transition-colors duration-300 data-[active=true]:bg-white data-[active=true]:text-[#ff1e2d] max-[820px]:h-[calc(30*var(--spacing))] max-[820px]:w-[calc(30*var(--spacing))]"
+      >
         <svg
           data-active={active}
           width="14"
@@ -98,7 +110,7 @@ function ArrowPill({ active }: { active: boolean }) {
         >
           <path
             d="M12.48 0L13.44 0.99L13.33 1.1C10.56 4.01 10.66 7.98 12.49 9.87L11.52 10.86C10.01 9.3 9.47 6.87 10.01 4.46L1.95 12.64L1 11.65L9.06 3.47C6.7 4 4.34 3.43 2.83 1.87L3.8 0.88C5.65 0.88 9.6 2.92 12.48 0Z"
-            fill="white"
+            fill="currentColor"
           />
         </svg>
       </span>

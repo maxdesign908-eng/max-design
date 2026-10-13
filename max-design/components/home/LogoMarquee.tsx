@@ -39,6 +39,7 @@ const logos = [
   { name: "Kora Constructions", file: "kora", w: 145 },
   { name: "Oh Belly", file: "oh-belly", w: 80 },
   { name: "Fifer Electric", file: "fifer-electric", w: 101 },
+  { name: "Jams Wheels on Deals", file: "jams-wheels-on-deals", w: 154 },
 ];
 
 export default function LogoMarquee() {

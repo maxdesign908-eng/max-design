@@ -19,7 +19,7 @@ type Props = {
 
   HOVER (and keyboard focus): a red fill rises from the bottom with a soft curved edge.
   While it is red, the small dot and the arrow circle turn white and the arrow turns red,
-  so they stay visible. With "reduce motion" the colour changes instantly, no sliding.
+  so they stay visible. The arrow also turns 45deg (same as the What We Build arrows). With "reduce motion" the colour changes instantly, no sliding.
 */
 export default function CtaButton({ href, label, width, className }: Props) {
   return (
@@ -45,16 +45,18 @@ export default function CtaButton({ href, label, width, className }: Props) {
         className="relative z-10 ml-auto h-[calc(38*var(--k,1px))] w-[calc(38*var(--k,1px))] flex-none rounded-[50%] bg-(color:--color-accent) text-white transition-colors duration-300 group-hover:bg-white group-hover:text-(color:--color-accent) group-focus-visible:bg-white group-focus-visible:text-(color:--color-accent)"
         aria-hidden="true"
       >
-        <svg
-          className="absolute top-[calc(11*var(--k,1px))] left-[calc(12.13*var(--k,1px))] h-[calc(14*var(--k,1px))] w-[calc(14*var(--k,1px))]"
-          width="14"
-          height="14"
-          viewBox="1691.1 41 14 14"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M1703.58 41L1704.54 41.9906L1704.43 42.0986C1701.66 45.0122 1701.76 48.9776 1703.59 50.8714L1702.62 51.8562C1701.11 50.2962 1700.57 47.8741 1701.11 45.4621L1693.05 53.6371L1692.1 52.6476L1700.16 44.4691C1697.8 45.002 1695.44 44.4296 1693.93 42.8684L1694.9 41.8824C1696.75 43.8001 1700.7 43.9228 1703.58 41Z" fill="currentColor" />
-        </svg>
+        <span className="absolute top-[calc(11*var(--k,1px))] left-[calc(12.13*var(--k,1px))] block h-[calc(14*var(--k,1px))] w-[calc(14*var(--k,1px))] origin-center transition-[transform] duration-300 ease-out group-hover:[transform:rotate(45deg)] group-focus-visible:[transform:rotate(45deg)]">
+          <svg
+            className="block h-full w-full"
+            width="14"
+            height="14"
+            viewBox="1691.1 41 14 14"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M1703.58 41L1704.54 41.9906L1704.43 42.0986C1701.66 45.0122 1701.76 48.9776 1703.59 50.8714L1702.62 51.8562C1701.11 50.2962 1700.57 47.8741 1701.11 45.4621L1693.05 53.6371L1692.1 52.6476L1700.16 44.4691C1697.8 45.002 1695.44 44.4296 1693.93 42.8684L1694.9 41.8824C1696.75 43.8001 1700.7 43.9228 1703.58 41Z" fill="currentColor" />
+          </svg>
+        </span>
       </span>
     </a>
   );

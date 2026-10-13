@@ -13,6 +13,8 @@ type Props = { sources: { src: string; type: string }[]; poster: string; classNa
  * the same box (absolute inset-0), so the button is always in the corner of the video itself.
  */
 export default function HeroVideo({ sources, poster, className }: Props) {
+  // H.264 mp4 is hardware decoded (smooth); VP9 webm is often software decoded (laggy) -> mp4 first
+  const ordered = [...sources].sort((a, b) => Number(b.type.includes("mp4")) - Number(a.type.includes("mp4")));
   const ref = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
 
@@ -22,6 +24,7 @@ export default function HeroVideo({ sources, poster, className }: Props) {
 
     let visible = true;
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
 
     // the button always shows the real state of the video
     const onVolume = () => setMuted(video.muted);
@@ -29,9 +32,9 @@ export default function HeroVideo({ sources, poster, className }: Props) {
     setMuted(video.muted);
 
     const resume = () => {
-      if (visible && !document.hidden && !query.matches) void video.play().catch(() => {});
+      if (visible && !saveData && !document.hidden && !query.matches) void video.play().catch(() => {});
     };
-    const sync = () => (query.matches ? video.pause() : resume());
+    const sync = () => (query.matches || saveData ? video.pause() : resume());
     sync();
     query.addEventListener("change", sync);
 
@@ -66,7 +69,7 @@ export default function HeroVideo({ sources, poster, className }: Props) {
   }
 
   return (
-    <div className="absolute inset-0">
+    <div className="absolute inset-0 [contain:paint] [transform:translateZ(0)]">
       <video
         ref={ref}
         className={className}
@@ -76,10 +79,12 @@ export default function HeroVideo({ sources, poster, className }: Props) {
         loop
         playsInline
         preload="metadata"
+        disablePictureInPicture
+        disableRemotePlayback
         aria-hidden="true"
         tabIndex={-1}
       >
-        {sources.map(({ src, type }) => (
+        {ordered.map(({ src, type }) => (
           <source key={src} src={src} type={type} />
         ))}
       </video>
