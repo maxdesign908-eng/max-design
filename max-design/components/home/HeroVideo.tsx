@@ -75,7 +75,7 @@ export default function HeroVideo({ sources, poster, className }: Props) {
         muted
         loop
         playsInline
-        preload="auto"
+        preload="metadata"
         aria-hidden="true"
         tabIndex={-1}
       >
@@ -90,7 +90,7 @@ export default function HeroVideo({ sources, poster, className }: Props) {
         aria-label={muted ? "Unmute video" : "Mute video"}
         aria-pressed={!muted}
         title={muted ? "Unmute" : "Mute"}
-        className="absolute right-[max(10px,calc(20*var(--u,1px)))] bottom-[max(10px,calc(20*var(--u,1px)))] z-10 grid h-[max(32px,calc(44*var(--u,1px)))] w-[max(32px,calc(44*var(--u,1px)))] cursor-pointer place-items-center rounded-full border border-white/30 bg-black/55 text-white backdrop-blur-sm transition-[background-color,transform,border-color] duration-200 hover:scale-105 hover:border-white/70 hover:bg-black/75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff1e2d] active:scale-95"
+        className="absolute right-[max(10px,calc(20*var(--u,1px)))] bottom-[max(10px,calc(20*var(--u,1px)))] z-10 grid h-[max(32px,calc(44*var(--u,1px)))] w-[max(32px,calc(44*var(--u,1px)))] cursor-pointer place-items-center rounded-full border border-white/30 bg-black/70 text-white transition-[background-color,transform,border-color] duration-200 hover:scale-105 hover:border-white/70 hover:bg-black/85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff1e2d] active:scale-95"
       >
         <svg
           viewBox="0 0 24 24"
