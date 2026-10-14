@@ -32,6 +32,9 @@ import {
 
   Background: the red-glass picture, 3817 x 2147, turned 180deg, blur 12 (Figma 24), opacity 1.
   I fitted it on your screenshot (0.9998 match), so top / left are relative to this section.
+
+  "Book A Call Directly": if the page gives an onBookCall function (see ContactSection.tsx),
+  clicking it opens the booking pop-up. Without it the link just goes to callHref.
 */
 
 const SERVICES = [
@@ -352,11 +355,14 @@ function Select({
 export default function Contact({
   endpoint = "/api/contact",
   callHref = "#book-a-call",
+  onBookCall,
 }: {
   /** the form is sent here as JSON (POST). Change it to your own API route. */
   endpoint?: string;
   /** where "Book A Call Directly" goes (for example your Calendly link) */
   callHref?: string;
+  /** if given, "Book A Call Directly" calls this (opens the BookCall pop-up) instead of following the link */
+  onBookCall?: () => void;
 }) {
   const uid = useId().replace(/:/g, "");
   const [values, setValues] = useState<Values>(EMPTY);
@@ -600,6 +606,12 @@ export default function Contact({
               </p>
               <a
                 href={callHref}
+                onClick={(e) => {
+                  if (onBookCall) {
+                    e.preventDefault();
+                    onBookCall();
+                  }
+                }}
                 className="text-[length:var(--ks)] leading-[1.3] font-normal tracking-[-0.04em] whitespace-nowrap text-[#E71117] underline decoration-1 underline-offset-[4px] transition-colors hover:text-[#ff1e2d] focus-visible:outline-2 focus-visible:outline-offset-[4px] focus-visible:outline-[#ff1e2d]"
               >
                 Book A Call Directly
