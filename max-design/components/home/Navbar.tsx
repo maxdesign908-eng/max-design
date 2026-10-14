@@ -2,16 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import localFont from "next/font/local";
 import { useEffect, useState } from "react";
 import CtaButton from "../home/CtaButton";
-
-const designFont = localFont({
-  src: "../../app/fonts/Poppins-ExtraLight.woff2",
-  weight: "200",
-  style: "normal",
-  display: "swap",
-});
 
 const links = [
   { label: "Services", href: "/services" },
@@ -53,22 +45,18 @@ export default function Navbar() {
             href="/"
             aria-label="MAX design — home"
             onClick={() => setOpen(false)}
-            className="@container relative block h-[calc(43*var(--k))] w-[calc(159.59*var(--k))] flex-none [@media(max-width:900px)]:aspect-[159.59/43] [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:w-[clamp(120px,34vw,160px)]"
+            className="relative block h-[calc(43*var(--k))] w-[calc(159.59*var(--k))] flex-none [@media(max-width:900px)]:aspect-[159.59/43] [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:w-[clamp(120px,34vw,160px)]"
           >
+            {/* new full logo (SVG, 157 x 31): full width of the 159.59 x 43 box, never stretched; top offset 21.35% = same place the old logo mark sat */}
             <Image
-              src="/images/logo-mark.png"
+              src="/images/logo.svg"
               alt=""
-              width={76}
-              height={23}
+              width={157}
+              height={31}
               priority
-              className="absolute top-[21.35%] left-0 block h-[52.88%] w-[47.264%]"
+              unoptimized
+              className="absolute top-[21.35%] left-0 block h-auto w-full"
             />
-
-            <span
-              className={`${designFont.className} absolute top-0 left-[47.363%] flex h-full w-[52.634%] items-center text-[length:18.022cqw] leading-none tracking-[-0.08em] whitespace-nowrap text-white`}
-            >
-              design
-            </span>
           </Link>
 
           {/* Navigation */}
