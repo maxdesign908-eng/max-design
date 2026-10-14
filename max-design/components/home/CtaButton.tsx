@@ -17,7 +17,7 @@ type Props = {
   The red fill is positioned inside the button with `contain: layout` (not `relative`), so the button
   can still be absolute / static / relative through className (Hero uses absolute on desktop, static on mobile).
 
-  HOVER (and keyboard focus): a red fill rises from the bottom with a soft curved edge.
+  HOVER (and keyboard focus): a #E71117 red fill rises from the bottom with a soft curved edge.
   While it is red, the small dot and the arrow circle turn white and the arrow turns red,
   so they stay visible. The arrow also turns 45deg (same as the What We Build arrows). With "reduce motion" the colour changes instantly, no sliding.
 */
@@ -31,7 +31,7 @@ export default function CtaButton({ href, label, width, className }: Props) {
       {/* red fill that rises from the bottom (taller than the button so the curved top edge stays above it) */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute top-0 left-0 z-0 h-[140%] w-full translate-y-[72%] rounded-[50%_50%_0_0/28%_28%_0_0] bg-(color:--color-accent) transition-transform duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] group-hover:-translate-y-[28.6%] group-focus-visible:-translate-y-[28.6%] motion-reduce:transition-none"
+        className="pointer-events-none absolute top-0 left-0 z-0 h-[140%] w-full translate-y-[72%] rounded-[50%_50%_0_0/28%_28%_0_0] bg-[#E71117] transition-transform duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] group-hover:-translate-y-[28.6%] group-focus-visible:-translate-y-[28.6%] motion-reduce:transition-none"
       />
 
       <span
@@ -42,7 +42,7 @@ export default function CtaButton({ href, label, width, className }: Props) {
         {label}
       </span>
       <span
-        className="relative z-10 ml-auto h-[calc(38*var(--k,1px))] w-[calc(38*var(--k,1px))] flex-none rounded-[50%] bg-(color:--color-accent) text-white transition-colors duration-300 group-hover:bg-white group-hover:text-(color:--color-accent) group-focus-visible:bg-white group-focus-visible:text-(color:--color-accent)"
+        className="relative z-10 ml-auto h-[calc(38*var(--k,1px))] w-[calc(38*var(--k,1px))] flex-none rounded-[50%] bg-(color:--color-accent) text-white transition-colors duration-300 group-hover:bg-white group-hover:text-[#E71117] group-focus-visible:bg-white group-focus-visible:text-[#E71117]"
         aria-hidden="true"
       >
         <span className="absolute top-[calc(11*var(--k,1px))] left-[calc(12.13*var(--k,1px))] block h-[calc(14*var(--k,1px))] w-[calc(14*var(--k,1px))] origin-center transition-[transform] duration-300 ease-out group-hover:[transform:rotate(45deg)] group-focus-visible:[transform:rotate(45deg)]">

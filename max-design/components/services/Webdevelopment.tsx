@@ -24,7 +24,7 @@ const STEPS = [
 
 const TAGS: string[][] = [
   ["Website Strategy & Planning", "Responsive Web Design", "Front-End Development", "Custom Website Development", "Website Performance Optimization"],
-  ["E-commerce Website Design", "Back-End Development", "✦ Website Maintenance & Support"],
+  ["E-commerce Website Design", "Back-End Development", "Website Maintenance & Support"],
 ];
 
 /* the red rounded badge (same shape as your cursor), traced from Figma, 13.48deg, 2.989x */
@@ -35,6 +35,8 @@ const BADGE =
 const SIDE = "px-[calc(97*var(--u))] [@media(max-width:900px)]:px-[var(--pad)]";
 
 /* ───────── animation helpers (all in this file) ─────────
+   (the word "mask" has extra side padding with an equal negative margin: the headings use negative letter-spacing,
+    so without it the last letter of every word, e.g. the "e" or the ".", was cut off by overflow-hidden) 
    useInView : true once the element has been scrolled into view (stays true).
    Words     : splits a text into words. "mask" = every word slides up out of a hidden strip,
                "fade" = every word fades up. Words come in one after another (step ms apart).
@@ -83,7 +85,7 @@ function Words({
           {mode === "mask" ? (
             <span
               aria-hidden="true"
-              className="-mt-[0.14em] -mb-[0.16em] inline-block overflow-hidden pt-[0.14em] pb-[0.16em] align-top"
+              className="-mt-[0.14em] -mr-[0.2em] -mb-[0.16em] -ml-[0.1em] inline-block overflow-hidden pt-[0.14em] pr-[0.2em] pb-[0.16em] pl-[0.1em] align-top"
             >
               <span
                 style={{ transitionDelay: inView ? `${delay + i * step}ms` : "0ms" }}

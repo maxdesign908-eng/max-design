@@ -86,17 +86,17 @@ function ArrowPill({ active }: { active: boolean }) {
       <span
         aria-hidden="true"
         data-active={active}
-        className="pointer-events-none absolute top-0 left-0 z-0 h-[140%] w-full translate-y-[72%] rounded-[50%_50%_0_0/28%_28%_0_0] bg-[#ff1e2d] transition-transform duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] data-[active=true]:-translate-y-[28.6%]"
+        className="pointer-events-none absolute top-0 left-0 z-0 h-[140%] w-full translate-y-[72%] rounded-[50%_50%_0_0/28%_28%_0_0] bg-[#E71117] transition-transform duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] data-[active=true]:-translate-y-[28.6%]"
       />
 
       <i
         data-active={active}
-        className="relative z-10 h-7 w-7 shrink-0 rounded-full bg-[#ff1e2d] transition-colors duration-300 data-[active=true]:bg-white max-[820px]:h-6 max-[820px]:w-6"
+        className="relative z-10 h-7 w-7 shrink-0 rounded-full bg-[#E71117] transition-colors duration-300 data-[active=true]:bg-white max-[820px]:h-6 max-[820px]:w-6"
       />
 
       <span
         data-active={active}
-        className="relative z-10 grid h-[calc(38*var(--spacing))] w-[calc(38*var(--spacing))] shrink-0 place-items-center rounded-full bg-[#ff1e2d] text-white transition-colors duration-300 data-[active=true]:bg-white data-[active=true]:text-[#ff1e2d] max-[820px]:h-[calc(30*var(--spacing))] max-[820px]:w-[calc(30*var(--spacing))]"
+        className="relative z-10 grid h-[calc(38*var(--spacing))] w-[calc(38*var(--spacing))] shrink-0 place-items-center rounded-full bg-[#E71117] text-white transition-colors duration-300 data-[active=true]:bg-white data-[active=true]:text-[#E71117] max-[820px]:h-[calc(30*var(--spacing))] max-[820px]:w-[calc(30*var(--spacing))]"
       >
         <svg
           data-active={active}
@@ -164,7 +164,7 @@ export default function WhatWeBuild() {
                 inView ? "translate-y-0" : "translate-y-[105%]"
               }`}
             >
-              What We build
+              What We Do
             </span>
           </span>
         </h2>
@@ -215,7 +215,7 @@ export default function WhatWeBuild() {
                     hover:bg-white/[0.04]
                     focus-visible:outline-2
                     focus-visible:-outline-offset-2
-                    focus-visible:outline-[#ff1e2d]
+                    focus-visible:outline-[#E71117]
                     data-[active=true]:bg-white/[0.04]
                     max-[820px]:min-h-[calc(64*var(--spacing))]
                     max-[820px]:px-[calc(16*var(--spacing))]

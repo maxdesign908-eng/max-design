@@ -182,7 +182,7 @@ export default function Faq() {
                   </button>
                 </h3>
 
-                {/* answer: height opens smoothly, text fades up */}
+                {/* answer: height opens smoothly, text rises and fades in (no blur) */}
                 <div
                   id={panelId}
                   role="region"
@@ -190,7 +190,7 @@ export default function Faq() {
                   className="grid grid-rows-[0fr] transition-[grid-template-rows,margin] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] group-data-[open=true]:mt-[calc(-1*var(--pull))] group-data-[open=true]:grid-rows-[1fr] motion-reduce:transition-none"
                 >
                   <div className="min-h-0 overflow-hidden">
-                    <p className="m-0 translate-y-[14px] blur-[4px] pr-[calc(var(--pr)_+_12*var(--u))] pb-[calc(38*var(--u))] pl-[var(--tx)] text-[length:var(--as)] leading-[1.5] font-normal text-white/70 opacity-0 transition-[opacity,translate,filter] duration-600 ease-out group-data-[open=true]:translate-y-0 group-data-[open=true]:opacity-100 group-data-[open=true]:blur-0 group-data-[open=true]:delay-150 motion-reduce:transition-none max-[899px]:pb-[22px]">
+                    <p className="m-0 translate-y-[22px] pr-[calc(var(--pr)_+_12*var(--u))] pb-[calc(38*var(--u))] pl-[var(--tx)] text-[length:var(--as)] leading-[1.5] font-normal text-white/70 opacity-0 transition-[opacity,translate] duration-300 ease-out group-data-[open=true]:translate-y-0 group-data-[open=true]:opacity-100 group-data-[open=true]:duration-[750ms] group-data-[open=true]:ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[open=true]:delay-[140ms] motion-reduce:transition-none max-[899px]:pb-[22px]">
                       {item.a}
                     </p>
                   </div>
