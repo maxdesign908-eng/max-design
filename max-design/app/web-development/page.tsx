@@ -5,7 +5,7 @@ import Navbar from "@/components/home/Navbar";
 import Webdevelopment from "@/components/services/Webdevelopment";
 
 
-export default function ServicesPage() {
+export default function WebDevelopmentPage() {
   return (
     <>
       <div className="w-full bg-black">

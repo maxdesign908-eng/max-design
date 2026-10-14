@@ -5,7 +5,7 @@ import Navbar from "@/components/home/Navbar";
 import Socialmedia from "@/components/services/Socialmedia";
 
 
-export default function ServicesPage() {
+export default function SocialMediaPage() {
   return (
     <>
       <div className="w-full bg-black">

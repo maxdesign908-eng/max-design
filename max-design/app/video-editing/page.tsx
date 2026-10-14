@@ -6,7 +6,7 @@ import Navbar from "@/components/home/Navbar";
 import Videoediting from "@/components/services/Videoediting";
 
 
-export default function ServicesPage() {
+export default function VideoEditingPage() {
   return (
     <>
       <div className="w-full bg-black">

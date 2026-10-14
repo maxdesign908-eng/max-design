@@ -4,7 +4,7 @@ import Navbar from "@/components/home/Navbar";
 
 import UiDesign from "@/components/services/UIDesign";
 
-export default function ServicesPage() {
+export default function UiUxPage() {
   return (
     <>
       <div className="w-full bg-black">

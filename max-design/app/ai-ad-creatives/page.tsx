@@ -5,7 +5,7 @@ import Aiadcreatives from "@/components/services/Aiadcreatives";
 
 
 
-export default function ServicesPage() {
+export default function AiAdCreativesPage() {
   return (
     <>
       <div className="w-full bg-black">

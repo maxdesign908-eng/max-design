@@ -5,7 +5,7 @@ import BrandDesign from "@/components/services/BrandDesign";
 
 import ContactService from "@/components/services/ContactService";
 
-export default function ServicesPage() {
+export default function BrandPage() {
   return (
     <>
       <div className="w-full bg-black">

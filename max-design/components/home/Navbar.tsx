@@ -8,9 +8,9 @@ import CtaButton from "../home/CtaButton";
 const links = [
   { label: "Services", href: "/services" },
   { label: "Portfolio", href: "#portfolio" },
-  { label: "About", href: "#about" },
-  { label: "Blogs", href: "#blogs" },
-  { label: "Contact", href: "#contact" },
+  { label: "About", href: "/about" },
+  { label: "Blogs", href: "/blogs" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
