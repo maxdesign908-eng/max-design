@@ -234,7 +234,7 @@ export default function StartProject() {
                 {/* heading row: 151 high, the divider is its bottom line */}
                 <div className="flex items-start border-b border-white/[0.26] pb-[22px] min-[901px]:h-[calc(151*var(--u))] min-[901px]:pb-0">
                   <h1 className="m-0 text-[length:clamp(34px,9vw,64px)] leading-[1.12] font-medium tracking-[-0.04em] text-white min-[901px]:text-[length:calc(80*var(--u))]">
-                    <Words text="Start your Project" delay={150} step={110} />
+                    <Words text="Pick what you need. Select one or more." delay={150} step={110} />
                   </h1>
                 </div>
 
@@ -243,7 +243,7 @@ export default function StartProject() {
                   style={fade(200).style}
                   className={`${fade(200).className} m-0 mt-[32px] text-[length:clamp(24px,6vw,40px)] leading-[1.2] font-normal tracking-[-0.04em] text-white min-[901px]:mt-[calc(43*var(--u))] min-[901px]:text-[length:calc(48*var(--u))] min-[901px]:leading-[calc(39*var(--u))]`}
                 >
-                  What are you supposed to do?
+                  Pick what you need. Select one or more.
                 </h2>
                 <div
                   role="group"

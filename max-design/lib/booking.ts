@@ -20,24 +20,37 @@ export const BOOKING = {
   /** people can't book less than this many hours from now */
   minNoticeHours: 6,
   /** how far ahead people can book */
-  maxDaysAhead: 120, // about 4 months ahead, so visitors can move through several months
+  maxDaysAhead: 365, // a full year ahead: visitors can open any month (Oct, Nov, Dec, ...)
   title: "Intro call with MAX design",
 };
 
 /* ------------------------------------------------------------------ time zones */
 
+/* building an Intl.DateTimeFormat is slow: make each one once and reuse it (the pop-up asks for thousands of them) */
+const fmtCache = new Map<string, Intl.DateTimeFormat>();
+function cachedFmt(key: string, make: () => Intl.DateTimeFormat): Intl.DateTimeFormat {
+  let f = fmtCache.get(key);
+  if (!f) {
+    f = make();
+    fmtCache.set(key, f);
+  }
+  return f;
+}
+
 /** minutes to add to UTC to get the wall-clock time in `tz` at instant `ms` (e.g. Karachi = 300) */
 export function tzOffsetMinutes(ms: number, tz: string): number {
-  const dtf = new Intl.DateTimeFormat("en-US", {
-    timeZone: tz,
-    hourCycle: "h23",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
+  const dtf = cachedFmt(`off|${tz}`, () =>
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: tz,
+      hourCycle: "h23",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    }),
+  );
   const p = dtf.formatToParts(new Date(ms));
   const n = (t: string) => Number(p.find((x) => x.type === t)?.value);
   const asUtc = Date.UTC(n("year"), n("month") - 1, n("day"), n("hour") % 24, n("minute"), n("second"));
@@ -89,14 +102,14 @@ export function generateSlots(nowMs: number = Date.now()): number[] {
 
 /** "2026-08-04" : the calendar date of instant `ms` as seen in `tz` */
 export function dateKey(ms: number, tz: string): string {
-  const p = new Intl.DateTimeFormat("en-US", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date(ms));
+  const p = cachedFmt(`day|${tz}`, () => new Intl.DateTimeFormat("en-US", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" })).formatToParts(new Date(ms));
   const g = (t: string) => p.find((x) => x.type === t)?.value ?? "";
   return `${g("year")}-${g("month")}-${g("day")}`;
 }
 
 /** "11:30 AM" */
 export function fmtTime(ms: number, tz: string): string {
-  return new Intl.DateTimeFormat("en-US", { timeZone: tz, hour: "numeric", minute: "2-digit" }).format(new Date(ms));
+  return cachedFmt(`time|${tz}`, () => new Intl.DateTimeFormat("en-US", { timeZone: tz, hour: "numeric", minute: "2-digit" })).format(new Date(ms));
 }
 
 /** "Tuesday, August 4, 2026" */

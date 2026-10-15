@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
+import Image from "next/image";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 import {
   BOOKING,
   dateKey,
@@ -14,14 +15,25 @@ import {
 } from "@/lib/booking";
 
 /*
-  "Book A Call Directly" pop-up (dark theme: black + red #E71117).
+  "Book A Call Directly" pop-up (solid black + red #E71117).
+  Logo: the MAX design logo from the navbar (/images/logo.svg), on a solid black background.
+  Font: the site font (Poppins, same as the "Design That LEAVE a LASTING mark!" heading): Medium for titles,
+  Regular for text, tight letter-spacing like the rest of the site.
   Pick a day + time (shown in the visitor's own time zone), type name + email, confirm.
   The booking is sent to /api/book, which emails it to you.
 
   Your open days / hours / call length / how far ahead people can book live in  lib/booking.ts
 
-  Months: the visitor can move freely between this month and the last month you allow
-  (BOOKING.maxDaysAhead), even when a month has no free days.
+  CALENDAR
+  - Every date of the month is shown. Today and every day after it can be opened (nothing in the future is
+    greyed out). Only days that already passed are dimmed, because nobody can book in the past.
+  - The month strip under the title (Oct, Nov, Dec, ...) and the two arrows move between months.
+    The visitor can go as far ahead as BOOKING.maxDaysAhead.
+
+  NO JUMPING
+  - The pop-up is prepared BEFORE the browser paints it (no empty calendar flashing first).
+  - Locking the page scroll keeps the page where it is: the width of the scrollbar is added back as padding,
+    so the page does not shift sideways, and focus never scrolls the page.
 */
 
 type Props = {
@@ -48,12 +60,18 @@ const monthIndexOf = (k: string) => {
   return y * 12 + (m - 1);
 };
 
+// useLayoutEffect runs before the browser paints (so there is no flash); on the server it is a normal effect
+const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
 const CSS = `
-  @keyframes bcIn   { from { opacity: 0; transform: translateY(18px) scale(.985); } to { opacity: 1; transform: none; } }
-  @keyframes bcFade { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: none; } }
+  @keyframes bcIn   { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  @keyframes bcFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @keyframes bcSheet { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
   .bc-scroll { scrollbar-width: thin; scrollbar-color: ${RED} transparent; }
-  .bc-scroll::-webkit-scrollbar { width: 6px; }
+  .bc-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
   .bc-scroll::-webkit-scrollbar-thumb { background: ${RED}; border-radius: 6px; }
+  .bc-noscroll { scrollbar-width: none; }
+  .bc-noscroll::-webkit-scrollbar { display: none; }
   .bc input:-webkit-autofill,
   .bc textarea:-webkit-autofill { -webkit-text-fill-color: #fff; caret-color: #fff; transition: background-color 99999s ease-out; }
 `;
@@ -91,27 +109,54 @@ export default function BookCall({ open, onClose, defaultName = "", defaultEmail
   const [status, setStatus] = useState<"idle" | "sending" | "error">("idle");
   const [message, setMessage] = useState("");
   const dialog = useRef<HTMLDivElement>(null);
+  const timesRef = useRef<HTMLDivElement>(null);
+  const strip = useRef<HTMLDivElement>(null);
 
-  /* ---------- open / close housekeeping ---------- */
-  useEffect(() => {
+  /* ---------- open: set everything up before the first paint ---------- */
+  useIsoLayoutEffect(() => {
     if (!open) return;
-    const before = document.activeElement as HTMLElement | null;
+    const now = Date.now();
     const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const z = isValidTimeZone(zone) ? zone : BOOKING.timezone;
+    const slots = generateSlots(now);
+    const first = slots.length ? dateKey(slots[0], z) : dateKey(now, z);
+    const [fy, fm] = first.split("-").map(Number);
+
     setTz(z);
-    setBase(generateSlots(Date.now()));
-    const [cy, cm] = dateKey(Date.now(), z).split("-").map(Number);
-    setMonth({ y: cy, m: cm - 1 });
+    setBase(slots);
+    setTaken(new Set());
+    setMonth({ y: fy, m: fm - 1 });
+    setDay(first);
     setStep("pick");
     setSlot(null);
-    setDay("");
     setStatus("idle");
     setMessage("");
     setName(defaultName);
     setEmail(defaultEmail);
     setNotes("");
 
-    // times somebody else already booked
+    // lock the page without moving it: add the scrollbar's width back as padding
+    const body = document.body;
+    const prevOverflow = body.style.overflow;
+    const prevPad = body.style.paddingRight;
+    const scrollbar = window.innerWidth - document.documentElement.clientWidth;
+    body.style.overflow = "hidden";
+    if (scrollbar > 0) body.style.paddingRight = `${scrollbar}px`;
+
+    const before = document.activeElement as HTMLElement | null;
+    dialog.current?.focus({ preventScroll: true });
+
+    return () => {
+      body.style.overflow = prevOverflow;
+      body.style.paddingRight = prevPad;
+      before?.focus?.({ preventScroll: true });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  /* ---------- times somebody else already booked ---------- */
+  useEffect(() => {
+    if (!open) return;
     const from = Date.now();
     const to = from + (BOOKING.maxDaysAhead + 1) * 86_400_000;
     const ctrl = new AbortController();
@@ -119,17 +164,8 @@ export default function BookCall({ open, onClose, defaultName = "", defaultEmail
       .then((r) => r.json())
       .then((j: { taken?: number[] }) => setTaken(new Set(j.taken ?? [])))
       .catch(() => {});
-
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    dialog.current?.focus();
-    return () => {
-      ctrl.abort();
-      document.body.style.overflow = prevOverflow;
-      before?.focus?.();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+    return () => ctrl.abort();
+  }, [open, endpoint]);
 
   /* ---------- open times, grouped by the visitor's calendar day ---------- */
   const byDay = useMemo(() => {
@@ -145,38 +181,37 @@ export default function BookCall({ open, onClose, defaultName = "", defaultEmail
   }, [base, taken, tz]);
   const dayKeys = useMemo(() => Array.from(byDay.keys()).sort(), [byDay]);
 
-  // choose the first open day (also when the time zone changes and the old day is gone)
-  useEffect(() => {
-    if (!open || (day && byDay.has(day))) return;
-    const k = dayKeys[0];
-    if (!k) return;
-    const [y, m] = k.split("-").map(Number);
-    setDay(k);
-    setMonth({ y, m: m - 1 });
-  }, [open, day, byDay, dayKeys]);
-
-  /* ---------- free month navigation: from this month to the last bookable month ---------- */
   const todayKey = useMemo(() => dateKey(Date.now(), tz), [tz, open]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /* ---------- months: from this month to the last bookable month ---------- */
   const winMin = monthIndexOf(todayKey);
   const winMax = base.length ? Math.max(winMin, monthIndexOf(dateKey(base[base.length - 1], tz))) : winMin;
   const cur = month.y * 12 + month.m;
   const ready = month.y > 0;
   const canPrev = ready && cur > winMin;
   const canNext = ready && cur < winMax;
+  const months = useMemo(() => Array.from({ length: winMax - winMin + 1 }, (_, i) => winMin + i), [winMin, winMax]);
 
-  const go = (delta: number) => {
-    const i = cur + delta;
-    const y = Math.floor(i / 12), m = ((i % 12) + 12) % 12;
+  // open a month and put the selection on its first free day (or its first day that can still be booked)
+  const goTo = (index: number) => {
+    if (index < winMin || index > winMax) return;
+    const y = Math.floor(index / 12), m = ((index % 12) + 12) % 12;
     setMonth({ y, m });
-    // jump to the first free day of that month (keep the chosen day if it is already in that month)
     const prefix = `${y}-${pad(m + 1)}-`;
     if (day.startsWith(prefix)) return;
-    const first = dayKeys.find((k) => k.startsWith(prefix));
-    if (first) {
-      setDay(first);
-      setSlot(null);
-    }
+    const free = dayKeys.find((k) => k.startsWith(prefix));
+    const fallback = index === winMin ? todayKey : `${prefix}01`;
+    setDay(free ?? fallback);
+    setSlot(null);
   };
+
+  // keep the chosen month centred in the month strip (scrolls the strip only, never the page)
+  useEffect(() => {
+    const box = strip.current;
+    const chip = box?.querySelector<HTMLElement>('[aria-current="true"]');
+    if (!box || !chip) return;
+    box.scrollTo({ left: chip.offsetLeft - (box.clientWidth - chip.offsetWidth) / 2, behavior: "smooth" });
+  }, [cur, open, months.length]);
 
   const cells = useMemo(() => {
     const first = new Date(Date.UTC(month.y, month.m, 1)).getUTCDay();
@@ -200,6 +235,28 @@ export default function BookCall({ open, onClose, defaultName = "", defaultEmail
   })();
 
   /* ---------- actions ---------- */
+  function changeZone(next: string) {
+    setTz(next);
+    setSlot(null);
+    // jump to the first free day in the new zone
+    const k = base.find((s) => !taken.has(s));
+    if (k != null) {
+      const key = dateKey(k, next);
+      const [y, m] = key.split("-").map(Number);
+      setDay(key);
+      setMonth({ y, m: m - 1 });
+    }
+  }
+
+  function pickDay(key: string) {
+    setDay(key);
+    setSlot(null);
+    // on a phone the times are below the calendar: bring them into view (inside the pop-up only)
+    if (typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches) {
+      window.setTimeout(() => timesRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 60);
+    }
+  }
+
   async function submit(e: FormEvent) {
     e.preventDefault();
     if (status === "sending" || slot == null) return;
@@ -260,12 +317,12 @@ export default function BookCall({ open, onClose, defaultName = "", defaultEmail
   const field =
     "w-full rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 text-[15px] text-white outline-none transition-colors placeholder:text-white/35 hover:border-white/25 focus:border-[#E71117] focus:bg-white/[0.06]";
   const arrow =
-    "grid h-10 w-10 cursor-pointer place-items-center rounded-full border border-white/15 text-white transition-colors hover:border-[#E71117] hover:bg-[#E71117] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E71117] disabled:cursor-default disabled:opacity-25 disabled:hover:border-white/15 disabled:hover:bg-transparent";
+    "grid h-10 w-10 shrink-0 cursor-pointer place-items-center rounded-full border border-white/15 text-white transition-colors hover:border-[#E71117] hover:bg-[#E71117] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E71117] disabled:cursor-default disabled:opacity-25 disabled:hover:border-white/15 disabled:hover:bg-transparent";
 
   return (
     <div className="fixed inset-0 z-[9990] flex items-end justify-center sm:items-center sm:p-6" onKeyDown={onKeyDown}>
       <style>{CSS}</style>
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-[3px]" onClick={onClose} aria-hidden="true" />
+      <div className="absolute inset-0 bg-black" onClick={onClose} aria-hidden="true" />
 
       <div
         ref={dialog}
@@ -273,30 +330,42 @@ export default function BookCall({ open, onClose, defaultName = "", defaultEmail
         aria-modal="true"
         aria-labelledby="bookcall-title"
         tabIndex={-1}
-        className="bc relative flex max-h-[94dvh] w-full max-w-[1000px] animate-[bcIn_0.4s_cubic-bezier(0.22,1,0.36,1)_both] flex-col overflow-hidden rounded-t-[24px] border border-white/10 bg-[#0A0A0A] text-white shadow-[0_40px_120px_-20px_rgba(231,17,23,0.28),0_30px_80px_rgba(0,0,0,0.7)] outline-none motion-reduce:animate-none sm:rounded-[24px]"
+        className="bc relative flex max-h-[94dvh] w-full max-w-[1040px] animate-[bcSheet_0.35s_cubic-bezier(0.22,1,0.36,1)_both] flex-col overflow-hidden rounded-t-[24px] border border-white/15 bg-black font-[family-name:var(--font-poppins),Poppins,system-ui,sans-serif] tracking-[-0.03em] text-white shadow-[0_30px_80px_rgba(0,0,0,0.9)] outline-none motion-reduce:animate-none sm:animate-[bcIn_0.35s_cubic-bezier(0.22,1,0.36,1)_both] sm:rounded-[24px]"
       >
         <button
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="absolute top-4 right-4 z-10 grid h-10 w-10 cursor-pointer place-items-center rounded-full border border-white/15 bg-black/40 text-white transition-colors hover:border-[#E71117] hover:bg-[#E71117] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E71117]"
+          className="absolute top-3.5 right-3.5 z-10 grid h-10 w-10 cursor-pointer place-items-center rounded-full border border-white/15 bg-black/50 text-white transition-colors hover:border-[#E71117] hover:bg-[#E71117] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E71117] sm:top-4 sm:right-4"
         >
           <Icon d={ICON.close} className="h-4 w-4" />
         </button>
 
         <div className="bc-scroll grid min-h-0 flex-1 overflow-y-auto lg:grid-cols-[300px_minmax(0,1fr)]">
           {/* ───────── left: what this call is ───────── */}
-          <aside className="border-b border-white/10 p-6 pr-16 sm:p-8 lg:border-r lg:border-b-0 lg:pr-8">
-            <div className="mb-5 flex items-center gap-2.5">
-              <span aria-hidden="true" className="h-3 w-3 rotate-45 rounded-[3px] bg-[#E71117]" />
-              <span className="text-[13px] tracking-[0.08em] text-white/60 uppercase">MAX design</span>
+          <aside className="border-b border-white/10 px-5 pt-5 pb-5 pr-16 sm:px-8 sm:pt-7 sm:pb-6 lg:border-r lg:border-b-0 lg:p-8 lg:pr-8">
+            {/* MAX design logo (same file as the navbar), on the solid black background */}
+            <div className="mb-5 bg-black lg:mb-7">
+              <Image
+                src="/images/logo.svg"
+                alt="MAX design"
+                width={157}
+                height={31}
+                priority
+                unoptimized
+                className="block h-auto w-[132px] sm:w-[150px] lg:w-[157px]"
+              />
+              <span aria-hidden="true" className="mt-5 block h-px w-10 bg-[#E71117] lg:mt-6" />
             </div>
 
-            <h2 id="bookcall-title" className="m-0 text-[26px] leading-[1.15] font-medium tracking-[-0.02em] lg:text-[30px]">
+            <h2 id="bookcall-title" className="m-0 text-[24px] leading-[1.15] font-medium tracking-[-0.04em] sm:text-[26px] lg:text-[32px]">
               {BOOKING.title}
             </h2>
+            <p className="m-0 mt-2.5 hidden text-[14px] leading-relaxed text-white/50 sm:block">
+              Pick a day and a time that suits you. We will talk about your project and how we can help.
+            </p>
 
-            <ul className="m-0 mt-5 flex list-none flex-col gap-3 p-0 text-[15px] text-white/75">
+            <ul className="m-0 mt-5 flex list-none flex-col gap-3.5 p-0 text-[15px] text-white/80 lg:mt-7">
               <li className="flex items-center gap-3">
                 <Icon d={ICON.clock} className="h-[18px] w-[18px] shrink-0 text-[#E71117]" />
                 {BOOKING.lengthMin} minute call
@@ -309,10 +378,7 @@ export default function BookCall({ open, onClose, defaultName = "", defaultEmail
                     <span className="sr-only">Time zone</span>
                     <select
                       value={tz}
-                      onChange={(e) => {
-                        setTz(e.target.value);
-                        setSlot(null);
-                      }}
+                      onChange={(e) => changeZone(e.target.value)}
                       className="w-full cursor-pointer appearance-none truncate rounded-lg border border-white/15 bg-white/[0.04] py-2 pr-9 pl-3 text-[14px] text-white [color-scheme:dark] outline-none transition-colors hover:border-white/25 focus:border-[#E71117]"
                     >
                       {zones.map((z) => (
@@ -372,20 +438,52 @@ export default function BookCall({ open, onClose, defaultName = "", defaultEmail
 
             {/* step 1: choose a day and a time */}
             {step === "pick" && (
-              <div className="grid gap-8 sm:grid-cols-[minmax(0,1fr)_210px]">
+              <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_220px] md:gap-8">
+                {/* calendar */}
                 <div className="min-w-0">
-                  <div className="mb-5 flex items-center justify-between gap-3">
-                    <h3 className="m-0 text-[18px] font-medium tracking-[-0.01em]" aria-live="polite">
-                      {ready ? MONTH.format(Date.UTC(month.y, month.m, 1)) : "\u00A0"}
+                  <div className="mb-4 flex items-center justify-between gap-3">
+                    <h3 className="m-0 text-[20px] font-medium tracking-[-0.04em] sm:text-[22px]" aria-live="polite">
+                      {ready ? MONTH.format(Date.UTC(month.y, month.m, 1)) : " "}
                     </h3>
                     <div className="flex gap-2">
-                      <button type="button" onClick={() => go(-1)} disabled={!canPrev} aria-label="Previous month" className={arrow}>
+                      <button type="button" onClick={() => goTo(cur - 1)} disabled={!canPrev} aria-label="Previous month" className={arrow}>
                         <Icon d={ICON.left} className="h-4 w-4" />
                       </button>
-                      <button type="button" onClick={() => go(1)} disabled={!canNext} aria-label="Next month" className={arrow}>
+                      <button type="button" onClick={() => goTo(cur + 1)} disabled={!canNext} aria-label="Next month" className={arrow}>
                         <Icon d={ICON.right} className="h-4 w-4" />
                       </button>
                     </div>
+                  </div>
+
+                  {/* month strip: Oct  Nov  Dec ... pick any month */}
+                  <div
+                    ref={strip}
+                    role="group"
+                    aria-label="Choose a month"
+                    className="bc-noscroll relative -mx-1 mb-5 flex gap-2 overflow-x-auto px-1 py-1"
+                  >
+                    {months.map((idx) => {
+                      const y = Math.floor(idx / 12), m = ((idx % 12) + 12) % 12;
+                      const t = Date.UTC(y, m, 1);
+                      const active = idx === cur;
+                      const showYear = y !== Math.floor(winMin / 12);
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => goTo(idx)}
+                          aria-current={active ? "true" : undefined}
+                          className={`shrink-0 cursor-pointer rounded-full border px-4 py-1.5 text-[13px] whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E71117] ${
+                            active
+                              ? "border-[#E71117] bg-[#E71117] font-medium text-white"
+                              : "border-white/15 text-white/70 hover:border-white/40 hover:text-white"
+                          }`}
+                        >
+                          {MONTH_SHORT.format(t)}
+                          {showYear ? <span className={active ? "text-white/80" : "text-white/40"}> {String(y).slice(2)}</span> : null}
+                        </button>
+                      );
+                    })}
                   </div>
 
                   <div className="mb-2 grid grid-cols-7 gap-1.5 text-center text-[12px] tracking-wide text-white/40 sm:gap-2">
@@ -397,26 +495,26 @@ export default function BookCall({ open, onClose, defaultName = "", defaultEmail
                   <div key={cur} className="grid animate-[bcFade_0.3s_ease-out_both] grid-cols-7 gap-1.5 motion-reduce:animate-none sm:gap-2">
                     {cells.map((c) => {
                       if (!c.inMonth) return <span key={c.key} aria-hidden="true" />;
-                      const available = byDay.has(c.key);
-                      const selected = available && c.key === day;
+                      const past = c.key < todayKey;
+                      const free = byDay.has(c.key);
+                      const selected = !past && c.key === day;
                       const isToday = c.key === todayKey;
                       return (
                         <button
                           key={c.key}
                           type="button"
-                          disabled={!available}
-                          onClick={() => {
-                            setDay(c.key);
-                            setSlot(null);
-                          }}
+                          disabled={past}
+                          onClick={() => pickDay(c.key)}
                           aria-pressed={selected}
-                          aria-label={available ? `${c.key}, ${byDay.get(c.key)?.length} times open` : `${c.key}, not available`}
-                          className={`relative grid aspect-square w-full place-items-center rounded-xl text-[15px] transition-all duration-200 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E71117] ${
+                          aria-label={`${c.key}${past ? ", already passed" : free ? `, ${byDay.get(c.key)?.length} times open` : ", no times left"}`}
+                          className={`relative grid aspect-square w-full place-items-center rounded-xl text-[14px] transition-all duration-200 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E71117] sm:text-[15px] ${
                             selected
                               ? "cursor-pointer bg-[#E71117] font-medium text-white shadow-[0_10px_28px_-8px_rgba(231,17,23,0.8)]"
-                              : available
-                                ? "cursor-pointer bg-white/[0.06] font-medium text-white hover:-translate-y-0.5 hover:bg-[#E71117]/25"
-                                : "cursor-default text-white/25"
+                              : past
+                                ? "cursor-default text-white/25"
+                                : free
+                                  ? "cursor-pointer bg-white/[0.07] font-medium text-white hover:-translate-y-0.5 hover:bg-[#E71117]/30"
+                                  : "cursor-pointer bg-white/[0.03] text-white/55 hover:bg-white/[0.08]"
                           }`}
                         >
                           {c.n}
@@ -429,10 +527,14 @@ export default function BookCall({ open, onClose, defaultName = "", defaultEmail
                   </div>
                 </div>
 
-                <div className="min-w-0 sm:border-l sm:border-white/10 sm:pl-8">
+                {/* times */}
+                <div ref={timesRef} className="min-w-0 border-t border-white/10 pt-6 md:border-t-0 md:border-l md:pt-0 md:pl-8">
                   <p className="m-0 mb-1 text-[16px] font-medium">{dayTitle || "Pick a day"}</p>
-                  <p className="m-0 mb-4 text-[13px] text-white/45">{day ? "Choose a time" : base.length ? "Choose a free day" : "Loading…"}</p>
-                  <ul className="bc-scroll m-0 flex max-h-[300px] list-none flex-col gap-2.5 overflow-y-auto p-0 pr-1 sm:max-h-[372px]" aria-label="Open times">
+                  <p className="m-0 mb-4 text-[13px] text-white/45">{times.length ? "Choose a time" : day ? "" : "Choose a day"}</p>
+                  <ul
+                    className="bc-scroll m-0 grid max-h-[300px] list-none grid-cols-3 gap-2 overflow-y-auto p-0 pr-1 md:max-h-[388px] md:grid-cols-1 md:gap-2.5"
+                    aria-label="Open times"
+                  >
                     {times.map((t) => (
                       <li key={t} className="m-0 p-0">
                         <button
@@ -443,15 +545,18 @@ export default function BookCall({ open, onClose, defaultName = "", defaultEmail
                             setStatus("idle");
                             setMessage("");
                           }}
-                          className="w-full cursor-pointer rounded-xl border border-white/15 py-3 text-center text-[15px] text-white transition-colors hover:border-[#E71117] hover:bg-[#E71117] focus-visible:border-[#E71117] focus-visible:bg-[#E71117] focus-visible:outline-none"
+                          className="w-full cursor-pointer rounded-xl border border-white/15 px-1 py-3 text-center text-[14px] whitespace-nowrap text-white transition-colors hover:border-[#E71117] hover:bg-[#E71117] focus-visible:border-[#E71117] focus-visible:bg-[#E71117] focus-visible:outline-none sm:text-[15px]"
                         >
                           {fmtTime(t, tz)}
                         </button>
                       </li>
                     ))}
-                    {day && times.length === 0 && <li className="py-2 text-[14px] text-white/45">No times left on this day.</li>}
-                    {!day && base.length > 0 && <li className="py-2 text-[14px] text-white/45">No free days in this month.</li>}
                   </ul>
+                  {day && times.length === 0 && (
+                    <p className="m-0 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-[14px] leading-relaxed text-white/55">
+                      {day < todayKey ? "This day has already passed." : "No times left on this day. Please pick another date."}
+                    </p>
+                  )}
                 </div>
               </div>
             )}
@@ -459,7 +564,7 @@ export default function BookCall({ open, onClose, defaultName = "", defaultEmail
             {/* step 2: your details */}
             {step === "details" && slot != null && (
               <form onSubmit={submit} noValidate aria-label="Your details" className="mx-auto max-w-[520px] lg:mx-0">
-                <h3 className="m-0 mb-6 text-[22px] font-medium tracking-[-0.01em]">Your details</h3>
+                <h3 className="m-0 mb-6 text-[22px] font-medium tracking-[-0.04em]">Your details</h3>
                 <div className="grid gap-5">
                   <label className="grid gap-2 text-[14px] text-white/75">
                     Full name*
@@ -499,7 +604,7 @@ export default function BookCall({ open, onClose, defaultName = "", defaultEmail
                 <span className="mb-6 grid h-16 w-16 place-items-center rounded-full bg-[#E71117] text-white shadow-[0_14px_40px_-10px_rgba(231,17,23,0.9)]">
                   <Icon d={ICON.check} className="h-8 w-8" />
                 </span>
-                <h3 className="m-0 text-[28px] font-medium tracking-[-0.02em]">You’re booked!</h3>
+                <h3 className="m-0 text-[28px] font-medium tracking-[-0.04em]">You’re booked!</h3>
                 <p className="mt-4 mb-0 text-[16px] leading-relaxed text-white/80">
                   {fmtDate(slot, tz)}
                   <br />
