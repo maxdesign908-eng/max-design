@@ -21,24 +21,23 @@ const TABS = [
   {
     id: "mission",
     label: "Our Mission",
-    lines: [
-      "We build bold identities that speak your story visually and verbally. From websites to packaging,",
-      "we design experiences that are beautiful and functional. We don\u2019t just make things look good framer",
-      "website template crafted.",
+    lines: [ 
+      "Our mission is simple help your business grow through better design. From brand identity and website design to",
+      "custom software, e-commerce, digital marketing and SEO, we build work that brings you more customers, not",
+      "just more compliments.",
     ],
   },
   {
     id: "vision",
     label: "Our Vision",
-    lines: [
-      "We’re building a design agency where design is never an afterthought. Great branding, thoughtful UI/UX","and clean web development should sit at the heart of every business, because the brands people","remember are the ones designed with care.",
+    lines: [ 
+      "We’re a design agency where design is never an after thought. Great branding, thoughtful UI/UX and","clean web development should sit at the heart of every business, because the brands people remember","are the ones designed with care.",
     ],
   },
   {
     id: "value",
     label: "Our Value",
-    lines: [
-      "We keep things honest, clear and personal. One team from first sketch to launch, straight timelines, and work","you fully own. We listen before we design, we care about the craft, and we measure our success by your","growth.",
+    lines: [  "We keep things honest, clear and personal. One team from first sketch to launch, straight timelines, and work","you fully own. We listen before we design, we care about the craft, and we measure our success by your","growth.",
     ],
   },
 ];

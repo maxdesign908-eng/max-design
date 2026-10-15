@@ -1,26 +1,35 @@
-"use client";
+import type { Metadata } from "next";
+import BookCallPage from "../../components/BookCallPage";
+import Navbar from "../../components/home/Navbar";
+import Footer from "@/components/home/Footer";
 
-import { useState } from "react";
-import BookCall from "@/components/home/BookCall";
-import Contact from "@/components/home/Contact";
-import Navbar from "@/components/home/Navbar";
+export const metadata: Metadata = {
+  title: "Book a call | MAX design",
+  description: "Pick a day and a time and book a call with MAX design.",
+};
 
-export default function Page() {
-  // the pop-up is controlled from here: BookCall needs `open` and `onClose`
-  const [bookOpen, setBookOpen] = useState(false);
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    name?: string | string[];
+    email?: string | string[];
+  }>;
+}) {
+  const sp = await searchParams;
+
+  const one = (v?: string | string[]) =>
+    (Array.isArray(v) ? v[0] : v) ?? "";
 
   return (
     <>
-      <div className="w-full bg-black">
-        <Navbar />
-      </div>
+      <Navbar />
 
-      <main className="min-h-screen bg-black text-white">
-        {/* "Book A Call Directly" opens the pop-up */}
-        <Contact onBookCall={() => setBookOpen(true)} />
-      </main>
-
-      <BookCall open={bookOpen} onClose={() => setBookOpen(false)} />
+      <BookCallPage
+        defaultName={one(sp.name).slice(0, 200)}
+        defaultEmail={one(sp.email).slice(0, 200)}
+      />
+      <Footer/>
     </>
   );
 }

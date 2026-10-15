@@ -354,7 +354,7 @@ function Select({
 
 export default function Contact({
   endpoint = "/api/contact",
-  callHref = "#book-a-call",
+  callHref = "/book-a-call",
   onBookCall,
 }: {
   /** the form is sent here as JSON (POST). Change it to your own API route. */
@@ -606,12 +606,6 @@ export default function Contact({
               </p>
               <a
                 href={callHref}
-                onClick={(e) => {
-                  if (onBookCall) {
-                    e.preventDefault();
-                    onBookCall();
-                  }
-                }}
                 className="text-[length:var(--ks)] leading-[1.3] font-normal tracking-[-0.04em] whitespace-nowrap text-[#E71117] underline decoration-1 underline-offset-[4px] transition-colors hover:text-[#ff1e2d] focus-visible:outline-2 focus-visible:outline-offset-[4px] focus-visible:outline-[#ff1e2d]"
               >
                 Book A Call Directly
