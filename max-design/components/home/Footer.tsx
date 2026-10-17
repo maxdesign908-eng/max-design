@@ -122,13 +122,17 @@ const CSS = `
     .ft-mark { position: relative; left: 0; width: 100%; height: calc(290 * var(--m)); grid-column: 1 / -1; }
     .ft-line { position: static; width: 100%; grid-column: 1 / -1; }
     .ft-col { position: static; }
+    .ft-mark { grid-row: 1; }
+    .ft-line { grid-row: 2; }
+    nav.ft-col { grid-column: 1; grid-row: 3 / span 2; }
+    .ft-col:not(.ft-where):not(nav) { grid-column: 2; grid-row: 3; }
     .ft .ft-body { margin-top: 12px; gap: 8px; }
-    .ft-col.ft-where { grid-column: 1 / -1; }
+    .ft-col.ft-where { grid-column: 1 / -1; grid-row: 5; }
     .ft-addr { line-height: 26px; }
     .ft-addr span { white-space: normal; }
     .ft-soc { margin-top: 4px; }
-    .ft-logo { position: relative; top: auto; left: auto; width: min(220px, 55%); height: auto; aspect-ratio: 1; grid-column: 1 / -1; justify-self: center; margin: -8px 0; }
-    .ft-copy { position: static; grid-column: 1 / -1; height: auto; margin-top: 8px; }
+    .ft-logo { position: relative; top: auto; left: auto; width: 100%; max-width: 160px; height: auto; aspect-ratio: 1; grid-column: 2; grid-row: 4; justify-self: center; align-self: start; margin: -16px 0 0; }
+    .ft-copy { position: static; grid-column: 1 / -1; height: auto; margin-top: 8px; grid-row: 6; }
   }
 `;
 
