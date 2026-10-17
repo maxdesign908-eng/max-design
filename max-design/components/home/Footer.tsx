@@ -131,7 +131,7 @@ const CSS = `
     .ft-addr { line-height: 26px; }
     .ft-addr span { white-space: normal; }
     .ft-soc { margin-top: 4px; }
-    .ft-logo { position: relative; top: auto; left: auto; width: 100%; max-width: 160px; height: auto; aspect-ratio: 1; grid-column: 2; grid-row: 4; justify-self: center; align-self: start; margin: -16px 0 0; }
+    .ft-logo { position: relative; top: auto; left: auto; width: 125%; max-width: 220px; height: auto; aspect-ratio: 1; grid-column: 2; grid-row: 4; justify-self: center; align-self: start; margin: 8px 0 0; }
     .ft-copy { position: static; grid-column: 1 / -1; height: auto; margin-top: 8px; grid-row: 6; }
   }
 `;
