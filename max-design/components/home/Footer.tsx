@@ -105,6 +105,8 @@ const CSS = `
   .ft a:focus-visible { outline: 2px solid #ff1e2d; outline-offset: 3px; }
 
   @media (max-width: 899px) {
+    /* no white strip under the footer when the phone browser bar / overscroll shows the page background */
+    html { background: #000; }
     .ft {
       --pad: clamp(16px, 5cqw, 48px);
       --top: 0px;
@@ -124,15 +126,15 @@ const CSS = `
     .ft-col { position: static; }
     .ft-mark { grid-row: 1; }
     .ft-line { grid-row: 2; }
-    nav.ft-col { grid-column: 1; grid-row: 3 / span 2; }
+    nav.ft-col { grid-column: 1; grid-row: 3; }
     .ft-col:not(.ft-where):not(nav) { grid-column: 2; grid-row: 3; }
     .ft .ft-body { margin-top: 12px; gap: 8px; }
-    .ft-col.ft-where { grid-column: 1 / -1; grid-row: 5; }
+    .ft-col.ft-where { grid-column: 1 / -1; grid-row: 4; }
     .ft-addr { line-height: 26px; }
     .ft-addr span { white-space: normal; }
     .ft-soc { margin-top: 4px; }
-    .ft-logo { position: relative; top: auto; left: auto; width: 125%; max-width: 220px; height: auto; aspect-ratio: 1; grid-column: 2; grid-row: 4; justify-self: center; align-self: start; margin: 8px 0 0; }
-    .ft-copy { position: static; grid-column: 1 / -1; height: auto; margin-top: 8px; grid-row: 6; }
+    .ft-logo { position: relative; top: auto; left: auto; width: 100%; max-width: 160px; height: auto; aspect-ratio: 1; grid-column: 2; grid-row: 4; justify-self: end; align-self: center; margin: 0; }
+    .ft-copy { position: static; grid-column: 1 / -1; height: auto; margin-top: 8px; grid-row: 5; }
   }
 `;
 

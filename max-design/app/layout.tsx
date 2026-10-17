@@ -38,7 +38,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={poppins.variable}>
-      <body>
+      <body className="bg-black">
         <CustomCursor />
         {children}
       </body>
