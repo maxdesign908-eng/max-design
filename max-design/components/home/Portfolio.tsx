@@ -15,7 +15,7 @@ import CtaButton from "./CtaButton";
   - --k is the unit CtaButton uses: = --u on large screens, 1px on small ones.
 
   Vertical rhythm (Figma px, taken from your numbers):
-    space above the heading 60 and below the button 60 (the same gap as every other section)
+    space above the heading 108 (so it does not touch the section above)
     heading frame 236  ->  80  ->  row 1 cards (803)  ->  42.79  ->  title (45)  ->  84
     ->  row 2 cards (876 / 875)  ->  42.79  ->  title (45)  ->  98.35  ->  banner (802.31)
     ->  42.79  ->  title (45)  ->  126  ->  "View All Projects" button (56)
@@ -127,7 +127,7 @@ export default function Portfolio() {
     >
       <style>{CSS}</style>
 
-      <div className="wf mx-auto w-full max-w-[1920px] px-[calc(97*var(--u))] pt-[calc(56*var(--u))] pb-[calc(60*var(--u))] max-[767px]:px-[var(--pad)] max-[767px]:pt-[18px] max-[767px]:pb-[18px]">
+      <div className="wf mx-auto w-full max-w-[1920px] px-[calc(97*var(--u))] pt-[calc(108*var(--u))] max-[767px]:px-[var(--pad)] max-[767px]:py-[48px] max-[767px]:pt-[72px]">
         {/* ───────── heading frame (902 x 236) ───────── */}
         <header className="mx-auto flex w-[max(calc(902*var(--u)),min(100%,520px))] flex-col items-center max-[767px]:w-full">
           <h2 className="relative m-0 mt-[0.1875em] w-[6.3125em] max-w-full text-left text-[length:var(--hs)] leading-[1.12] font-medium tracking-[-0.04em] text-white max-[767px]:mt-0">
@@ -169,7 +169,7 @@ export default function Portfolio() {
         </header>
 
         {/* ───────── row 1: three portrait cards (559 : 560 : 559) ───────── */}
-        <div className="mt-[calc(80*var(--u))] grid grid-cols-[559fr_560fr_559fr] items-start gap-x-[calc(24*var(--u))] max-[767px]:mt-[36px] max-[767px]:grid-cols-1 max-[767px]:gap-y-[36px]">
+        <div className="mt-[calc(80*var(--u))] grid grid-cols-[559fr_560fr_559fr] items-start gap-x-[calc(24*var(--u))] max-[767px]:mt-[40px] max-[767px]:grid-cols-1 max-[767px]:gap-y-[36px]">
           {row1.map((work) => (
             <Project key={work.src} work={work} />
           ))}
@@ -188,7 +188,7 @@ export default function Portfolio() {
         </div>
 
         {/* ───────── button ───────── */}
-        <div className="mt-[calc(126.07*var(--u))] flex justify-center max-[767px]:mt-[36px]">
+        <div className="mt-[calc(126.07*var(--u))] flex justify-center max-[767px]:mt-[48px]">
           <CtaButton href="#projects" label="View All Projects" width={207} />
         </div>
       </div>
