@@ -147,7 +147,7 @@ export default function WhatWeBuild() {
     <section
       ref={sectionRef}
       id="services"
-      className="relative isolate h-1164 w-full overflow-hidden bg-black text-white max-[820px]:flex max-[820px]:h-auto max-[820px]:flex-col max-[820px]:gap-32 max-[820px]:px-20 max-[820px]:py-48"
+      className="relative isolate h-1164 w-full overflow-hidden bg-black text-white max-[820px]:flex max-[820px]:h-auto max-[820px]:flex-col max-[820px]:gap-32 max-[820px]:px-20 max-[820px]:pb-48 pt-28"
     >
       {/* Frame */}
       <div
