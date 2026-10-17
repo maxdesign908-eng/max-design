@@ -194,7 +194,7 @@ export default function Testimonials() {
   const visible = TESTIMONIALS.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
 
   return (
-    <section className="relative isolate h-1133 w-full overflow-hidden bg-black text-white max-[820px]:h-auto max-[820px]:px-20 max-[820px]:pt-32 max-[820px]:pb-40">
+    <section className="relative isolate h-1067 w-full overflow-hidden bg-black text-white max-[820px]:h-auto max-[820px]:px-20 max-[820px]:pt-[18px] max-[820px]:pb-[18px]">
       {/* ───── Background: red glass panels ─────
           Values taken from your Figma properties:
           3817 x 2147, rotated 27.5deg clockwise (Figma shows -27.5), opacity 0.21.
@@ -209,7 +209,7 @@ export default function Testimonials() {
           style={{
             width: "calc(3817 * var(--spacing))",
             height: "calc(2147 * var(--spacing))",
-            top: "calc(-592.22 * var(--spacing))",
+            top: "calc(-624.22 * var(--spacing))",
             left: "calc(50% - 1961.99 * var(--spacing))",
           }}
         >
@@ -225,7 +225,7 @@ export default function Testimonials() {
       </div>
 
       {/* ───── Heading ───── */}
-      <h2 className="absolute top-92 left-1/2 z-10 w-982 -translate-x-1/2 text-center text-[calc(80*var(--spacing))] leading-[1.12] font-medium tracking-[-0.04em] max-[820px]:relative max-[820px]:top-0 max-[820px]:left-0 max-[820px]:w-auto max-[820px]:translate-x-0 max-[820px]:text-[calc(38*var(--spacing))]">
+      <h2 className="absolute top-60 left-1/2 z-10 w-982 -translate-x-1/2 text-center text-[calc(80*var(--spacing))] leading-[1.12] font-medium tracking-[-0.04em] max-[820px]:relative max-[820px]:top-0 max-[820px]:left-0 max-[820px]:w-auto max-[820px]:translate-x-0 max-[820px]:text-[calc(38*var(--spacing))]">
         Designed to Impress.
         <br />
         Remembered for More.
@@ -234,7 +234,7 @@ export default function Testimonials() {
       {/* ───── Cards ───── */}
       <div
         key={page}
-        className="absolute top-361 left-1/2 z-10 flex w-[calc(1726*var(--spacing))] -translate-x-1/2 gap-32 max-[820px]:relative max-[820px]:top-0 max-[820px]:left-0 max-[820px]:mt-32 max-[820px]:w-full max-[820px]:translate-x-0 max-[820px]:flex-col"
+        className="absolute top-329 left-1/2 z-10 flex w-[calc(1726*var(--spacing))] -translate-x-1/2 gap-32 max-[820px]:relative max-[820px]:top-0 max-[820px]:left-0 max-[820px]:mt-[36px] max-[820px]:w-full max-[820px]:translate-x-0 max-[820px]:flex-col"
       >
         {visible.map((t, i) => (
           <Card key={`${page}-${i}`} t={t} />
@@ -242,7 +242,7 @@ export default function Testimonials() {
       </div>
 
       {/* ───── Pager: one segment per page ───── */}
-      <div className="absolute top-1035 left-1/2 z-10 flex -translate-x-1/2 items-center gap-6 max-[820px]:relative max-[820px]:top-0 max-[820px]:left-0 max-[820px]:mt-24 max-[820px]:translate-x-0 max-[820px]:justify-center">
+      <div className="absolute top-1003 left-1/2 z-10 flex -translate-x-1/2 items-center gap-6 max-[820px]:relative max-[820px]:top-0 max-[820px]:left-0 max-[820px]:mt-[36px] max-[820px]:translate-x-0 max-[820px]:justify-center">
         {Array.from({ length: pages }).map((_, i) => (
           <button
             key={i}

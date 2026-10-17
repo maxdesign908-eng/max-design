@@ -19,7 +19,7 @@ import { useId, useRef, useState } from "react";
     columns ........ 836 + 48 + 836, rows 40 apart
     red icon ....... 40 round, 43 from the box edge; question text starts 43 after it
     question ....... Poppins Regular 32, tracking -4% (fitted from the screenshot)
-    block padding .. 120 above and below
+    block padding .. 60 above and below (same gap as every other section)
 
   BEHAVIOUR
   - Mouse: hover a box -> the arrow turns and the box opens; leave -> it closes.
@@ -125,7 +125,7 @@ export default function Faq() {
     >
       <style>{CSS}</style>
 
-      <div className="faq mx-auto w-full max-w-[1920px] px-[calc(97*var(--u))] pt-[calc(120*var(--u))] pb-[calc(80*var(--u))] max-[899px]:px-[clamp(16px,5cqw,48px)] max-[899px]:pt-[56px] max-[899px]:pb-[36px]">
+      <div className="faq mx-auto w-full max-w-[1920px] px-[calc(97*var(--u))] pt-[calc(60*var(--u))] pb-[calc(60*var(--u))] max-[899px]:px-[clamp(16px,5cqw,48px)] max-[899px]:pt-[18px] max-[899px]:pb-[18px]">
         {/* ───────── heading (660 x 168) ───────── */}
         <h2
           id={`${uid}-title`}
