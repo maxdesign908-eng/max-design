@@ -458,7 +458,7 @@ export default function Contact({
         </div>
 
         {/* ───────── content: left text + right form (space-between) ───────── */}
-        <div className="mx-auto flex min-h-[calc(943.11*var(--u))] w-full max-w-[1920px] justify-between pt-[calc(45*var(--u))] pr-[calc(98*var(--u))] pb-[calc(45.9*var(--u))] pl-[calc(102*var(--u))] max-[899px]:min-h-0 max-[899px]:flex-col max-[899px]:gap-[40px] max-[899px]:px-[clamp(16px,5cqw,48px)] max-[899px]:py-[56px]">
+        <div className="mx-auto flex min-h-[calc(943.11*var(--u))] w-full max-w-[1920px] justify-between pt-[calc(45*var(--u))] pr-[calc(98*var(--u))] pb-[calc(45.9*var(--u))] pl-[calc(102*var(--u))] max-[899px]:min-h-0 max-[899px]:flex-col max-[899px]:gap-[40px] max-[899px]:px-[clamp(16px,5cqw,48px)] max-[899px]:pt-[56px] max-[899px]:pb-0">
           {/* heading: the 288px text block sits 325 from the container top */}
           <div className="w-[calc(727*var(--u))] shrink-0 pt-[calc(324.8*var(--u))] max-[899px]:w-full max-[899px]:pt-0">
             <h2 className="m-0 text-[length:var(--hs)] leading-[1.2] font-medium tracking-[-0.04em] text-white">
@@ -469,7 +469,7 @@ export default function Contact({
           </div>
 
           {/* form column: 788 wide, 32 between the box and the call link */}
-          <div className="flex w-[calc(788*var(--u))] shrink-0 flex-col gap-[max(16px,calc(32*var(--u)))] max-[899px]:w-full">
+          <div className="flex w-[calc(788*var(--u))] shrink-0 flex-col gap-[max(16px,calc(32*var(--u)))] max-[899px]:w-full max-[899px]:gap-[40px]">
             <form
               key={formKey}
               ref={formRef}
@@ -604,25 +604,9 @@ export default function Contact({
               </p>
               <Link
                 href={callHref}
-                className="group relative isolate -mr-[0.9em] inline-flex items-center rounded-full px-[0.9em] py-[0.4em] text-[length:var(--ks)] leading-[1.3] font-normal tracking-[-0.04em] whitespace-nowrap text-[#E71117] no-underline transition-[color,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] outline-none select-none [-webkit-tap-highlight-color:transparent] hover:text-white focus-visible:text-white active:scale-[0.96] motion-reduce:transition-none"
+                className="text-[length:var(--ks)] leading-[1.3] font-normal tracking-[-0.04em] whitespace-nowrap text-[#E71117] underline decoration-1 underline-offset-[4px] transition-colors hover:text-[#ff1e2d] focus-visible:outline-2 focus-visible:outline-offset-[4px] focus-visible:outline-[#ff1e2d]"
               >
-                {/* pop-up pill behind the text: grows in on hover / keyboard focus */}
-                <span
-                  aria-hidden="true"
-                  className="absolute inset-0 -z-10 scale-[0.85] rounded-full bg-[#E71117] opacity-0 shadow-[0_10px_28px_-8px_rgba(231,17,23,0.85)] transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100 group-hover:opacity-100 group-focus-visible:scale-100 group-focus-visible:opacity-100 group-focus-visible:ring-2 group-focus-visible:ring-white/80 group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-black motion-reduce:transition-none"
-                />
-                <span className="underline decoration-1 underline-offset-[4px] transition-[text-decoration-color] duration-300 group-hover:decoration-transparent group-focus-visible:decoration-transparent">
-                  Book A Call Directly
-                </span>
-                {/* small arrow that slides in on hover */}
-                <svg
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  aria-hidden="true"
-                  className="ml-0 h-[0.8em] w-0 shrink-0 -translate-x-1 opacity-0 transition-[width,margin,transform,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:ml-[0.45em] group-hover:w-[0.8em] group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:ml-[0.45em] group-focus-visible:w-[0.8em] group-focus-visible:translate-x-0 group-focus-visible:opacity-100 motion-reduce:transition-none"
-                >
-                  <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+                Book A Call Directly
               </Link>
             </div>
           </div>
