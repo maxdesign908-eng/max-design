@@ -22,7 +22,7 @@ export function HomeStage({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="@container w-full bg-[#000000]">
-        <div className="relative isolate z-[2] mx-auto h-[calc(1017*var(--u))] w-full max-w-[1920px] bg-[#000000] [--u:calc(min(100cqw,1920px)_/_1920)] [--k:var(--u)] [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:[--k:1px] [@media(max-width:900px)]:pb-[56px] [@media(max-width:900px)]:[--fs:min(120px,calc((100cqw_-_2_*_var(--pad))_/_6.1))] [@media(max-width:900px)]:[--pad:clamp(16px,5vw,96px)]">
+        <div className="relative isolate z-[2] mx-auto h-[calc(1017*var(--u))] w-full max-w-[1920px] bg-[#000000] [--u:calc(min(100cqw,1920px)_/_1920)] [--k:var(--u)] [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:[--k:1px] [@media(max-width:900px)]:pb-[18px] [@media(max-width:900px)]:[--fs:min(120px,calc((100cqw_-_2_*_var(--pad))_/_6.1))] [@media(max-width:900px)]:[--pad:clamp(16px,5vw,96px)]">
           {/* Keep your existing background texture and children here */}
           {children}
         </div>
