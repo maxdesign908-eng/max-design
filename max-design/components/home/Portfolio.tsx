@@ -127,7 +127,7 @@ export default function Portfolio() {
     >
       <style>{CSS}</style>
 
-      <div className="wf mx-auto w-full max-w-[1920px] px-[calc(97*var(--u))] pt-[calc(108*var(--u))] max-[767px]:px-[var(--pad)] max-[767px]:py-[48px] max-[767px]:pt-[72px]">
+      <div className="wf mx-auto w-full max-w-[1920px] px-[calc(97*var(--u))] pt-[calc(108*var(--u))] pb-[calc(60*var(--u))] max-[767px]:px-[var(--pad)] max-[767px]:py-[48px] max-[767px]:pt-[72px]">
         {/* ───────── heading frame (902 x 236) ───────── */}
         <header className="mx-auto flex w-[max(calc(902*var(--u)),min(100%,520px))] flex-col items-center max-[767px]:w-full">
           <h2 className="relative m-0 mt-[0.1875em] w-[6.3125em] max-w-full text-left text-[length:var(--hs)] leading-[1.12] font-medium tracking-[-0.04em] text-white max-[767px]:mt-0">
