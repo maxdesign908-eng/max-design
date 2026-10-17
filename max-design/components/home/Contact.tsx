@@ -436,7 +436,7 @@ export default function Contact({
       {/* empty space above the block (108 Figma px, scales with the page) */}
       <div
         aria-hidden="true"
-        className="h-[calc(50*min(100cqw,1920px)/1920)] max-[899px]:h-[72px]"
+        className="h-[calc(50*min(100cqw,1920px)/1920)] max-[899px]:h-[42px]"
       />
 
       <div className="ct relative isolate w-full overflow-hidden">
