@@ -235,7 +235,7 @@ export default function Socialmedia() {
           </section>
 
           {/* ───────── How We Work ───────── */}
-          <section className={`${SIDE} mt-[calc(120*var(--u))] pb-[calc(120*var(--u))] [@media(max-width:900px)]:mt-[72px] [@media(max-width:900px)]:pb-[72px]`}>
+          <section className={`${SIDE} mt-[calc(120*var(--u))] pb-[calc(120*var(--u))] [@media(max-width:900px)]:mt-[72px] [@media(max-width:900px)]:pb-[32px]`}>
             <h2 className="m-0 text-center text-[length:calc(80*var(--u))] leading-[1.12] font-medium tracking-[-0.04em] text-white [@media(max-width:900px)]:text-[length:clamp(36px,10vw,64px)]">
               <Words text="How We Work" step={120} />
             </h2>

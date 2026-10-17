@@ -130,7 +130,7 @@ export default function StatsStrip() {
     <section
       ref={ref}
       aria-label="Max Design in numbers"
-      className="@container w-full bg-black py-[calc(130*min(100cqw,1920px)/1920)] text-white max-[900px]:py-[56px]"
+      className="@container w-full bg-black py-[calc(130*min(100cqw,1920px)/1920)] text-white max-[900px]:py-[46px]"
     >
       <div className="w-full [--u:calc(min(100cqw,1920px)_/_1920)]">
         <div className="mx-auto h-[calc(273*var(--u))] w-full max-w-[1920px] border-y border-white/[0.14] pl-[calc(97*var(--u))] [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:pl-0">
