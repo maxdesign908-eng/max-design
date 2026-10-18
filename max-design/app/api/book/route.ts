@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
+import { emailLayout } from "@/lib/emailTemplate";
 import { BOOKING, fmtDate, fmtTime, generateSlots, isValidTimeZone, tzLabel } from "@/lib/booking";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const esc = (s: string) =>
-  s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string);
 
 /* ───────── GET: nothing is stored any more, so no time is ever "taken" (the page still asks for this) ───────── */
 export async function GET() {
@@ -74,9 +73,17 @@ export async function POST(req: Request) {
       replyTo: email,
       subject: `New call booked: ${name} · ${fmtDate(start, BOOKING.timezone)} ${fmtTime(start, BOOKING.timezone)}`,
       text: `${BOOKING.title}\n\nWhen (your time): ${mine}\nWhen (their time): ${theirs}\n\nName: ${name}\nEmail: ${email}\nNotes: ${notes || "-"}`,
-      html: `<h2>${esc(BOOKING.title)}</h2>
-<p><b>When (your time):</b> ${esc(mine)}<br><b>When (their time):</b> ${esc(theirs)}</p>
-<p><b>Name:</b> ${esc(name)}<br><b>Email:</b> ${esc(email)}<br><b>Notes:</b> ${esc(notes || "-")}</p>`,
+      html: emailLayout({
+        heading: "New call booked",
+        intro: BOOKING.title,
+        rows: [
+          ["When (your time)", mine],
+          ["When (their time)", theirs],
+          ["Name", name],
+          ["Email", email],
+          ["Notes", notes],
+        ],
+      }),
     });
   } catch (err) {
     console.error("[book] email failed", err);
@@ -91,7 +98,12 @@ export async function POST(req: Request) {
       to: email,
       subject: `Your call with MAX design is booked`,
       text: `Hi ${name},\n\nYour ${BOOKING.lengthMin} minute call is booked:\n${theirs}\n\nWe will contact you before the call.\n\nMAX design`,
-      html: `<p>Hi ${esc(name)},</p><p>Your ${BOOKING.lengthMin} minute call is booked:<br><b>${esc(theirs)}</b></p><p>We will contact you before the call.</p><p>MAX design</p>`,
+      html: emailLayout({
+        heading: "You're booked!",
+        intro: `Hi ${name}, your ${BOOKING.lengthMin} minute call with MAX design is booked.`,
+        rows: [["When", theirs]],
+        note: "We will contact you before the call.",
+      }),
     });
   } catch (e) {
     console.error("[book] visitor email failed", e);

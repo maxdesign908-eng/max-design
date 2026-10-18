@@ -1,12 +1,12 @@
 // app/api/contact/route.ts : receives the contact form and emails it to you (Resend)
 //
-// Needs two environment variables in .env.local (never paste the key in a chat or commit it):
+// Needs these environment variables (in .env.local on your computer, and in Vercel for the live site):
 //   RESEND_API_KEY=re_xxxxxxxxx
 //   CONTACT_TO_EMAIL=you@yourmail.com
-// Optional (only after you verify your domain in Resend):
-//   CONTACT_FROM_EMAIL="Max Design <hello@yourdomain.com>"
+//   CONTACT_FROM_EMAIL=Max Design <hello@yourdomain.com>      (no quote marks in Vercel)
 
 import { NextResponse } from "next/server";
+import { emailLayout } from "@/lib/emailTemplate";
 
 export const runtime = "nodejs";
 
@@ -21,13 +21,6 @@ type Body = {
   budget?: string | null;
   details?: string;
 };
-
-const esc = (s: unknown) =>
-  String(s ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
 
 const clean = (s: unknown, max = 3000) => String(s ?? "").trim().slice(0, max);
 
@@ -71,19 +64,7 @@ export async function POST(req: Request) {
     ["Details", details],
   ];
 
-  const html = `
-    <div style="font-family:Arial,sans-serif;font-size:15px;color:#111">
-      <h2 style="margin:0 0 16px">New project query</h2>
-      <table cellpadding="8" style="border-collapse:collapse">
-        ${rows
-          .filter(([, v]) => v)
-          .map(
-            ([k, v]) =>
-              `<tr><td style="vertical-align:top;color:#666;white-space:nowrap"><b>${esc(k)}</b></td><td style="white-space:pre-wrap">${esc(v)}</td></tr>`,
-          )
-          .join("")}
-      </table>
-    </div>`;
+  const html = emailLayout({ heading: "New project query", rows });
 
   const text = rows
     .filter(([, v]) => v)
