@@ -11,9 +11,9 @@
 }
 
 :root {
-  --color-ink: #111111;
+  --color-ink: #ffffff;
   --color-accent: #e71117;
-  --color-bg: #ffffff;
+  --color-bg: #000000;
   --font-sans: var(--font-poppins), "Poppins", system-ui, sans-serif;
 }
 
