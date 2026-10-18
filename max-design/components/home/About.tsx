@@ -228,7 +228,7 @@ export default function About() {
             On mobile it is 0.857 x (48 px high), like the old button. */}
         <div {...rise(550)}>
           <CtaButton
-            href="#about"
+            href="/about"
             label="More About Us"
             width={197}
             className="shrink-0 [--k:var(--spacing)] max-[820px]:[--k:calc(0.857*var(--spacing))]"

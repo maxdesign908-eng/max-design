@@ -214,8 +214,8 @@ export default function CustomCursor() {
       >
         <div className="absolute -left-[20px] -top-[26.5px] opacity-0 transition-opacity duration-150 group-data-[hide=true]:!opacity-0 group-data-[visible=true]:opacity-100">
           <svg
-            width="30"
-            height="33"
+            width="27"
+            height="30"
             viewBox="0 0 40 53"
             className="block scale-100 overflow-visible transition-transform duration-200 ease-out group-data-[down=true]:scale-[0.82] group-data-[hover=true]:scale-[1.3] motion-reduce:transition-none"
           >
