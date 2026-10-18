@@ -1,4 +1,5 @@
-import type { CSSProperties } from "react";
+import Link from "next/link";
+import type { CSSProperties, ElementType } from "react";
 
 type Props = {
   href: string;
@@ -6,6 +7,8 @@ type Props = {
   /** Outer width in Figma px (1920 artboard). Can be overridden with a width class (e.g. w-full). */
   width: number;
   className?: string;
+  /** optional click handler (e.g. close the mobile menu) */
+  onClick?: () => void;
 };
 
 /*
@@ -21,10 +24,13 @@ type Props = {
   While it is red, the small dot and the arrow circle turn white and the arrow turns red,
   so they stay visible. The arrow also turns 45deg (same as the What We Build arrows). With "reduce motion" the colour changes instantly, no sliding.
 */
-export default function CtaButton({ href, label, width, className }: Props) {
+export default function CtaButton({ href, label, width, className, onClick }: Props) {
+  // page links ("/book-a-call") use next/link (no page reload); "#anchor" links stay a plain <a>
+  const Tag: ElementType = href.startsWith("/") ? Link : "a";
   return (
-    <a
+    <Tag
       href={href}
+      onClick={onClick}
       className={`group isolate flex [contain:layout] h-[calc(56*var(--k,1px))] w-[calc(var(--w)*var(--k,1px))] flex-none items-center overflow-hidden rounded-[999px] border-[length:calc(0.573*var(--k,1px))] border-solid border-white pr-[calc(10.46*var(--k,1px))] pl-[calc(14.33*var(--k,1px))] text-white whitespace-nowrap no-underline transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(color:--color-accent) ${className ?? ""}`}
       style={{ "--w": width } as CSSProperties}
     >
@@ -58,6 +64,6 @@ export default function CtaButton({ href, label, width, className }: Props) {
           </svg>
         </span>
       </span>
-    </a>
+    </Tag>
   );
 }

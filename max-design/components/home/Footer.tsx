@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 /*
   Footer: big "MAXdesign" wordmark, link columns, moving logo, copyright.
@@ -28,12 +29,12 @@ import Image from "next/image";
 */
 
 const COMPANY = [
-  { label: "Home", href: "#home" },
-  { label: "Services", href: "#services" },
-  { label: "Protfolio", href: "#portfolio" },
-  { label: "About", href: "#about" },
-  { label: "Blogs", href: "#blogs" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
+  { label: "Protfolio", href: "/portfolio" },
+  { label: "About", href: "/about" },
+  { label: "Blogs", href: "/blogs" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const SOCIALS = [
@@ -192,7 +193,7 @@ export default function Footer() {
           <ul className="ft-body">
             {COMPANY.map((l) => (
               <li key={l.label}>
-                <a className="ft-link" href={l.href}>{l.label}</a>
+                <Link className="ft-link" href={l.href}>{l.label}</Link>
               </li>
             ))}
           </ul>

@@ -87,7 +87,8 @@ export default function Navbar() {
             </ul>
 
             <CtaButton
-              href="#contact"
+              href="/book-a-call"
+              onClick={() => setOpen(false)}
               label="Book a Consultation"
               width={239}
               className="mt-[24px] [@media(min-width:561px)]:hidden [@media(max-width:560px)]:w-full"
@@ -96,7 +97,7 @@ export default function Navbar() {
 
           {/* Desktop / tablet CTA */}
           <CtaButton
-            href="#contact"
+            href="/book-a-call"
             label="Book a Consultation"
             width={239}
             className="[@media(max-width:900px)]:mr-[12px] [@media(max-width:900px)]:ml-auto [@media(max-width:560px)]:hidden"

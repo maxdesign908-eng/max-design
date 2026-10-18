@@ -189,7 +189,7 @@ export default function Portfolio() {
 
         {/* ───────── button ───────── */}
         <div className="mt-[calc(126.07*var(--u))] flex justify-center max-[767px]:mt-[48px]">
-          <CtaButton href="#projects" label="View All Projects" width={207} />
+          <CtaButton href="/portfolio" label="View All Projects" width={207} />
         </div>
       </div>
     </section>

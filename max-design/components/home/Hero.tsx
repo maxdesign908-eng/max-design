@@ -80,7 +80,7 @@ export default function Hero() {
       </p>
 
       <CtaButton
-        href="#contact"
+        href="/contact"
         label="Let’s Connect"
         width={189}
         className="animate-[fadeUp_0.9s_cubic-bezier(0.22,1,0.36,1)_both] motion-reduce:animate-none [animation-delay:850ms] absolute top-[calc(860*var(--u))] left-[calc(96*var(--u))] [@media(max-width:900px)]:static [@media(max-width:900px)]:mt-[28px] [@media(max-width:900px)]:w-full [@media(max-width:900px)]:max-w-[360px] [@media(max-width:900px)]:[--k:1.1px]"

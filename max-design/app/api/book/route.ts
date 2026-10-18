@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { BOOKING, fmtDate, fmtTime, generateSlots, isValidTimeZone, tzLabel } from "@/lib/booking";
-import { addBooking, removeBooking, takenBetween } from "@/lib/bookingStore";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -9,13 +8,9 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string);
 
-/* ───────── GET: which times are already taken (the pop-up hides them) ───────── */
-export async function GET(req: Request) {
-  const sp = new URL(req.url).searchParams;
-  const from = Number(sp.get("from"));
-  const to = Math.min(Number(sp.get("to")), from + 120 * 86_400_000);
-  if (!Number.isFinite(from) || !Number.isFinite(to)) return NextResponse.json({ taken: [] });
-  return NextResponse.json({ taken: await takenBetween(from, to) }, { headers: { "Cache-Control": "no-store" } });
+/* ───────── GET: nothing is stored any more, so no time is ever "taken" (the page still asks for this) ───────── */
+export async function GET() {
+  return NextResponse.json({ taken: [] }, { headers: { "Cache-Control": "no-store" } });
 }
 
 /* ───────── email (Resend, plain fetch, no package needed) ───────── */
@@ -60,11 +55,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "That time is no longer available. Please pick another one." }, { status: 409 });
   }
 
-  const saved = await addBooking({ start, tz, name, email, notes, createdAt: Date.now() });
-  if (saved === "taken") {
-    return NextResponse.json({ error: "That time was just taken. Please pick another one." }, { status: 409 });
-  }
-
   /* the email to you */
   const owner = process.env.BOOKING_TO_EMAIL || process.env.CONTACT_TO_EMAIL; // same inbox as the contact form
   const mine = `${fmtDate(start, BOOKING.timezone)}, ${fmtTime(start, BOOKING.timezone)} – ${fmtTime(start + BOOKING.lengthMin * 60_000, BOOKING.timezone)} (${tzLabel(BOOKING.timezone, start)})`;
@@ -72,10 +62,9 @@ export async function POST(req: Request) {
 
   if (!process.env.RESEND_API_KEY || !owner) {
     if (process.env.NODE_ENV === "production") {
-      await removeBooking(start);
       return NextResponse.json({ error: "Booking is not set up yet. Please use the contact form." }, { status: 500 });
     }
-    console.log(`[book] (no email set up, saved only) ${name} <${email}> ${mine}\n${notes}`);
+    console.log(`[book] (no email set up) ${name} <${email}> ${mine}\n${notes}`);
     return NextResponse.json({ ok: true });
   }
 
@@ -91,7 +80,6 @@ export async function POST(req: Request) {
     });
   } catch (err) {
     console.error("[book] email failed", err);
-    await removeBooking(start); // free the time again so the visitor can retry
     return NextResponse.json({ error: "We could not send your booking. Please try again." }, { status: 502 });
   }
 
