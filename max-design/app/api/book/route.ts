@@ -83,13 +83,19 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "We could not send your booking. Please try again." }, { status: 502 });
   }
 
-  /* a confirmation to the visitor (if this one fails the booking still stands) */
-  sendMail({
-    to: email,
-    subject: `Your call with MAX design is booked`,
-    text: `Hi ${name},\n\nYour ${BOOKING.lengthMin} minute call is booked:\n${theirs}\n\nWe will contact you before the call.\n\nMAX design`,
-    html: `<p>Hi ${esc(name)},</p><p>Your ${BOOKING.lengthMin} minute call is booked:<br><b>${esc(theirs)}</b></p><p>We will contact you before the call.</p><p>MAX design</p>`,
-  }).catch((e) => console.error("[book] visitor email failed", e));
+  /* a confirmation to the visitor (if this one fails the booking still stands).
+     It is awaited: on Vercel the function stops as soon as the answer is sent, so an email
+     that is not awaited can be cut off before it leaves. */
+  try {
+    await sendMail({
+      to: email,
+      subject: `Your call with MAX design is booked`,
+      text: `Hi ${name},\n\nYour ${BOOKING.lengthMin} minute call is booked:\n${theirs}\n\nWe will contact you before the call.\n\nMAX design`,
+      html: `<p>Hi ${esc(name)},</p><p>Your ${BOOKING.lengthMin} minute call is booked:<br><b>${esc(theirs)}</b></p><p>We will contact you before the call.</p><p>MAX design</p>`,
+    });
+  } catch (e) {
+    console.error("[book] visitor email failed", e);
+  }
 
   return NextResponse.json({ ok: true });
 }
