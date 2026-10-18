@@ -29,6 +29,10 @@ const poppins = localFont({
 export const metadata: Metadata = {
   title: "MAX design",
   description: "Design that leaves a lasting mark.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function RootLayout({
