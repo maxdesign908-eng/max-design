@@ -7,7 +7,7 @@ import CtaButton from "../home/CtaButton";
 
 const links = [
   { label: "Services", href: "/services" },
-  { label: "Portfolio", href: "#portfolio" },
+  { label: "Portfolio", href: "/portfolio" },
   { label: "About", href: "/about" },
   { label: "Blogs", href: "/blogs" },
   { label: "Contact", href: "/contact" },
