@@ -1,8 +1,8 @@
 import Footer from "@/components/home/Footer";
 import Navbar from "@/components/home/Navbar";
+import PortfolioSection from "@/components/portfolio/PortfolioSection";
 
-
-export default function ContactPage() {
+export default function PortfolioPage() {
   return (
     <>
       <div className="w-full bg-black">
@@ -10,7 +10,8 @@ export default function ContactPage() {
       </div>
 
       <main className="min-h-screen bg-black text-white">
-         <Footer />
+        <PortfolioSection />
+        <Footer />
       </main>
     </>
   );
