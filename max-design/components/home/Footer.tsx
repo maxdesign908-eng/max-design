@@ -202,7 +202,7 @@ export default function Footer() {
         <div className="ft-col" style={{ left: "calc(366 * var(--u))" }}>
           <h2>Portfolio</h2>
           <div className="ft-body">
-            <a className="ft-link" href="#portfolio">Our work</a>
+            <Link className="ft-link" href="/portfolio">Our work</Link>
             <ul className="ft-soc">
               {SOCIALS.map((s) => (
                 <li key={s.label}>
