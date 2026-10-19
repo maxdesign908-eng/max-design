@@ -129,7 +129,7 @@ export const portfolioCategories: PortfolioCategory[] = [
   },
   { id: "social-media", label: "Social Media", items: [] },
   { id: "ui-ux", label: "UI/UX", items: [] },
-  { id: "ai-ad-creatives", label: "AI-powered ad creatives", items: [] },
-  { id: "website", label: "Website Design & Development", items: [] },
-  { id: "video", label: "Video Production & Editing", items: [] },
+  { id: "ai-ad-creatives", label: "AI Ad Creatives", items: [] },
+  { id: "website", label: "Web Development", items: [] },
+  { id: "video", label: "Video Editing", items: [] },
 ];
