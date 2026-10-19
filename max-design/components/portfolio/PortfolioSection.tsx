@@ -15,12 +15,12 @@ export default function PortfolioSection() {
     portfolioCategories.find((c) => c.id === activeId) ?? portfolioCategories[0];
 
   return (
-    <section className={`${poppins.className} px-[5vw] pt-[clamp(48px,9.4vw,180px)] pb-[clamp(64px,8vw,160px)]`}>
+    <section className={`${poppins.className} px-[5vw] pt-[clamp(48px,9.375vw,180px)] pb-[clamp(64px,8vw,160px)]`}>
       <h1 className="max-w-[44.3vw] text-[clamp(44px,4.1667vw,80px)] leading-[0.96] font-medium tracking-[-0.08em] text-white max-[820px]:max-w-full">
         Built to Be Remembered.
       </h1>
 
-      <div className="mt-[clamp(20px,2.19vw,42px)] border-t border-white/25 pt-[clamp(20px,2.19vw,42px)]">
+      <div className="mt-[clamp(20px,2.1875vw,42px)] border-t border-[#424242] pt-[clamp(20px,2.1354vw,41px)]">
         <CategoryTabs
           categories={portfolioCategories}
           activeId={active.id}

@@ -25,12 +25,13 @@ export default function CategoryTabs({ categories, activeId, onChange }: Props) 
             aria-selected={active}
             onClick={() => onChange(cat.id)}
             className={`flex cursor-pointer items-center gap-[18px] text-[clamp(14px,1.0417vw,20px)] leading-[1.12] font-normal tracking-[-0.04em] whitespace-nowrap transition-colors duration-200 ${
-              active ? "text-white" : "text-white/45 hover:text-white/80"
+              active ? "text-white" : "text-[#838383] hover:text-white"
             }`}
           >
-            <span aria-hidden className="text-[0.7em] text-white/45">
-              ●
-            </span>
+            <span
+              aria-hidden
+              className="h-[6px] w-[6px] shrink-0 rounded-full bg-[#838383]"
+            />
             {cat.label}
           </button>
         );
