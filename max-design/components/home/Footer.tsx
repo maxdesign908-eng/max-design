@@ -38,10 +38,10 @@ const COMPANY = [
 ];
 
 const SOCIALS = [
-  { label: "LinkedIn", href: "#", icon: "in" },
-  { label: "Facebook", href: "#", icon: "f" },
-  { label: "Instagram", href: "#", icon: "ig" },
-  { label: "Behance", href: "#", icon: "be" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/maxdesignagency/", icon: "in" },
+  { label: "Facebook", href: "https://www.facebook.com/maxdesignsinnovation/", icon: "f" },
+  { label: "Instagram", href: "https://www.instagram.com/maxdesign908/", icon: "ig" },
+  { label: "Behance", href: "#", icon: "https://www.behance.net/maxdesignagency" },
 ] as const;
 
 const CSS = `
