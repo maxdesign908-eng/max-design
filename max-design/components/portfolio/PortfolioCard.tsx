@@ -32,15 +32,16 @@ export default function PortfolioCard({ item }: { item: PortfolioItem }) {
         />
       )}
 
-      {/* Label bar: sirf patli line + naam (koi tint / blur nahi). Jin images me naam
-          pehle se likha hai (labelInImage) unme sirf line aati hai. */}
-      <div className="absolute inset-x-0 bottom-0 flex h-[13.04%] items-center border-t border-white/60 px-[3.57%] pt-[1.43%]">
-        {!item.labelInImage && (
-          <h3 className="text-[clamp(16px,1.6667vw,32px)] leading-none font-semibold tracking-[-0.04em] text-white uppercase">
-            {item.title}
-          </h3>
-        )}
-      </div>
+      {/* Label bar ki patli line (sab cards par same) */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[13.04%] border-t border-white/60" />
+
+      {/* Label: Figma = left 20, top 660, height 36 (card 560 x 721), Poppins Bold 32px.
+          Jin images me naam pehle se likha hai (labelInImage) wahan dobara nahi likhte. */}
+      {!item.labelInImage && (
+        <h3 className="absolute top-[91.54%] left-[3.5714%] h-[4.99%] text-[clamp(16px,1.6667vw,32px)] leading-[1.125] font-bold tracking-[-0.04em] whitespace-nowrap text-white uppercase">
+          {item.title}
+        </h3>
+      )}
     </article>
   );
 }

@@ -6,7 +6,7 @@ import { portfolioCategories } from "@/data/portfolio";
 import CategoryTabs from "./CategoryTabs";
 import PortfolioCard from "./PortfolioCard";
 
-const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "600"] });
+const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
 export default function PortfolioSection() {
   // URL /portfolio hi rehta hai, sirf state change hoti hai
