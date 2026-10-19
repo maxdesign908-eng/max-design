@@ -41,7 +41,7 @@ const SOCIALS = [
   { label: "LinkedIn", href: "https://www.linkedin.com/company/maxdesignagency/", icon: "in" },
   { label: "Facebook", href: "https://www.facebook.com/maxdesignsinnovation/", icon: "f" },
   { label: "Instagram", href: "https://www.instagram.com/maxdesign908/", icon: "ig" },
-  { label: "Behance", href: "#", icon: "https://www.behance.net/maxdesignagency" },
+  { label: "Behance", href: "https://www.behance.net/maxdesignagency", icon: "be" },
 ] as const;
 
 const CSS = `
