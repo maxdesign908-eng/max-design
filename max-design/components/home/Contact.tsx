@@ -41,9 +41,9 @@ import {
 const SERVICES = [
   "Brand Design",
   "UI/UX Design",
-  "Website Design & Development",
+  "Website Development",
   "Video Editing",
-  "AI-Powered Ad Creatives",
+  "AI Ad Creatives",
   "Social Media",
 ];
 

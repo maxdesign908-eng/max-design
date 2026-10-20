@@ -30,9 +30,9 @@ const SERVICES = [
   "Branding",
   "Social Media",
   "UI/UX Design",
-  "AI-powered ad creatives",
-  "Website Design & Development",
-  "Video Production & Editing",
+  "AI Ad Creatives",
+  "Website Development",
+  "Video Editing"
 ];
 
 const BUDGETS = [
@@ -55,6 +55,21 @@ const FIELDS: Field[] = [
   { name: "phone", label: "Phone Number", type: "tel" },
   { name: "source", label: "How did you hear about us" },
 ];
+
+/* browser autofill paints inputs light blue with dark text: keep them black with white text */
+const AUTOFILL_CSS = `
+  .sp-in { color-scheme: dark; caret-color: #fff; }
+  .sp-in:-webkit-autofill,
+  .sp-in:-webkit-autofill:hover,
+  .sp-in:-webkit-autofill:focus,
+  .sp-in:-webkit-autofill:active {
+    -webkit-text-fill-color: #fff;
+    caret-color: #fff;
+    -webkit-box-shadow: 0 0 0 1000px #000 inset;
+    box-shadow: 0 0 0 1000px #000 inset;
+    transition: background-color 99999s ease-in-out 0s;
+  }
+`;
 
 /* side padding: 97 Figma px on desktop, fluid on phones */
 const SIDE = "px-[calc(97*var(--u))] [@media(max-width:900px)]:px-[var(--pad)]";
@@ -160,7 +175,7 @@ function Pill({ label, on, onClick, delay }: { label: string; on: boolean; onCli
 function Line({ field, tall }: { field: Field; tall?: boolean }) {
   const id = `sp-${field.name}`;
   const inputCls =
-    "absolute bottom-0 left-0 m-0 h-[48px] w-full border-0 bg-transparent p-0 text-[length:16px] text-white outline-none min-[901px]:h-[max(28px,calc(47.89*var(--u)))] min-[901px]:text-[length:max(14px,calc(18*var(--u)))]";
+    "sp-in absolute bottom-0 left-0 m-0 h-[48px] w-full border-0 bg-transparent p-0 text-[length:16px] text-white outline-none min-[901px]:h-[max(28px,calc(47.89*var(--u)))] min-[901px]:text-[length:max(14px,calc(18*var(--u)))]";
   return (
     <div className="relative flex h-[88px] w-full flex-col border-b border-white/[0.26] transition-colors duration-300 focus-within:border-[#E71117] min-[901px]:h-[max(64px,calc(96.42*var(--u)))]">
       <label
@@ -224,6 +239,7 @@ export default function StartProject() {
 
   return (
     <div className="@container w-full bg-black text-white">
+      <style>{AUTOFILL_CSS}</style>
       <div className="mx-auto w-full max-w-[1920px] [--k:var(--u)] [--u:calc(min(100cqw,1920px)_/_1920)] [@media(max-width:900px)]:[--k:1px] [@media(max-width:900px)]:[--pad:clamp(16px,5vw,96px)]">
         <main>
           <section
