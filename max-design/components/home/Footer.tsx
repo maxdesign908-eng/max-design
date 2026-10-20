@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 /*
   Footer: big "MAXdesign" wordmark, link columns, moving logo, copyright.
@@ -173,6 +176,17 @@ function Glyph({ name }: { name: (typeof SOCIALS)[number]["icon"] }) {
 }
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  // Home: when you are already on the home page, Next.js does not scroll anywhere,
+  // so scroll to the very top ourselves. From other pages the normal Link navigation starts at the top.
+  const goHome = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <footer id="footer" className="@container w-full bg-black">
       <style>{CSS}</style>
@@ -193,7 +207,7 @@ export default function Footer() {
           <ul className="ft-body">
             {COMPANY.map((l) => (
               <li key={l.label}>
-                <Link className="ft-link" href={l.href}>{l.label}</Link>
+                <Link className="ft-link" href={l.href} onClick={l.href === "/" ? goHome : undefined}>{l.label}</Link>
               </li>
             ))}
           </ul>
