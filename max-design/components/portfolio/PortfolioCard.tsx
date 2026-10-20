@@ -28,8 +28,26 @@ export default function PortfolioCard({ item }: { item: PortfolioItem }) {
           alt={item.title}
           fill
           unoptimized
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className={`object-cover transition-transform duration-500 group-hover:scale-105 ${
+            item.labelInImage ? "origin-bottom" : ""
+          }`}
         />
+      )}
+
+      {/* Jin images me naam image ke andar likha hai: neeche ki bar wali patti ko image ki
+          static copy se dhak dete hain, taake hover par sirf image zoom ho, naam nahi. */}
+      {item.labelInImage && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[13.04%] overflow-hidden">
+          <Image
+            src={item.image}
+            alt=""
+            aria-hidden
+            width={1400}
+            height={1802}
+            unoptimized
+            className="absolute bottom-0 left-0 h-[766.9%] w-full max-w-none object-cover"
+          />
+        </div>
       )}
 
       {/* Label bar ki patli line (sab cards par same) */}
