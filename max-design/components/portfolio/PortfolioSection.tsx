@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 import { Poppins } from "next/font/google";
-import { portfolioCategories } from "@/data/portfolio";
+import {
+  CARD_H,
+  DEFAULT_HEADING,
+  LABEL_TOP,
+  portfolioCategories,
+} from "@/data/portfolio";
 import CategoryTabs from "./CategoryTabs";
 import PortfolioCard from "./PortfolioCard";
 
@@ -16,8 +21,10 @@ export default function PortfolioSection() {
 
   return (
     <section className={`${poppins.className} px-[5vw] pt-[clamp(48px,9.375vw,180px)] pb-[clamp(64px,8vw,160px)]`}>
-      <h1 className="max-w-[44.3vw] text-[clamp(44px,4.1667vw,80px)] leading-[0.96] font-medium tracking-[-0.08em] text-white max-[820px]:max-w-full">
-        Built to Be Remembered.
+      <h1
+        style={{ "--hw": `${((active.headingW ?? 850) / 1920) * 100}vw` } as React.CSSProperties}
+        className="max-w-[var(--hw)] text-[clamp(44px,4.1667vw,80px)] leading-[0.96] font-medium tracking-[-0.08em] text-white max-[820px]:max-w-full">
+        {active.heading ?? DEFAULT_HEADING}
       </h1>
 
       <div className="mt-[clamp(20px,2.1875vw,42px)] border-t border-[#424242] pt-[clamp(20px,2.1354vw,41px)]">
@@ -35,8 +42,14 @@ export default function PortfolioSection() {
       >
         {active.items.length > 0 ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-[1.25vw]">
-            {active.items.map((item) => (
-              <PortfolioCard key={item.id} item={item} />
+            {active.items.map((item, i) => (
+              <PortfolioCard
+                key={item.id}
+                index={i}
+                item={item}
+                cardH={active.cardH ?? CARD_H}
+                labelTop={active.labelTop ?? LABEL_TOP}
+              />
             ))}
           </div>
         ) : (
