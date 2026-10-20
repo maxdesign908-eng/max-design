@@ -31,8 +31,9 @@ const SERVICES = [
   "Social Media",
   "UI/UX Design",
   "AI Ad Creatives",
+  "Video Editing",
   "Website Development",
-  "Video Editing"
+  
 ];
 
 const BUDGETS = [
