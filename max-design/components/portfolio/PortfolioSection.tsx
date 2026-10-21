@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Poppins } from "next/font/google";
 import {
+  type PortfolioItem,
   CARD_H,
   DEFAULT_HEADING,
   LABEL_TOP,
@@ -10,6 +11,24 @@ import {
 } from "@/data/portfolio";
 import CategoryTabs from "./CategoryTabs";
 import PortfolioCard from "./PortfolioCard";
+
+/** Video layout: ek jaisay cards ek row-group me (3 / 4 / 1 column), har group ka apna gap (Figma) */
+const VIDEO_GROUP: Record<string, { cols: string; gap: string }> = {
+  vtall: { cols: "grid-cols-3", gap: "1.25vw" },
+  vsmall: { cols: "grid-cols-4", gap: "0.9344vw" },
+  vwide: { cols: "grid-cols-1", gap: "0" },
+};
+
+function groupByVariant(items: PortfolioItem[]) {
+  const groups: { variant: string; items: { item: PortfolioItem; index: number }[] }[] = [];
+  items.forEach((item, index) => {
+    const variant = item.variant ?? "vtall";
+    const last = groups[groups.length - 1];
+    if (last && last.variant === variant) last.items.push({ item, index });
+    else groups.push({ variant, items: [{ item, index }] });
+  });
+  return groups;
+}
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
@@ -40,7 +59,32 @@ export default function PortfolioSection() {
         role="tabpanel"
         className="mt-[clamp(32px,9.375vw,180px)]"
       >
-        {active.items.length > 0 ? (
+        {active.items.length > 0 && active.layout === "video" ? (
+          <div
+            className="flex flex-col"
+            style={{
+              rowGap: `${((active.rowGap ?? 24) / 1920) * 100}vw`,
+              width: "90vw",
+              marginLeft: `${((active.gridOffset ?? 0) / 1920) * 100}vw`,
+            }}
+          >
+            {groupByVariant(active.items).map((g, gi) => (
+              <div
+                key={gi}
+                className={`grid ${VIDEO_GROUP[g.variant]?.cols ?? "grid-cols-3"}`}
+                style={{
+                  columnGap: VIDEO_GROUP[g.variant]?.gap ?? "1.25vw",
+                  // ek hi group ke andar upar-neeche cards (jaise 2 wide videos) ke beech bhi wahi gap
+                  rowGap: `${((active.rowGap ?? 24) / 1920) * 100}vw`,
+                }}
+              >
+                {g.items.map(({ item, index }) => (
+                  <PortfolioCard key={item.id} item={item} index={index} />
+                ))}
+              </div>
+            ))}
+          </div>
+        ) : active.items.length > 0 ? (
           <div
             className={
               active.layout === "bento"

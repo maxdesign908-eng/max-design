@@ -19,7 +19,7 @@ export const DEFAULT_HEADING = "Built to Be Remembered.";
 export type FigmaCrop = { width: number; height: number; left: number; top: number };
 
 /** AI Ad Creatives ke bento layout ke card size: small 560x709.86, half 852x1080, wide 1728x1080 */
-export type CardVariant = "small" | "half" | "wide";
+export type CardVariant = "small" | "half" | "wide" | "vtall" | "vsmall" | "vwide";
 
 export type PortfolioItem = {
   id: string;
@@ -31,6 +31,9 @@ export type PortfolioItem = {
   crop?: FigmaCrop;
   /** Sirf bento layout me: card ka size (grid me kitni jagah ghere) */
   variant?: CardVariant;
+  /** Sirf video cards: video (.webm) aur poster (.webp, video load hone se pehle) */
+  video?: string;
+  poster?: string;
 };
 
 export type PortfolioCategory = {
@@ -41,7 +44,11 @@ export type PortfolioCategory = {
   /** Figma: heading ki max width (default 850). Lambi heading ke liye badhao */
   headingW?: number;
   /** "bento" = 6 column grid jisme small/half/wide cards mix hote hain */
-  layout?: "bento";
+  layout?: "bento" | "video";
+  /** Figma: grid ka left offset (px, 1920 frame par). Video Editing me -11 */
+  gridOffset?: number;
+  /** Video layout: rows ke beech ka gap (px, 1920 frame par). Figma me 24. 0 karo to cards chipak jate hain */
+  rowGap?: number;
   /** Figma: card ki height (default 721) */
   cardH?: number;
   /** Figma: label ka top (default 660) */
@@ -212,7 +219,7 @@ export const portfolioCategories: PortfolioCategory[] = [
       {
         id: "fusio-block-guard",
         title: "Fusio Block Guard",
-        image: "/portfolio/social-media/fusio-block-guard.webp",
+        image: "/portfolio/social-media/fusio-blockguard.webp",
       },
       {
         id: "akashic-knowing",
@@ -336,6 +343,75 @@ export const portfolioCategories: PortfolioCategory[] = [
       },
     ],
   },
-  { id: "video", label: "Video Editing", items: [] },
+  {
+    id: "video",
+    label: "Video Editing",
+    heading: "Visual Stories That Keep People Watching",
+    headingW: 1560,
+    layout: "video",
+    gridOffset: -11,
+    rowGap: 24,
+    items: [
+      // ---- PEHLE 6 CARDS (3 + 3, variant "vtall") ----
+      // Jab un 6 videos ki .webm + .webp (poster) aa jayen, to neeche wali entry copy kar ke
+      // is list ke SHURU me (vsmall wale cards se pehle) daalo:
+      // {
+      //   id: "jamswheels-1",
+      //   title: "Jamswheels on Deals",
+      //   image: "/portfolio/video-editing/jamswheels-1.webp",
+      //   video: "/portfolio/video-editing/jamswheels-1.webm",
+      //   poster: "/portfolio/video-editing/jamswheels-1.webp",
+      //   variant: "vtall",
+      // },
+      {
+        id: "leafrooms-avenair",
+        title: "Leafrooms",
+        image: "/portfolio/video-editing/leafrooms-avenair.webp",
+        video: "/portfolio/video-editing/leafrooms-avenair.webm",
+        poster: "/portfolio/video-editing/leafrooms-avenair.webp",
+        variant: "vsmall",
+      },
+      {
+        id: "leafrooms-clients",
+        title: "Leafrooms",
+        image: "/portfolio/video-editing/leafrooms-clients.webp",
+        video: "/portfolio/video-editing/leafrooms-clients.webm",
+        poster: "/portfolio/video-editing/leafrooms-clients.webp",
+        variant: "vsmall",
+      },
+      {
+        id: "leafrooms-window",
+        title: "Leafrooms",
+        image: "/portfolio/video-editing/leafrooms-window.webp",
+        video: "/portfolio/video-editing/leafrooms-window.webm",
+        poster: "/portfolio/video-editing/leafrooms-window.webp",
+        variant: "vsmall",
+      },
+      {
+        id: "highland-manor",
+        title: "Highland Manor",
+        image: "/portfolio/video-editing/highland-manor.webp",
+        video: "/portfolio/video-editing/highland-manor.webm",
+        poster: "/portfolio/video-editing/highland-manor.webp",
+        variant: "vsmall",
+      },
+      {
+        id: "synavos-field",
+        title: "Synavos",
+        image: "/portfolio/video-editing/synavos-field.webp",
+        video: "/portfolio/video-editing/synavos-field.webm",
+        poster: "/portfolio/video-editing/synavos-field.webp",
+        variant: "vwide",
+      },
+      {
+        id: "synavos-tcl",
+        title: "Synavos",
+        image: "/portfolio/video-editing/synavos-tcl.webp",
+        video: "/portfolio/video-editing/synavos-tcl.webm",
+        poster: "/portfolio/video-editing/synavos-tcl.webp",
+        variant: "vwide",
+      },
+    ],
+  },
   { id: "website", label: "Web Development", items: [] },
 ];

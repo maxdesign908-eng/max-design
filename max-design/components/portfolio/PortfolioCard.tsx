@@ -2,24 +2,55 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { CARD_H, CARD_W, LABEL_H, LABEL_TOP, BAR_H, type CardVariant, type PortfolioItem } from "@/data/portfolio";
+import {
+  CARD_H,
+  CARD_W,
+  LABEL_H,
+  LABEL_TOP,
+  BAR_H,
+  type CardVariant,
+  type FigmaCrop,
+  type PortfolioItem,
+} from "@/data/portfolio";
 
 /**
- * Bento (AI Ad Creatives) cards: Figma sizes.
- * small = half card ka 0.6573 scale (560/852), isliye label/bar ke % sab ke same hain.
- * Font cqw me hai (card ki width ke hisab se), radius vw me (poori layout ke saath scale).
+ * Har card ka Figma config.
+ *  - w / h        : card ka design size (px)
+ *  - radius       : vw me (poori layout ke saath scale hota hai), max = Figma px
+ *  - border/line  : border ki motai + opacity (Figma 0.53px white ~ white/50)
+ *  - font         : cqw me (card ki width ke hisab se), left/top/height/bar = card ke % me
+ *  - crop         : (sirf video) Figma ka video size/position card ke andar
  */
-const BENTO: Record<
-  CardVariant,
-  { w: number; h: number; radius: string; border: string; borderCls: string; lineCls: string; font: string; left: string; span: string }
-> = {
-  small: { w: 560, h: 709.86, radius: "min(9.2px, 0.4792vw)", border: "0.35px", borderCls: "border-white/35", lineCls: "border-white/45", font: "3.7559cqw", left: "4.5775%", span: "col-span-2" },
-  half: { w: 852, h: 1080, radius: "min(14px, 0.7292vw)", border: "0.53px", borderCls: "border-white/50", lineCls: "border-white/60", font: "3.7559cqw", left: "4.5775%", span: "col-span-3" },
-  wide: { w: 1728, h: 1080, radius: "min(14px, 0.7292vw)", border: "0.53px", borderCls: "border-white/50", lineCls: "border-white/60", font: "1.8519cqw", left: "2.2569%", span: "col-span-6" },
+type Cfg = {
+  w: number;
+  h: number;
+  radius: string;
+  border: string;
+  borderCls: string;
+  lineCls: string;
+  font: string;
+  left: string;
+  top: number; // fraction of card height
+  labelH: number;
+  bar: number;
+  span?: string;
+  widthPct?: number;
+  crop?: FigmaCrop;
 };
-const BENTO_LABEL_TOP = 996 / 1080; // Figma: label top 996 (card height 1080)
-const BENTO_LABEL_H = 36 / 1080;
-const BENTO_BAR = 136 / 1080;
+
+// AI Ad Creatives (bento). small = half ka 0.6573 scale
+const AI = { top: 996 / 1080, labelH: 36 / 1080, bar: 136 / 1080 };
+// Video Editing. vsmall = vtall ka 0.7474 scale
+const VID = { top: 842 / 906, labelH: 24 / 906, bar: 105 / 906 };
+
+const VARIANTS: Record<CardVariant, Cfg> = {
+  small: { w: 560, h: 709.86, radius: "min(9.2px, 0.4792vw)", border: "0.35px", borderCls: "border-white/35", lineCls: "border-white/45", font: "3.7559cqw", left: "4.5775%", span: "col-span-2", ...AI },
+  half: { w: 852, h: 1080, radius: "min(14px, 0.7292vw)", border: "0.53px", borderCls: "border-white/50", lineCls: "border-white/60", font: "3.7559cqw", left: "4.5775%", span: "col-span-3", ...AI },
+  wide: { w: 1728, h: 1080, radius: "min(14px, 0.7292vw)", border: "0.53px", borderCls: "border-white/50", lineCls: "border-white/60", font: "1.8519cqw", left: "2.2569%", span: "col-span-6", ...AI },
+  vtall: { w: 560, h: 906, radius: "min(9.2px, 0.4792vw)", border: "0.35px", borderCls: "border-white/35", lineCls: "border-white/45", font: "3.7554cqw", left: "4.9304%", crop: { width: 560, height: 995.56, left: 0, top: -18 }, ...VID },
+  vsmall: { w: 418.55, h: 677.15, radius: "min(6.88px, 0.3583vw)", border: "0.26px", borderCls: "border-white/30", lineCls: "border-white/40", font: "3.7557cqw", left: "4.9314%", crop: { width: 429.36, height: 763.31, left: -5.36, top: -43.16 }, ...VID },
+  vwide: { w: 1724, h: 906, radius: "min(9.2px, 0.4792vw)", border: "0.35px", borderCls: "border-white/35", lineCls: "border-white/45", font: "1.2198cqw", left: "1.6016%", widthPct: (1724 / 1728) * 100, crop: { width: 1724, height: 970, left: 0, top: 0 }, ...VID },
+};
 
 type Props = {
   item: PortfolioItem;
@@ -31,53 +62,85 @@ type Props = {
   index?: number;
 };
 
-
 export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_TOP, index = 0 }: Props) {
-  const { crop } = item;
+  const v = item.variant ? VARIANTS[item.variant] : null;
 
-  // Smooth reveal: card jab screen me aata hai (ya category badalne par naya mount hota hai)
-  // to neeche se halka sa upar uthta hua fade-in hota hai.
+  // Default (Branding / Social / UI-UX) config
+  const cfg: Cfg = v ?? {
+    w: CARD_W,
+    h: cardH,
+    radius: "14px",
+    border: "0.53px",
+    borderCls: "border-white/50",
+    lineCls: "border-white/60",
+    font: "5.7143cqw",
+    left: "3.5714%",
+    top: labelTop / cardH,
+    labelH: LABEL_H / cardH,
+    bar: BAR_H / cardH,
+  };
+  const crop = item.crop ?? cfg.crop;
+
+  // Smooth reveal + (video) sirf screen me ho to play
   const ref = useRef<HTMLElement>(null);
+  const vref = useRef<HTMLVideoElement>(null);
   const [shown, setShown] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setShown(true);
-      return;
-    }
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) setShown(true);
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setShown(true);
-          io.disconnect();
+        if (entry.isIntersecting) setShown(true);
+        const vid = vref.current;
+        if (vid && !reduce) {
+          if (entry.isIntersecting) vid.play().catch(() => {});
+          else vid.pause();
         }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
+      { threshold: 0.2, rootMargin: "0px 0px -6% 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
   }, []);
-  const pct = (px: number) => `${(px / cardH) * 100}%`;
 
-  const bento = item.variant ? BENTO[item.variant] : null;
-  const barH = bento ? `${BENTO_BAR * 100}%` : pct(BAR_H);
-  const labelTopV = bento ? `${BENTO_LABEL_TOP * 100}%` : pct(labelTop);
-  const labelHV = bento ? `${BENTO_LABEL_H * 100}%` : pct(LABEL_H);
+  const pctW = (px: number) => `${(px / cfg.w) * 100}%`;
+  const pctH = (px: number) => `${(px / cfg.h) * 100}%`;
+  const cropStyle = crop
+    ? { width: pctW(crop.width), height: pctH(crop.height), left: pctW(crop.left), top: pctH(crop.top) }
+    : undefined;
+  const barH = `${cfg.bar * 100}%`;
 
   return (
     <article
       ref={ref}
       style={{
-        aspectRatio: bento ? `${bento.w} / ${bento.h}` : `${CARD_W} / ${cardH}`,
-        ...(bento ? { borderRadius: bento.radius, borderWidth: bento.border } : { borderRadius: 14, borderWidth: "0.53px" }),
+        aspectRatio: `${cfg.w} / ${cfg.h}`,
+        borderRadius: cfg.radius,
+        borderWidth: cfg.border,
+        ...(cfg.widthPct ? { width: `${cfg.widthPct}%` } : {}),
         transitionDelay: shown ? `${(index % 3) * 90}ms` : "0ms",
       }}
-      className={`group @container relative w-full overflow-hidden border-solid ${bento ? `${bento.borderCls} ${bento.span}` : "border-white/50"} bg-neutral-900 transition-[opacity,translate] duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+      className={`group @container relative w-full overflow-hidden border-solid ${cfg.borderCls} ${cfg.span ?? ""} bg-neutral-900 transition-[opacity,translate] duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
         shown ? "translate-y-0 opacity-100" : "translate-y-[36px] opacity-0"
       }`}
     >
-      {crop ? (
+      {item.video ? (
+        // Video: Figma ki exact width/height/left/top, muted loop, screen me aane par play
+        <video
+          ref={vref}
+          src={item.video}
+          poster={item.poster}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-label={item.title}
+          className="absolute max-w-none object-cover transition-transform duration-500 group-hover:scale-105"
+          style={cropStyle ?? { inset: 0, width: "100%", height: "100%" }}
+        />
+      ) : crop ? (
         // Figma ki exact width/height/left/top (card ke % me convert hoti hai)
         <Image
           src={item.image}
@@ -86,12 +149,7 @@ export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_T
           height={Math.round(crop.height)}
           unoptimized
           className="absolute max-w-none transition-transform duration-500 group-hover:scale-105"
-          style={{
-            width: `${(crop.width / CARD_W) * 100}%`,
-            height: `${(crop.height / CARD_H) * 100}%`,
-            left: `${(crop.left / CARD_W) * 100}%`,
-            top: `${(crop.top / CARD_H) * 100}%`,
-          }}
+          style={cropStyle}
         />
       ) : (
         <Image
@@ -105,9 +163,9 @@ export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_T
         />
       )}
 
-      {/* Jin images me naam image ke andar likha hai: neeche ki bar wali patti ko image ki
-          static copy se dhak dete hain, taake hover par sirf image zoom ho, naam nahi. */}
-      {item.labelInImage && (
+      {/* Jin images me naam image ke andar likha hai: neeche ki patti ki static copy,
+          taake hover par sirf image zoom ho, naam nahi. */}
+      {item.labelInImage && !item.video && (
         <div className="pointer-events-none absolute inset-x-0 bottom-0 overflow-hidden" style={{ height: barH }}>
           <Image
             src={item.image}
@@ -117,25 +175,25 @@ export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_T
             height={1802}
             unoptimized
             className="absolute bottom-0 left-0 w-full max-w-none object-cover"
-            style={{ height: `${(cardH / BAR_H) * 100}%` }}
+            style={{ height: `${(1 / cfg.bar) * 100}%` }}
           />
         </div>
       )}
 
-      {/* Label bar ki patli line (sab cards par same) */}
-      <div className={`pointer-events-none absolute inset-x-0 bottom-0 border-t ${bento ? bento.lineCls : "border-white/60"}`} style={{ height: barH }} />
+      {/* Label bar ki patli line */}
+      <div className={`pointer-events-none absolute inset-x-0 bottom-0 border-t ${cfg.lineCls}`} style={{ height: barH }} />
 
-      {/* Label: Figma = left 20, top 660, height 36 (card 560 x 721), Poppins Bold 32px at 560px card width; font-size card ki width ke saath scale hoti hai (5.7143cqw = 32/560), isliye image me likhe naam ke barabar rehta hai.
-          Jin images me naam pehle se likha hai (labelInImage) wahan dobara nahi likhte. */}
+      {/* Label: Poppins Bold, -4% spacing, line-height 112%, uppercase */}
       {!item.labelInImage && (
         <h3
           style={{
-            top: labelTopV,
-            height: labelHV,
-            left: bento ? bento.left : "3.5714%",
-            fontSize: bento ? bento.font : "5.7143cqw",
+            top: `${cfg.top * 100}%`,
+            height: `${cfg.labelH * 100}%`,
+            left: cfg.left,
+            fontSize: cfg.font,
           }}
-          className="absolute leading-[1.12] font-bold tracking-[-0.04em] whitespace-nowrap text-white uppercase">
+          className="absolute leading-[1.12] font-bold tracking-[-0.04em] whitespace-nowrap text-white uppercase"
+        >
           {item.title}
         </h3>
       )}
