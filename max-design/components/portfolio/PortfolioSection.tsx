@@ -41,7 +41,13 @@ export default function PortfolioSection() {
         className="mt-[clamp(32px,9.375vw,180px)]"
       >
         {active.items.length > 0 ? (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-[1.25vw]">
+          <div
+            className={
+              active.layout === "bento"
+                ? "grid grid-cols-6 gap-[1.25vw]"
+                : "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-[1.25vw]"
+            }
+          >
             {active.items.map((item, i) => (
               <PortfolioCard
                 key={item.id}

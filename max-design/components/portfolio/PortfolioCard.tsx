@@ -2,7 +2,24 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { CARD_H, CARD_W, LABEL_H, LABEL_TOP, BAR_H, type PortfolioItem } from "@/data/portfolio";
+import { CARD_H, CARD_W, LABEL_H, LABEL_TOP, BAR_H, type CardVariant, type PortfolioItem } from "@/data/portfolio";
+
+/**
+ * Bento (AI Ad Creatives) cards: Figma sizes.
+ * small = half card ka 0.6573 scale (560/852), isliye label/bar ke % sab ke same hain.
+ * Font cqw me hai (card ki width ke hisab se), radius vw me (poori layout ke saath scale).
+ */
+const BENTO: Record<
+  CardVariant,
+  { w: number; h: number; radius: string; border: string; borderCls: string; lineCls: string; font: string; left: string; span: string }
+> = {
+  small: { w: 560, h: 709.86, radius: "min(9.2px, 0.4792vw)", border: "0.35px", borderCls: "border-white/35", lineCls: "border-white/45", font: "3.7559cqw", left: "4.5775%", span: "col-span-2" },
+  half: { w: 852, h: 1080, radius: "min(14px, 0.7292vw)", border: "0.53px", borderCls: "border-white/50", lineCls: "border-white/60", font: "3.7559cqw", left: "4.5775%", span: "col-span-3" },
+  wide: { w: 1728, h: 1080, radius: "min(14px, 0.7292vw)", border: "0.53px", borderCls: "border-white/50", lineCls: "border-white/60", font: "1.8519cqw", left: "2.2569%", span: "col-span-6" },
+};
+const BENTO_LABEL_TOP = 996 / 1080; // Figma: label top 996 (card height 1080)
+const BENTO_LABEL_H = 36 / 1080;
+const BENTO_BAR = 136 / 1080;
 
 type Props = {
   item: PortfolioItem;
@@ -13,6 +30,7 @@ type Props = {
   /** Grid me position (stagger animation ke liye) */
   index?: number;
 };
+
 
 export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_TOP, index = 0 }: Props) {
   const { crop } = item;
@@ -42,14 +60,20 @@ export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_T
   }, []);
   const pct = (px: number) => `${(px / cardH) * 100}%`;
 
+  const bento = item.variant ? BENTO[item.variant] : null;
+  const barH = bento ? `${BENTO_BAR * 100}%` : pct(BAR_H);
+  const labelTopV = bento ? `${BENTO_LABEL_TOP * 100}%` : pct(labelTop);
+  const labelHV = bento ? `${BENTO_LABEL_H * 100}%` : pct(LABEL_H);
+
   return (
     <article
       ref={ref}
       style={{
-        aspectRatio: `${CARD_W} / ${cardH}`,
+        aspectRatio: bento ? `${bento.w} / ${bento.h}` : `${CARD_W} / ${cardH}`,
+        ...(bento ? { borderRadius: bento.radius, borderWidth: bento.border } : { borderRadius: 14, borderWidth: "0.53px" }),
         transitionDelay: shown ? `${(index % 3) * 90}ms` : "0ms",
       }}
-      className={`group @container relative w-full overflow-hidden rounded-[14px] border-[0.53px] border-white/50 bg-neutral-900 transition-[opacity,translate] duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+      className={`group @container relative w-full overflow-hidden border-solid ${bento ? `${bento.borderCls} ${bento.span}` : "border-white/50"} bg-neutral-900 transition-[opacity,translate] duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
         shown ? "translate-y-0 opacity-100" : "translate-y-[36px] opacity-0"
       }`}
     >
@@ -84,7 +108,7 @@ export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_T
       {/* Jin images me naam image ke andar likha hai: neeche ki bar wali patti ko image ki
           static copy se dhak dete hain, taake hover par sirf image zoom ho, naam nahi. */}
       {item.labelInImage && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 overflow-hidden" style={{ height: pct(BAR_H) }}>
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 overflow-hidden" style={{ height: barH }}>
           <Image
             src={item.image}
             alt=""
@@ -99,12 +123,19 @@ export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_T
       )}
 
       {/* Label bar ki patli line (sab cards par same) */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 border-t border-white/60" style={{ height: pct(BAR_H) }} />
+      <div className={`pointer-events-none absolute inset-x-0 bottom-0 border-t ${bento ? bento.lineCls : "border-white/60"}`} style={{ height: barH }} />
 
       {/* Label: Figma = left 20, top 660, height 36 (card 560 x 721), Poppins Bold 32px at 560px card width; font-size card ki width ke saath scale hoti hai (5.7143cqw = 32/560), isliye image me likhe naam ke barabar rehta hai.
           Jin images me naam pehle se likha hai (labelInImage) wahan dobara nahi likhte. */}
       {!item.labelInImage && (
-        <h3 style={{ top: pct(labelTop), height: pct(LABEL_H) }} className="absolute left-[3.5714%] text-[length:5.7143cqw] leading-[1.12] font-bold tracking-[-0.04em] whitespace-nowrap text-white uppercase">
+        <h3
+          style={{
+            top: labelTopV,
+            height: labelHV,
+            left: bento ? bento.left : "3.5714%",
+            fontSize: bento ? bento.font : "5.7143cqw",
+          }}
+          className="absolute leading-[1.12] font-bold tracking-[-0.04em] whitespace-nowrap text-white uppercase">
           {item.title}
         </h3>
       )}
