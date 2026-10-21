@@ -18,6 +18,9 @@ export const DEFAULT_HEADING = "Built to Be Remembered.";
 
 export type FigmaCrop = { width: number; height: number; left: number; top: number };
 
+/** AI Ad Creatives ke bento layout ke card size: small 560x709.86, half 852x1080, wide 1728x1080 */
+export type CardVariant = "small" | "half" | "wide";
+
 export type PortfolioItem = {
   id: string;
   title: string;
@@ -26,6 +29,8 @@ export type PortfolioItem = {
   labelInImage?: boolean;
   /** Optional: Figma ki image width/height/left/top (card 560 x 721 ke hisab se) */
   crop?: FigmaCrop;
+  /** Sirf bento layout me: card ka size (grid me kitni jagah ghere) */
+  variant?: CardVariant;
 };
 
 export type PortfolioCategory = {
@@ -35,6 +40,8 @@ export type PortfolioCategory = {
   heading?: string;
   /** Figma: heading ki max width (default 850). Lambi heading ke liye badhao */
   headingW?: number;
+  /** "bento" = 6 column grid jisme small/half/wide cards mix hote hain */
+  layout?: "bento";
   /** Figma: card ki height (default 721) */
   cardH?: number;
   /** Figma: label ka top (default 660) */
@@ -62,7 +69,6 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "oh-belly",
         title: "Oh Belly",
         image: "/portfolio/branding/oh-belly.webp",
-        labelInImage: true,
       },
       {
         id: "brainforce-digital",
@@ -88,7 +94,6 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "software-capital-llc",
         title: "Software Capital LLC",
         image: "/portfolio/branding/software-capital-llc.webp",
-        labelInImage: true,
       },
       {
         id: "carmentis",
@@ -280,7 +285,57 @@ export const portfolioCategories: PortfolioCategory[] = [
       },
     ],
   },
-  { id: "ai-ad-creatives", label: "AI Ad Creatives", items: [] },
+  {
+    id: "ai-ad-creatives",
+    label: "AI Ad Creatives",
+    heading: "Creative Ads, Powered by AI",
+    headingW: 1100,
+    layout: "bento",
+    items: [
+      {
+        id: "roche-melgar",
+        title: "Roche Melgar",
+        image: "/portfolio/ai-ad-creatives/roche-melgar.webp",
+        variant: "small",
+      },
+      {
+        id: "rolex",
+        title: "Rolex",
+        image: "/portfolio/ai-ad-creatives/rolex.webp",
+        variant: "small",
+      },
+      {
+        id: "jazzba",
+        title: "Jazzba",
+        image: "/portfolio/ai-ad-creatives/jazzba.webp",
+        variant: "small",
+      },
+      {
+        id: "pixelette-technologies",
+        title: "Pixelette Technologies",
+        image: "/portfolio/ai-ad-creatives/pixelette-technologies.webp",
+        variant: "wide",
+      },
+      {
+        id: "rosor-exploration",
+        title: "Rosor Eploration",
+        image: "/portfolio/ai-ad-creatives/rosor-exploration.webp",
+        variant: "half",
+      },
+      {
+        id: "oh-belly",
+        title: "Oh Belly",
+        image: "/portfolio/ai-ad-creatives/oh-belly.webp",
+        variant: "half",
+      },
+      {
+        id: "jams-wheels-on-deals",
+        title: "Jams Wheeels on Deals",
+        image: "/portfolio/ai-ad-creatives/jams-wheels-on-deals.webp",
+        variant: "wide",
+      },
+    ],
+  },
   { id: "video", label: "Video Editing", items: [] },
   { id: "website", label: "Web Development", items: [] },
 ];
