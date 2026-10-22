@@ -14,8 +14,8 @@ import PortfolioCard from "./PortfolioCard";
 
 /** Video layout: ek jaisay cards ek row-group me (3 / 4 / 1 column), har group ka apna gap (Figma) */
 const VIDEO_GROUP: Record<string, { cols: string; gap: string }> = {
-  vtall: { cols: "grid-cols-3", gap: "1.25vw" },
-  vsmall: { cols: "grid-cols-4", gap: "0.9344vw" },
+  vtall: { cols: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3", gap: "1.25vw" },
+  vsmall: { cols: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4", gap: "0.9344vw" },
   vwide: { cols: "grid-cols-1", gap: "0" },
 };
 
@@ -61,22 +61,19 @@ export default function PortfolioSection() {
       >
         {active.items.length > 0 && active.layout === "video" ? (
           <div
-            className="flex flex-col"
-            style={{
-              rowGap: `${((active.rowGap ?? 24) / 1920) * 100}vw`,
-              width: "90vw",
-              marginLeft: `${((active.gridOffset ?? 0) / 1920) * 100}vw`,
-            }}
+            className="flex flex-col gap-4 lg:w-[90vw] lg:ml-[var(--off)] lg:gap-[var(--rg)]"
+            style={
+              {
+                "--rg": `${((active.rowGap ?? 24) / 1920) * 100}vw`,
+                "--off": `${((active.gridOffset ?? 0) / 1920) * 100}vw`,
+              } as React.CSSProperties
+            }
           >
             {groupByVariant(active.items).map((g, gi) => (
               <div
                 key={gi}
-                className={`grid ${VIDEO_GROUP[g.variant]?.cols ?? "grid-cols-3"}`}
-                style={{
-                  columnGap: VIDEO_GROUP[g.variant]?.gap ?? "1.25vw",
-                  // ek hi group ke andar upar-neeche cards (jaise 2 wide videos) ke beech bhi wahi gap
-                  rowGap: `${((active.rowGap ?? 24) / 1920) * 100}vw`,
-                }}
+                className={`grid gap-4 lg:gap-x-[var(--cg)] lg:gap-y-[var(--rg)] ${VIDEO_GROUP[g.variant]?.cols ?? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"}`}
+                style={{ "--cg": VIDEO_GROUP[g.variant]?.gap ?? "1.25vw" } as React.CSSProperties}
               >
                 {g.items.map(({ item, index }) => (
                   <PortfolioCard key={item.id} item={item} index={index} />
@@ -88,7 +85,7 @@ export default function PortfolioSection() {
           <div
             className={
               active.layout === "bento"
-                ? "grid grid-cols-6 gap-[1.25vw]"
+                ? "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-6 lg:gap-[1.25vw]"
                 : "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-[1.25vw]"
             }
           >

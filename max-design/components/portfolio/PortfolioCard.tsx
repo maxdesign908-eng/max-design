@@ -44,12 +44,12 @@ const AI = { top: 996 / 1080, labelH: 36 / 1080, bar: 136 / 1080 };
 const VID = { top: 842 / 906, labelH: 24 / 906, bar: 105 / 906 };
 
 const VARIANTS: Record<CardVariant, Cfg> = {
-  small: { w: 560, h: 709.86, radius: "min(9.2px, 0.4792vw)", border: "0.35px", borderCls: "border-white/35", lineCls: "border-white/45", font: "3.7559cqw", left: "4.5775%", span: "col-span-2", ...AI },
-  half: { w: 852, h: 1080, radius: "min(14px, 0.7292vw)", border: "0.53px", borderCls: "border-white/50", lineCls: "border-white/60", font: "3.7559cqw", left: "4.5775%", span: "col-span-3", ...AI },
-  wide: { w: 1728, h: 1080, radius: "min(14px, 0.7292vw)", border: "0.53px", borderCls: "border-white/50", lineCls: "border-white/60", font: "1.8519cqw", left: "2.2569%", span: "col-span-6", ...AI },
-  vtall: { w: 560, h: 906, radius: "min(9.2px, 0.4792vw)", border: "0.35px", borderCls: "border-white/35", lineCls: "border-white/45", font: "3.7554cqw", left: "4.9304%", crop: { width: 560, height: 995.56, left: 0, top: -18 }, ...VID },
-  vsmall: { w: 418.55, h: 677.15, radius: "min(6.88px, 0.3583vw)", border: "0.26px", borderCls: "border-white/30", lineCls: "border-white/40", font: "3.7557cqw", left: "4.9314%", crop: { width: 429.36, height: 763.31, left: -5.36, top: -43.16 }, ...VID },
-  vwide: { w: 1724, h: 906, radius: "min(9.2px, 0.4792vw)", border: "0.35px", borderCls: "border-white/35", lineCls: "border-white/45", font: "1.2198cqw", left: "1.6016%", widthPct: (1724 / 1728) * 100, crop: { width: 1724, height: 970, left: 0, top: 0 }, ...VID },
+  small: { w: 560, h: 709.86, radius: "min(9.2px, 0.4792vw)", border: "0.35px", borderCls: "border-white/50 lg:border-white/35", lineCls: "border-white/60 lg:border-white/45", font: "3.7559cqw", left: "4.5775%", span: "lg:col-span-2", ...AI },
+  half: { w: 852, h: 1080, radius: "min(14px, 0.7292vw)", border: "0.53px", borderCls: "border-white/50", lineCls: "border-white/60", font: "3.7559cqw", left: "4.5775%", span: "lg:col-span-3", ...AI },
+  wide: { w: 1728, h: 1080, radius: "min(14px, 0.7292vw)", border: "0.53px", borderCls: "border-white/50", lineCls: "border-white/60", font: "1.8519cqw", left: "2.2569%", span: "sm:col-span-2 lg:col-span-6", ...AI },
+  vtall: { w: 560, h: 906, radius: "min(9.2px, 0.4792vw)", border: "0.35px", borderCls: "border-white/50 lg:border-white/35", lineCls: "border-white/60 lg:border-white/45", font: "3.7554cqw", left: "4.9304%", crop: { width: 560, height: 995.56, left: 0, top: -18 }, ...VID },
+  vsmall: { w: 418.55, h: 677.15, radius: "min(6.88px, 0.3583vw)", border: "0.26px", borderCls: "border-white/50 lg:border-white/30", lineCls: "border-white/60 lg:border-white/40", font: "3.7557cqw", left: "4.9314%", crop: { width: 429.36, height: 763.31, left: -5.36, top: -43.16 }, ...VID },
+  vwide: { w: 1724, h: 906, radius: "min(9.2px, 0.4792vw)", border: "0.35px", borderCls: "border-white/50 lg:border-white/35", lineCls: "border-white/60 lg:border-white/45", font: "1.2198cqw", left: "1.6016%", widthPct: (1724 / 1728) * 100, crop: { width: 1724, height: 970, left: 0, top: 0 }, ...VID },
 };
 
 type Props = {
@@ -115,14 +115,22 @@ export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_T
   return (
     <article
       ref={ref}
-      style={{
-        aspectRatio: `${cfg.w} / ${cfg.h}`,
-        borderRadius: cfg.radius,
-        borderWidth: cfg.border,
-        ...(cfg.widthPct ? { width: `${cfg.widthPct}%` } : {}),
-        transitionDelay: shown ? `${(index % 3) * 90}ms` : "0ms",
-      }}
-      className={`group @container relative w-full overflow-hidden border-solid ${cfg.borderCls} ${cfg.span ?? ""} bg-neutral-900 transition-[opacity,translate] duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+      style={
+        {
+          aspectRatio: `${cfg.w} / ${cfg.h}`,
+          // Desktop (lg+) = Figma bento naap, ye CSS variables `lg:` classes me use hote hain
+          "--r": cfg.radius,
+          "--bw": cfg.border,
+          "--bar": barH,
+          "--t": `${cfg.top * 100}%`,
+          "--h": `${cfg.labelH * 100}%`,
+          "--l": cfg.left,
+          "--fs": cfg.font,
+          ...(cfg.widthPct ? { width: `${cfg.widthPct}%` } : {}),
+          transitionDelay: shown ? `${(index % 3) * 90}ms` : "0ms",
+        } as React.CSSProperties
+      }
+      className={`group @container relative w-full overflow-hidden rounded-[14px] border-[0.53px] border-solid lg:rounded-[var(--r)] lg:border-[length:var(--bw)] ${cfg.borderCls} ${cfg.span ?? ""} bg-neutral-900 transition-[opacity,translate] duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
         shown ? "translate-y-0 opacity-100" : "translate-y-[36px] opacity-0"
       }`}
     >
@@ -180,20 +188,13 @@ export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_T
         </div>
       )}
 
-      {/* Label bar ki patli line */}
-      <div className={`pointer-events-none absolute inset-x-0 bottom-0 border-t ${cfg.lineCls}`} style={{ height: barH }} />
+      {/* Label bar ki patli line: mobile/tablet par Branding jaisi (card ki width ka 16.8%), lg+ par Figma bar */}
+      <div className={`pointer-events-none absolute inset-x-0 bottom-0 h-[16.8cqw] border-t lg:h-[var(--bar)] ${cfg.lineCls}`} />
 
-      {/* Label: Poppins Bold, -4% spacing, line-height 112%, uppercase */}
+      {/* Label: Poppins Bold, -4% spacing, line-height 112%, uppercase.
+          Mobile/tablet: Branding wali size (5.7143cqw). lg+: Figma ki exact jagah/size. */}
       {!item.labelInImage && (
-        <h3
-          style={{
-            top: `${cfg.top * 100}%`,
-            height: `${cfg.labelH * 100}%`,
-            left: cfg.left,
-            fontSize: cfg.font,
-          }}
-          className="absolute leading-[1.12] font-bold tracking-[-0.04em] whitespace-nowrap text-white uppercase"
-        >
+        <h3 className="absolute bottom-[4.46cqw] left-[3.5714cqw] h-[6.43cqw] text-[length:5.7143cqw] leading-[1.12] font-bold tracking-[-0.04em] whitespace-nowrap text-white uppercase lg:top-[var(--t)] lg:bottom-auto lg:left-[var(--l)] lg:h-[var(--h)] lg:text-[length:var(--fs)]">
           {item.title}
         </h3>
       )}

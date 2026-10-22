@@ -219,7 +219,7 @@ export const portfolioCategories: PortfolioCategory[] = [
       {
         id: "fusio-block-guard",
         title: "Fusio Block Guard",
-        image: "/portfolio/social-media/fusio-blockguard.webp",
+        image: "/portfolio/social-media/fusio-block-guard.webp",
       },
       {
         id: "akashic-knowing",
@@ -352,17 +352,56 @@ export const portfolioCategories: PortfolioCategory[] = [
     gridOffset: -11,
     rowGap: 24,
     items: [
-      // ---- PEHLE 6 CARDS (3 + 3, variant "vtall") ----
-      // Jab un 6 videos ki .webm + .webp (poster) aa jayen, to neeche wali entry copy kar ke
-      // is list ke SHURU me (vsmall wale cards se pehle) daalo:
-      // {
-      //   id: "jamswheels-1",
-      //   title: "Jamswheels on Deals",
-      //   image: "/portfolio/video-editing/jamswheels-1.webp",
-      //   video: "/portfolio/video-editing/jamswheels-1.webm",
-      //   poster: "/portfolio/video-editing/jamswheels-1.webp",
-      //   variant: "vtall",
-      // },
+      // ---- PEHLI 2 ROWS (3 + 3, variant "vtall") ----
+      {
+        id: "jamswheels-social-reel",
+        title: "Jamswheels on Deals",
+        image: "/portfolio/video-editing/jamswheels-social-reel.webp",
+        video: "/portfolio/video-editing/jamswheels-social-reel.webm",
+        poster: "/portfolio/video-editing/jamswheels-social-reel.webp",
+        variant: "vtall",
+      },
+      {
+        id: "jamswheels-dealers",
+        title: "Jamswheels on Deals",
+        image: "/portfolio/video-editing/jamswheels-dealers.webp",
+        video: "/portfolio/video-editing/jamswheels-dealers.webm",
+        poster: "/portfolio/video-editing/jamswheels-dealers.webp",
+        variant: "vtall",
+      },
+      {
+        id: "jamswheels-buyer",
+        title: "Jamswheels on Deals",
+        image: "/portfolio/video-editing/jamswheels-buyer.webp",
+        video: "/portfolio/video-editing/jamswheels-buyer.webm",
+        poster: "/portfolio/video-editing/jamswheels-buyer.webp",
+        variant: "vtall",
+      },
+      {
+        id: "leafrooms-overwhelmed",
+        title: "Leafrooms",
+        image: "/portfolio/video-editing/leafrooms-overwhelmed.webp",
+        video: "/portfolio/video-editing/leafrooms-overwhelmed.webm",
+        poster: "/portfolio/video-editing/leafrooms-overwhelmed.webp",
+        variant: "vtall",
+      },
+      {
+        id: "leafrooms-muree",
+        title: "Leafrooms",
+        image: "/portfolio/video-editing/leafrooms-muree.webp",
+        video: "/portfolio/video-editing/leafrooms-muree.webm",
+        poster: "/portfolio/video-editing/leafrooms-muree.webp",
+        variant: "vtall",
+      },
+      {
+        id: "leafrooms-escape",
+        title: "Leafrooms",
+        image: "/portfolio/video-editing/leafrooms-escape.webp",
+        video: "/portfolio/video-editing/leafrooms-escape.webm",
+        poster: "/portfolio/video-editing/leafrooms-escape.webp",
+        variant: "vtall",
+      },
+      // ---- 4 CARDS KI ROW (variant "vsmall") ----
       {
         id: "leafrooms-avenair",
         title: "Leafrooms",
