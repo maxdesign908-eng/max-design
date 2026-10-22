@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Poppins } from "next/font/google";
 import {
   type PortfolioItem,
@@ -11,6 +11,7 @@ import {
 } from "@/data/portfolio";
 import CategoryTabs from "./CategoryTabs";
 import PortfolioCard from "./PortfolioCard";
+import VideoModal from "./VideoModal";
 
 /** Video layout: ek jaisay cards ek row-group me (3 / 4 / 1 column), har group ka apna gap (Figma) */
 const VIDEO_GROUP: Record<string, { cols: string; gap: string }> = {
@@ -35,6 +36,9 @@ const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "600", "700
 export default function PortfolioSection() {
   // URL /portfolio hi rehta hai, sirf state change hoti hai
   const [activeId, setActiveId] = useState(portfolioCategories[0].id);
+  // Pop-up me chal rahi video (null = band)
+  const [playing, setPlaying] = useState<PortfolioItem | null>(null);
+  const closeVideo = useCallback(() => setPlaying(null), []);
   const active =
     portfolioCategories.find((c) => c.id === activeId) ?? portfolioCategories[0];
 
@@ -61,7 +65,7 @@ export default function PortfolioSection() {
       >
         {active.items.length > 0 && active.layout === "video" ? (
           <div
-            className="flex flex-col gap-4 lg:w-[90vw] lg:ml-[var(--off)] lg:gap-[var(--rg)]"
+            className="flex flex-col gap-[16px] lg:w-[90vw] lg:ml-[var(--off)] lg:gap-[var(--rg)]"
             style={
               {
                 "--rg": `${((active.rowGap ?? 24) / 1920) * 100}vw`,
@@ -72,11 +76,11 @@ export default function PortfolioSection() {
             {groupByVariant(active.items).map((g, gi) => (
               <div
                 key={gi}
-                className={`grid gap-4 lg:gap-x-[var(--cg)] lg:gap-y-[var(--rg)] ${VIDEO_GROUP[g.variant]?.cols ?? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"}`}
+                className={`grid gap-[16px] lg:gap-x-[var(--cg)] lg:gap-y-[var(--rg)] ${VIDEO_GROUP[g.variant]?.cols ?? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"}`}
                 style={{ "--cg": VIDEO_GROUP[g.variant]?.gap ?? "1.25vw" } as React.CSSProperties}
               >
                 {g.items.map(({ item, index }) => (
-                  <PortfolioCard key={item.id} item={item} index={index} />
+                  <PortfolioCard key={item.id} item={item} index={index} onOpen={setPlaying} />
                 ))}
               </div>
             ))}
@@ -85,14 +89,15 @@ export default function PortfolioSection() {
           <div
             className={
               active.layout === "bento"
-                ? "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-6 lg:gap-[1.25vw]"
-                : "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-[1.25vw]"
+                ? "grid grid-cols-1 gap-[16px] sm:grid-cols-2 lg:grid-cols-6 lg:gap-[1.25vw]"
+                : "grid grid-cols-1 gap-[16px] sm:grid-cols-2 lg:grid-cols-3 lg:gap-[1.25vw]"
             }
           >
             {active.items.map((item, i) => (
               <PortfolioCard
                 key={item.id}
                 index={i}
+                onOpen={setPlaying}
                 item={item}
                 cardH={active.cardH ?? CARD_H}
                 labelTop={active.labelTop ?? LABEL_TOP}
@@ -105,6 +110,8 @@ export default function PortfolioSection() {
           </p>
         )}
       </div>
+
+      <VideoModal item={playing} onClose={closeVideo} />
     </section>
   );
 }

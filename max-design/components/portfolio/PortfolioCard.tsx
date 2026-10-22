@@ -60,10 +60,13 @@ type Props = {
   labelTop?: number;
   /** Grid me position (stagger animation ke liye) */
   index?: number;
+  /** Click par video pop-up kholne ke liye (sirf unhi cards par jin ki video ho) */
+  onOpen?: (item: PortfolioItem) => void;
 };
 
-export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_TOP, index = 0 }: Props) {
+export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_TOP, index = 0, onOpen }: Props) {
   const v = item.variant ? VARIANTS[item.variant] : null;
+  const playable = Boolean(onOpen && (item.modalVideo ?? item.video));
 
   // Default (Branding / Social / UI-UX) config
   const cfg: Cfg = v ?? {
@@ -115,6 +118,20 @@ export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_T
   return (
     <article
       ref={ref}
+      {...(playable
+        ? {
+            role: "button",
+            tabIndex: 0,
+            "aria-label": `Play ${item.title} video`,
+            onClick: () => onOpen!(item),
+            onKeyDown: (e: React.KeyboardEvent) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onOpen!(item);
+              }
+            },
+          }
+        : {})}
       style={
         {
           aspectRatio: `${cfg.w} / ${cfg.h}`,
@@ -130,7 +147,7 @@ export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_T
           transitionDelay: shown ? `${(index % 3) * 90}ms` : "0ms",
         } as React.CSSProperties
       }
-      className={`group @container relative w-full overflow-hidden rounded-[14px] border-[0.53px] border-solid lg:rounded-[var(--r)] lg:border-[length:var(--bw)] ${cfg.borderCls} ${cfg.span ?? ""} bg-neutral-900 transition-[opacity,translate] duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+      className={`group @container relative w-full ${playable ? "cursor-pointer focus-visible:outline focus-visible:outline-white" : ""} overflow-hidden rounded-[14px] border-[0.53px] border-solid lg:rounded-[var(--r)] lg:border-[length:var(--bw)] ${cfg.borderCls} ${cfg.span ?? ""} bg-neutral-900 transition-[opacity,translate] duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
         shown ? "translate-y-0 opacity-100" : "translate-y-[36px] opacity-0"
       }`}
     >

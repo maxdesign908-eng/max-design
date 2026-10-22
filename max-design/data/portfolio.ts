@@ -34,6 +34,8 @@ export type PortfolioItem = {
   /** Sirf video cards: video (.webm) aur poster (.webp, video load hone se pehle) */
   video?: string;
   poster?: string;
+  /** Click par pop-up me chalne wali video (AI Ads: image card hai, video pop-up me). Video cards me `video` hi use hoti hai */
+  modalVideo?: string;
 };
 
 export type PortfolioCategory = {
@@ -303,36 +305,42 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "roche-melgar",
         title: "Roche Melgar",
         image: "/portfolio/ai-ad-creatives/roche-melgar.webp",
+        modalVideo: "/portfolio/ai-ad-creatives/roche-melgar.webm",
         variant: "small",
       },
       {
         id: "rolex",
         title: "Rolex",
         image: "/portfolio/ai-ad-creatives/rolex.webp",
+        modalVideo: "/portfolio/ai-ad-creatives/rolex.webm",
         variant: "small",
       },
       {
         id: "jazzba",
         title: "Jazzba",
         image: "/portfolio/ai-ad-creatives/jazzba.webp",
+        modalVideo: "/portfolio/ai-ad-creatives/jazzba.webm",
         variant: "small",
       },
       {
         id: "pixelette-technologies",
         title: "Pixelette Technologies",
         image: "/portfolio/ai-ad-creatives/pixelette-technologies.webp",
+        modalVideo: "/portfolio/ai-ad-creatives/pixelette-technologies.webm",
         variant: "wide",
       },
       {
         id: "rosor-exploration",
         title: "Rosor Eploration",
         image: "/portfolio/ai-ad-creatives/rosor-exploration.webp",
+        modalVideo: "/portfolio/ai-ad-creatives/rosor-exploration.webm",
         variant: "half",
       },
       {
         id: "oh-belly",
         title: "Oh Belly",
         image: "/portfolio/ai-ad-creatives/oh-belly.webp",
+        modalVideo: "/portfolio/ai-ad-creatives/oh-belly.webm",
         variant: "half",
       },
       {
