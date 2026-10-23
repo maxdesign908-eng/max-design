@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Poppins } from "next/font/google";
 import {
   type PortfolioItem,
@@ -31,6 +32,9 @@ function groupByVariant(items: PortfolioItem[]) {
   return groups;
 }
 
+const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+const STORE_KEY = "portfolio-category";
+
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
 export default function PortfolioSection() {
@@ -39,6 +43,30 @@ export default function PortfolioSection() {
   // Pop-up me chal rahi video (null = band)
   const [playing, setPlaying] = useState<PortfolioItem | null>(null);
   const closeVideo = useCallback(() => setPlaying(null), []);
+  const router = useRouter();
+
+  // Card par click: agar card ka `href` hai to us page par jao, warna video pop-up kholo
+  const openItem = useCallback(
+    (item: PortfolioItem) => {
+      if (item.href) router.push(item.href);
+      else setPlaying(item);
+    },
+    [router],
+  );
+
+  // Page se wapas aane par wahi tab (jaise AI Ad Creatives) khula rahe, Branding par wapas na jaye
+  useIsoLayoutEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(STORE_KEY);
+      if (saved && portfolioCategories.some((c) => c.id === saved)) setActiveId(saved);
+    } catch {}
+  }, []);
+  const changeCategory = useCallback((id: string) => {
+    setActiveId(id);
+    try {
+      sessionStorage.setItem(STORE_KEY, id);
+    } catch {}
+  }, []);
   const active =
     portfolioCategories.find((c) => c.id === activeId) ?? portfolioCategories[0];
 
@@ -54,7 +82,7 @@ export default function PortfolioSection() {
         <CategoryTabs
           categories={portfolioCategories}
           activeId={active.id}
-          onChange={setActiveId}
+          onChange={changeCategory}
         />
       </div>
 
@@ -80,7 +108,7 @@ export default function PortfolioSection() {
                 style={{ "--cg": VIDEO_GROUP[g.variant]?.gap ?? "1.25vw" } as React.CSSProperties}
               >
                 {g.items.map(({ item, index }) => (
-                  <PortfolioCard key={item.id} item={item} index={index} onOpen={setPlaying} />
+                  <PortfolioCard key={item.id} item={item} index={index} onOpen={openItem} />
                 ))}
               </div>
             ))}
@@ -97,7 +125,7 @@ export default function PortfolioSection() {
               <PortfolioCard
                 key={item.id}
                 index={i}
-                onOpen={setPlaying}
+                onOpen={openItem}
                 item={item}
                 cardH={active.cardH ?? CARD_H}
                 labelTop={active.labelTop ?? LABEL_TOP}

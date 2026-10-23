@@ -36,6 +36,9 @@ import {
 
   "Book A Call Directly": a next/link to /book-a-call (like the links in your Navbar), so the
   browser does not reload the page.
+
+  "Send on WhatsApp": checks the same required fields, then opens
+  https://wa.me/<number>?text=<the form details> in a new tab.
 */
 
 const SERVICES = [
@@ -87,6 +90,21 @@ function validate(v: Values): Errors {
   if (!v.budget) e.budget = "Please choose a budget";
   if (!v.details.trim()) e.details = "Please tell us about your project";
   return e;
+}
+
+/* the message that opens in WhatsApp (*text* is bold in WhatsApp) */
+function buildWhatsAppText(v: Values): string {
+  const lines = [
+    "Hi MAX Design, I would like to start a project.",
+    "",
+    ...(v.name.trim() ? [`*Name:* ${v.name.trim()}`] : []),
+    `*Company:* ${v.company.trim()}`,
+    `*Email:* ${v.email.trim()}`,
+    `*Service:* ${v.service}`,
+    `*Budget:* ${v.budget}`,
+    `*Details:* ${v.details.trim()}`,
+  ];
+  return lines.join("\n");
 }
 
 /* All the sizes of this block live here, so the class names below stay short. */
@@ -167,6 +185,19 @@ function Pencil() {
         strokeLinejoin="round"
       />
       <path d="M9 18.2h10" stroke="white" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function WhatsAppIcon() {
+  return (
+    <svg
+      viewBox="0 0 32 32"
+      fill="currentColor"
+      aria-hidden="true"
+      className="h-[max(20px,calc(24*var(--u)))] w-[max(20px,calc(24*var(--u)))] shrink-0 transition-colors duration-300"
+    >
+      <path d="M16 3C8.8 3 3 8.8 3 16c0 2.3.6 4.5 1.7 6.4L3 29l6.8-1.8C11.6 28.3 13.8 29 16 29c7.2 0 13-5.8 13-13S23.2 3 16 3zm0 23.7c-2 0-3.9-.5-5.6-1.5l-.4-.2-4 1 1.1-3.9-.3-.4C5.7 19.9 5.3 18 5.3 16 5.3 9.9 10.1 5.3 16 5.3S26.7 10.1 26.7 16 21.9 26.7 16 26.7zm5.9-8c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.2-.2-.3 0-.5.1-.7l.5-.6c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.6-.1-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.8s1.2 3.3 1.4 3.5c.2.2 2.4 3.7 5.8 5.1.8.4 1.4.6 1.9.7.8.3 1.5.2 2.1.1.6-.1 1.9-.8 2.2-1.5.3-.8.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z" />
     </svg>
   );
 }
@@ -356,11 +387,14 @@ function Select({
 export default function Contact({
   endpoint = "/api/contact",
   callHref = "/book-a-call",
+  whatsappNumber = "923394011842",
 }: {
   /** the form is sent here as JSON (POST). Change it to your own API route. */
   endpoint?: string;
   /** the booking page that "Book A Call Directly" opens (client-side navigation, no page reload) */
   callHref?: string;
+  /** WhatsApp number in international format, digits only (no + or spaces) */
+  whatsappNumber?: string;
 }) {
   const uid = useId().replace(/:/g, "");
   const [values, setValues] = useState<Values>(EMPTY);
@@ -418,6 +452,22 @@ export default function Contact({
     } catch {
       setStatus("error");
     }
+  }
+
+  // same checks as the form, then open WhatsApp with the details as a ready message
+  function onWhatsApp() {
+    const found = validate(values);
+    setErrors(found);
+    const first = (Object.keys(found) as (keyof Values)[])[0];
+    if (first) {
+      document.getElementById(id(first))?.focus();
+      return;
+    }
+
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+      buildWhatsAppText(values),
+    )}`;
+    window.open(url, "_blank", "noopener,noreferrer");
   }
 
   const buttonText =
@@ -587,6 +637,18 @@ export default function Contact({
                 }`}
               >
                 {buttonText}
+              </button>
+
+              {/* WhatsApp button: same size as the send button, green outline, fills on hover */}
+              <button
+                type="button"
+                onClick={onWhatsApp}
+                className="btn group mt-[max(14px,calc(20*var(--u)))] flex h-[max(48px,calc(56*var(--u)))] w-full cursor-pointer items-center justify-center gap-[max(8px,calc(10*var(--u)))] rounded-full border border-[#25D366] px-[16px] text-center text-white transition-colors duration-300 outline-none hover:bg-[#25D366] focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-white"
+              >
+                <span className="text-[#25D366] transition-colors duration-300 group-hover:text-white">
+                  <WhatsAppIcon />
+                </span>
+                Send on WhatsApp
               </button>
 
               <p className="sr-only" role="status" aria-live="polite">

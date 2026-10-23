@@ -19,7 +19,7 @@ export const DEFAULT_HEADING = "Built to Be Remembered.";
 export type FigmaCrop = { width: number; height: number; left: number; top: number };
 
 /** AI Ad Creatives ke bento layout ke card size: small 560x709.86, half 852x1080, wide 1728x1080 */
-export type CardVariant = "small" | "half" | "wide" | "vtall" | "vsmall" | "vwide";
+export type CardVariant = "small" | "half" | "wide" | "vtall" | "vsmall" | "vwide" | "csmall";
 
 export type PortfolioItem = {
   id: string;
@@ -36,6 +36,8 @@ export type PortfolioItem = {
   poster?: string;
   /** Click par pop-up me chalne wali video (AI Ads: image card hai, video pop-up me). Video cards me `video` hi use hoti hai */
   modalVideo?: string;
+  /** Click par is page par jao (pop-up ke bajaye). Jaise "/portfolio/jams-wheel" */
+  href?: string;
   /** Pop-up me video ke UPAR se kitna hissa chhupana hai (0 se 1, jaise 0.0165 = 1.65%). Kaali patti wali videos ke liye */
   modalCropTop?: number;
 };
@@ -349,6 +351,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "jams-wheels-on-deals",
         title: "Jams Wheeels on Deals",
         image: "/portfolio/ai-ad-creatives/jams-wheels-on-deals.webp",
+        href: "/portfolio/jams-wheel",
         variant: "wide",
       },
     ],

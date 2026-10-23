@@ -47,6 +47,8 @@ const VARIANTS: Record<CardVariant, Cfg> = {
   small: { w: 560, h: 709.86, radius: "min(9.2px, 0.4792vw)", border: "0.35px", borderCls: "border-white/50 lg:border-white/35", lineCls: "border-white/60 lg:border-white/45", font: "3.7559cqw", left: "4.5775%", span: "lg:col-span-2", ...AI },
   half: { w: 852, h: 1080, radius: "min(14px, 0.7292vw)", border: "0.53px", borderCls: "border-white/50", lineCls: "border-white/60", font: "3.7559cqw", left: "4.5775%", span: "lg:col-span-3", ...AI },
   wide: { w: 1728, h: 1080, radius: "min(14px, 0.7292vw)", border: "0.53px", borderCls: "border-white/50", lineCls: "border-white/60", font: "1.8519cqw", left: "2.2569%", span: "sm:col-span-2 lg:col-span-6", ...AI },
+  // Jams Wheels page ka card: AI "small" jaisa, label left 27.61 / top 654.65 / height 24. Thumbnail poora card hai (crop ki zaroorat nahi)
+  csmall: { w: 560, h: 709.86, radius: "min(9.2px, 0.4792vw)", border: "0.35px", borderCls: "border-white/50 lg:border-white/35", lineCls: "border-white/60 lg:border-white/45", font: "3.7554cqw", left: "4.9304%", span: "lg:col-span-2", top: 654.65 / 709.86, labelH: 24 / 709.86, bar: AI.bar },
   vtall: { w: 560, h: 906, radius: "min(9.2px, 0.4792vw)", border: "0.35px", borderCls: "border-white/50 lg:border-white/35", lineCls: "border-white/60 lg:border-white/45", font: "3.7554cqw", left: "4.9304%", crop: { width: 560, height: 995.56, left: 0, top: -18 }, ...VID },
   vsmall: { w: 418.55, h: 677.15, radius: "min(6.88px, 0.3583vw)", border: "0.26px", borderCls: "border-white/50 lg:border-white/30", lineCls: "border-white/60 lg:border-white/40", font: "3.7557cqw", left: "4.9314%", crop: { width: 429.36, height: 763.31, left: -5.36, top: -43.16 }, ...VID },
   vwide: { w: 1724, h: 906, radius: "min(9.2px, 0.4792vw)", border: "0.35px", borderCls: "border-white/50 lg:border-white/35", lineCls: "border-white/60 lg:border-white/45", font: "1.2198cqw", left: "1.6016%", widthPct: (1724 / 1728) * 100, crop: { width: 1724, height: 970, left: 0, top: 0 }, ...VID },
@@ -66,7 +68,7 @@ type Props = {
 
 export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_TOP, index = 0, onOpen }: Props) {
   const v = item.variant ? VARIANTS[item.variant] : null;
-  const playable = Boolean(onOpen && (item.modalVideo ?? item.video));
+  const playable = Boolean(onOpen && (item.href || item.modalVideo || item.video));
 
   // Default (Branding / Social / UI-UX) config
   const cfg: Cfg = v ?? {
@@ -122,7 +124,7 @@ export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_T
         ? {
             role: "button",
             tabIndex: 0,
-            "aria-label": `Play ${item.title} video`,
+            "aria-label": item.href ? `Open ${item.title}` : `Play ${item.title} video`,
             onClick: () => onOpen!(item),
             onKeyDown: (e: React.KeyboardEvent) => {
               if (e.key === "Enter" || e.key === " ") {
@@ -173,7 +175,7 @@ export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_T
           width={Math.round(crop.width)}
           height={Math.round(crop.height)}
           unoptimized
-          className="absolute max-w-none transition-transform duration-500 group-hover:scale-105"
+          className="absolute max-w-none object-cover transition-transform duration-500 group-hover:scale-105"
           style={cropStyle}
         />
       ) : (

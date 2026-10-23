@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useRef, useState, type FormEvent } from "react";
+import { Fragment, useEffect, useRef, useState, type CSSProperties, type FormEvent } from "react";
 import CtaButton from "./home/CtaButton";
 
 /*
@@ -22,9 +22,17 @@ import CtaButton from "./home/CtaButton";
   - 560px and narrower: one column, the button is full width.
 
   The send button is the shared CtaButton (same red-fill hover). Change ENDPOINT to where the form should be sent.
+
+  "Send on WhatsApp": checks the required fields (Name, Email), then opens
+  https://wa.me/<WHATSAPP_NUMBER>?text=<the form details> in a new tab.
+  Desktop: it sits right above "Send Your Query" (the send button keeps its Figma position).
+  Phone / tablet: it sits right below "Send Your Query".
 */
 
 const ENDPOINT = "/api/contact";
+
+/* WhatsApp number in international format, digits only (no + or spaces) */
+const WHATSAPP_NUMBER = "923394011842";
 
 const SERVICES = [
   "Branding",
@@ -155,6 +163,63 @@ function Words({
   );
 }
 
+function WhatsAppIcon() {
+  return (
+    <svg
+      viewBox="0 0 32 32"
+      fill="currentColor"
+      aria-hidden="true"
+      className="block h-full w-full"
+    >
+      <path d="M16 3C8.8 3 3 8.8 3 16c0 2.3.6 4.5 1.7 6.4L3 29l6.8-1.8C11.6 28.3 13.8 29 16 29c7.2 0 13-5.8 13-13S23.2 3 16 3zm0 23.7c-2 0-3.9-.5-5.6-1.5l-.4-.2-4 1 1.1-3.9-.3-.4C5.7 19.9 5.3 18 5.3 16 5.3 9.9 10.1 5.3 16 5.3S26.7 10.1 26.7 16 21.9 26.7 16 26.7zm5.9-8c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.2-.2-.3 0-.5.1-.7l.5-.6c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.6-.1-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.8s1.2 3.3 1.4 3.5c.2.2 2.4 3.7 5.8 5.1.8.4 1.4.6 1.9.7.8.3 1.5.2 2.1.1.6-.1 1.9-.8 2.2-1.5.3-.8.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z" />
+    </svg>
+  );
+}
+
+/* "Send on WhatsApp": same pill as the shared CtaButton (same size, white outline, dot, label, round icon on the right,
+   fill rises on hover) but in WhatsApp green and with the WhatsApp icon in the round part. CtaButton itself is not changed. */
+function WhatsAppCta({
+  label,
+  width,
+  onClick,
+  className,
+}: {
+  label: string;
+  width: number;
+  onClick: () => void;
+  className?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`group isolate flex [contain:layout] h-[calc(56*var(--k,1px))] w-[calc(var(--w)*var(--k,1px))] flex-none cursor-pointer items-center overflow-hidden rounded-[999px] border-[length:calc(0.573*var(--k,1px))] border-solid border-white bg-transparent py-0 pr-[calc(10.46*var(--k,1px))] pl-[calc(14.33*var(--k,1px))] text-white whitespace-nowrap transition-colors duration-300 outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#25D366] ${className ?? ""}`}
+      style={{ "--w": width } as CSSProperties}
+    >
+      {/* green fill that rises from the bottom */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute top-0 left-0 z-0 h-[140%] w-full translate-y-[72%] rounded-[50%_50%_0_0/28%_28%_0_0] bg-[#25D366] transition-transform duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] group-hover:-translate-y-[28.6%] group-focus-visible:-translate-y-[28.6%] motion-reduce:transition-none"
+      />
+      <span
+        aria-hidden="true"
+        className="relative z-10 h-[calc(5.73*var(--k,1px))] w-[calc(5.73*var(--k,1px))] flex-none rounded-[50%] bg-[#25D366] transition-colors duration-300 group-hover:bg-white group-focus-visible:bg-white"
+      />
+      <span className="relative z-10 ml-[calc(9.17*var(--k,1px))] text-[length:calc(14.5*var(--k,1px))] leading-[normal] font-medium tracking-[-0.04em]">
+        {label}
+      </span>
+      <span
+        aria-hidden="true"
+        className="relative z-10 ml-auto grid h-[calc(38*var(--k,1px))] w-[calc(38*var(--k,1px))] flex-none place-items-center rounded-[50%] bg-[#25D366] text-white transition-colors duration-300 group-hover:bg-white group-hover:text-[#25D366] group-focus-visible:bg-white group-focus-visible:text-[#25D366]"
+      >
+        <span className="block h-[calc(22*var(--k,1px))] w-[calc(22*var(--k,1px))]">
+          <WhatsAppIcon />
+        </span>
+      </span>
+    </button>
+  );
+}
+
 /* outlined pill; the chosen one is filled red (#E71117) */
 function Pill({ label, on, onClick, delay }: { label: string; on: boolean; onClick: () => void; delay: number }) {
   return (
@@ -231,6 +296,31 @@ export default function StartProject() {
     formRef.current?.requestSubmit();
   }
 
+  // same "required" checks as the form (Name, Email), then open WhatsApp with the details as a ready message
+  function whatsappClick() {
+    const form = formRef.current;
+    if (!form || !form.reportValidity()) return;
+
+    const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+    const get = (k: string) => String(data[k] ?? "").trim();
+
+    const lines = [
+      "Hi MAX Design, I would like to start a project.",
+      "",
+      `*Name:* ${get("name")}`,
+      `*Email:* ${get("email")}`,
+      ...(get("company") ? [`*Company:* ${get("company")}`] : []),
+      ...(get("phone") ? [`*Phone:* ${get("phone")}`] : []),
+      ...(services.length ? [`*Services:* ${services.join(", ")}`] : []),
+      ...(budget ? [`*Budget:* ${budget}`] : []),
+      ...(get("source") ? [`*Heard about us from:* ${get("source")}`] : []),
+      ...(get("details") ? [`*Details:* ${get("details")}`] : []),
+    ];
+
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+
   const fade = (delay: number) => ({
     style: { transitionDelay: blockIn ? `${delay}ms` : "0ms" },
     className: `transition-[opacity,translate] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
@@ -298,7 +388,7 @@ export default function StartProject() {
                   </div>
                 </div>
 
-                {/* details field (1344 wide) with the send button at the right end of the same row */}
+                {/* details field (1344 wide) with the buttons at the right end of the same row */}
                 <div className="mt-[40px] flex flex-col gap-[28px] min-[901px]:mt-[calc(34.6*var(--u))] min-[901px]:flex-row min-[901px]:items-end min-[901px]:justify-between min-[901px]:gap-[24px]">
                   <div
                     style={fade(450).style}
@@ -307,22 +397,36 @@ export default function StartProject() {
                     <Line field={{ name: "details", label: "Share details about your project" }} tall />
                   </div>
 
-                  {/* shared CtaButton, 211 x 56 (a click on it sends the form) */}
-                  <div onClickCapture={sendClick} className="relative flex flex-none flex-col items-end min-[901px]:block">
-                    <CtaButton
-                      href="#start-project"
-                      label={status === "sending" ? "Sending…" : "Send Your Query"}
-                      width={211}
-                      className="[--k:var(--u)] [@media(max-width:900px)]:[--k:1px] [@media(max-width:560px)]:w-full"
-                    />
-                    <p
-                      role="status"
-                      aria-live="polite"
-                      className="m-0 mt-[10px] text-[length:14px] leading-[1.4] text-white/70 min-[901px]:absolute min-[901px]:top-full min-[901px]:right-0 min-[901px]:w-[calc(320*var(--u))] min-[901px]:text-right min-[901px]:text-[length:max(13px,calc(16*var(--u)))]"
+                  {/* buttons column: desktop = WhatsApp above Send (Send keeps its Figma spot), phone = Send above WhatsApp */}
+                  <div className="flex flex-none flex-col items-end gap-[14px] min-[901px]:gap-[calc(16*var(--u))]">
+                    {/* shared CtaButton, 211 x 56 (a click on it sends the form) */}
+                    <div
+                      onClickCapture={sendClick}
+                      className="relative order-1 flex flex-none flex-col items-end min-[901px]:order-2 min-[901px]:block"
                     >
-                      {status === "sent" && "Thank you! We will get back to you soon."}
-                      {status === "error" && "Something went wrong. Please try again."}
-                    </p>
+                      <CtaButton
+                        href="#start-project"
+                        label={status === "sending" ? "Sending…" : "Send Your Query"}
+                        width={211}
+                        className="[--k:var(--u)] [@media(max-width:900px)]:[--k:1px] [@media(max-width:560px)]:w-full"
+                      />
+                      <p
+                        role="status"
+                        aria-live="polite"
+                        className="m-0 mt-[10px] text-[length:14px] leading-[1.4] text-white/70 min-[901px]:absolute min-[901px]:top-full min-[901px]:right-0 min-[901px]:w-[calc(320*var(--u))] min-[901px]:text-right min-[901px]:text-[length:max(13px,calc(16*var(--u)))]"
+                      >
+                        {status === "sent" && "Thank you! We will get back to you soon."}
+                        {status === "error" && "Something went wrong. Please try again."}
+                      </p>
+                    </div>
+
+                    {/* WhatsApp button: same look and size as Send Your Query, in WhatsApp green */}
+                    <WhatsAppCta
+                      label="Send on WhatsApp"
+                      width={211}
+                      onClick={whatsappClick}
+                      className="order-2 [--k:var(--u)] min-[901px]:order-1 [@media(max-width:900px)]:[--k:1px]"
+                    />
                   </div>
                 </div>
               </div>
