@@ -18,6 +18,7 @@ export default function VideoModal({
 }) {
   const [mounted, setMounted] = useState(false); // portal tabhi jab browser me ho
   const [visible, setVisible] = useState(false); // fade/scale animation
+  const [nat, setNat] = useState<{ w: number; h: number } | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
@@ -25,6 +26,7 @@ export default function VideoModal({
   const src = item ? (item.modalVideo ?? item.video) : undefined;
 
   useEffect(() => setMounted(true), []);
+  useEffect(() => setNat(null), [src]);
 
   useEffect(() => {
     if (!item) {
@@ -47,6 +49,10 @@ export default function VideoModal({
   }, [item]);
 
   if (!mounted || !item || !src) return null;
+
+  // modalCropTop: video ke upar se kitna hissa (0 se 1) chhupana hai. 0 = kuch nahi.
+  const crop = item.modalCropTop ?? 0;
+  const ratio = nat ? nat.w / (nat.h * (1 - crop)) : 9 / 16 / (1 - crop);
 
   return createPortal(
     <div
@@ -80,18 +86,41 @@ export default function VideoModal({
         </svg>
       </button>
 
-      <video
-        key={src}
-        src={src}
-        poster={item.poster ?? item.image}
-        controls
-        autoPlay
-        playsInline
-        onClick={(e) => e.stopPropagation()}
-        className={`max-h-[88vh] max-w-[92vw] rounded-[14px] bg-black shadow-[0_30px_80px_rgba(0,0,0,0.6)] transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          visible ? "scale-100 opacity-100" : "scale-95 opacity-0"
-        }`}
-      />
+      {crop > 0 ? (
+        // Is video ke upar ka thora hissa (kaali patti) chhupana hai: wrapper upar se `crop` hissa kaat deta hai
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className={`relative overflow-hidden rounded-[14px] bg-black shadow-[0_30px_80px_rgba(0,0,0,0.6)] transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            visible ? "scale-100 opacity-100" : "scale-95 opacity-0"
+          }`}
+          style={{ aspectRatio: ratio, height: `min(88vh, calc(92vw / ${ratio}))` }}
+        >
+          <video
+            key={src}
+            src={src}
+            poster={item.poster ?? item.image}
+            controls
+            autoPlay
+            playsInline
+            onLoadedMetadata={(e) => setNat({ w: e.currentTarget.videoWidth, h: e.currentTarget.videoHeight })}
+            className="absolute left-0 w-full"
+            style={{ height: `${100 / (1 - crop)}%`, top: `${-(crop / (1 - crop)) * 100}%` }}
+          />
+        </div>
+      ) : (
+        <video
+          key={src}
+          src={src}
+          poster={item.poster ?? item.image}
+          controls
+          autoPlay
+          playsInline
+          onClick={(e) => e.stopPropagation()}
+          className={`max-h-[88vh] max-w-[92vw] rounded-[14px] bg-black shadow-[0_30px_80px_rgba(0,0,0,0.6)] transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            visible ? "scale-100 opacity-100" : "scale-95 opacity-0"
+          }`}
+        />
+      )}
     </div>,
     document.body,
   );

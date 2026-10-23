@@ -36,6 +36,8 @@ export type PortfolioItem = {
   poster?: string;
   /** Click par pop-up me chalne wali video (AI Ads: image card hai, video pop-up me). Video cards me `video` hi use hoti hai */
   modalVideo?: string;
+  /** Pop-up me video ke UPAR se kitna hissa chhupana hai (0 se 1, jaise 0.0165 = 1.65%). Kaali patti wali videos ke liye */
+  modalCropTop?: number;
 };
 
 export type PortfolioCategory = {
@@ -391,6 +393,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         image: "/portfolio/video-editing/leafrooms-overwhelmed.webp",
         video: "/portfolio/video-editing/leafrooms-overwhelmed.webm",
         poster: "/portfolio/video-editing/leafrooms-overwhelmed.webp",
+        modalCropTop: 0.0165, // is video ke shuru me upar 20px ki kaali patti hai
         variant: "vtall",
       },
       {
