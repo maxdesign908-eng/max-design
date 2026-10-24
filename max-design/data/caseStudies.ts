@@ -117,6 +117,20 @@ export const caseStudies: CaseStudy[] = [
       ],
     },
   },
+    {
+    slug: "chain-legal",
+    title: "Chain Legal",
+    items: [],
+    longImage: {
+      alt: "Chain Legal UI/UX case study",
+           slices: [
+        { desktop: "/portfolio/chain-legal/01.webp", mobile: "/portfolio/chain-legal/01-m.webp", w: 3840, h: 4126, mw: 1170, mh: 1257 },
+        { desktop: "/portfolio/chain-legal/02.webp", mobile: "/portfolio/chain-legal/02-m.webp", w: 3840, h: 5106, mw: 1170, mh: 1556 },
+        { desktop: "/portfolio/chain-legal/03.webp", mobile: "/portfolio/chain-legal/03-m.webp", w: 3840, h: 3376, mw: 1170, mh: 1028 },
+        { desktop: "/portfolio/chain-legal/04.webp", mobile: "/portfolio/chain-legal/04-m.webp", w: 3840, h: 4636, mw: 1170, mh: 1413 },
+      ],
+    },
+  },
 ];
 
 export const getCaseStudy = (slug: string) => caseStudies.find((c) => c.slug === slug);

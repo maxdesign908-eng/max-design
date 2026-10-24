@@ -266,6 +266,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "chain-legal",
         title: "Chain Legal",
         image: "/portfolio/ui-ux/chain-legal.webp",
+        href: "/portfolio/chain-legal",
       },
       {
         id: "transact-secure",
