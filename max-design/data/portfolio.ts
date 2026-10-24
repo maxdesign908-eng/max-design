@@ -72,6 +72,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "roche-melgar",
         title: "Roche Melgar",
         image: "/portfolio/branding/roche-melgar.webp",
+        href: "/portfolio/roche-melgar",
       },
       {
         id: "jamswheel-on-deals",
@@ -280,6 +281,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "health-chain",
         title: "Health Chain",
         image: "/portfolio/ui-ux/health-chain.webp",
+        href: "/portfolio/health-chain",
       },
       {
         id: "credit-smart-ai",
