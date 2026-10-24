@@ -108,6 +108,27 @@ export const caseStudies: CaseStudy[] = [
       ],
     },
   },
+  {
+    slug: "oh-belly",
+    title: "Oh Belly",
+    items: [],
+    longImage: {
+      alt: "Oh Belly brand identity case study",
+      slices: [
+        { desktop: "/portfolio/oh-belly/01.webp", mobile: "/portfolio/oh-belly/01-m.webp", w: 3840, h: 2211, mw: 1170, mh: 674 },
+        { desktop: "/portfolio/oh-belly/02.webp", mobile: "/portfolio/oh-belly/02-m.webp", w: 3840, h: 2211, mw: 1170, mh: 674 },
+        { desktop: "/portfolio/oh-belly/03.webp", mobile: "/portfolio/oh-belly/03-m.webp", w: 2880, h: 1659, mw: 1170, mh: 674 },
+        { desktop: "/portfolio/oh-belly/04.webp", mobile: "/portfolio/oh-belly/04-m.webp", w: 2880, h: 1659, mw: 1170, mh: 674 },
+        { desktop: "/portfolio/oh-belly/05.webp", mobile: "/portfolio/oh-belly/05-m.webp", w: 2880, h: 1622, mw: 1170, mh: 659 },
+        { desktop: "/portfolio/oh-belly/06.webp", mobile: "/portfolio/oh-belly/06-m.webp", w: 2880, h: 709, mw: 1170, mh: 288 },
+        { desktop: "/portfolio/oh-belly/07.webp", mobile: "/portfolio/oh-belly/07-m.webp", w: 2880, h: 1659, mw: 1170, mh: 674 },
+        { desktop: "/portfolio/oh-belly/08.webp", mobile: "/portfolio/oh-belly/08-m.webp", w: 2880, h: 960, mw: 1170, mh: 390 },
+        { desktop: "/portfolio/oh-belly/09.webp", mobile: "/portfolio/oh-belly/09-m.webp", w: 2880, h: 1659, mw: 1170, mh: 674 },
+        { desktop: "/portfolio/oh-belly/10.webp", mobile: "/portfolio/oh-belly/10-m.webp", w: 2880, h: 1619, mw: 1170, mh: 658 },
+        { desktop: "/portfolio/oh-belly/11.webp", mobile: "/portfolio/oh-belly/11-m.webp", w: 2880, h: 1659, mw: 1170, mh: 674 },
+      ],
+    },
+  },
     {
     slug: "health-chain",
     title: "Health Chain",
@@ -133,6 +154,20 @@ export const caseStudies: CaseStudy[] = [
         { desktop: "/portfolio/chain-legal/02-v3.webp", mobile: "/portfolio/chain-legal/02-m-v3.webp", w: 3840, h: 5106, mw: 1170, mh: 1556 },
         { desktop: "/portfolio/chain-legal/03-v3.webp", mobile: "/portfolio/chain-legal/03-m-v3.webp", w: 3840, h: 3376, mw: 1170, mh: 1028 },
         { desktop: "/portfolio/chain-legal/04-v3.webp", mobile: "/portfolio/chain-legal/04-m-v3.webp", w: 3840, h: 4636, mw: 1170, mh: 1413 },
+      ],
+    },
+  },
+    {
+    slug: "belsio-crm",
+    title: "Belsio CRM",
+    items: [],
+    longImage: {
+      alt: "Belsio CRM UI/UX case study",
+      slices: [
+        { desktop: "/portfolio/belsio-crm/01.webp", mobile: "/portfolio/belsio-crm/01-m.webp", w: 2542, h: 1382, mw: 1170, mh: 636 },
+        { desktop: "/portfolio/belsio-crm/02.webp", mobile: "/portfolio/belsio-crm/02-m.webp", w: 2550, h: 1376, mw: 1170, mh: 631 },
+        { desktop: "/portfolio/belsio-crm/03.webp", mobile: "/portfolio/belsio-crm/03-m.webp", w: 2556, h: 1368, mw: 1170, mh: 626 },
+                { desktop: "/portfolio/belsio-crm/04.webp", mobile: "/portfolio/belsio-crm/04-m.webp", w: 2542, h: 1352, mw: 1170, mh: 622 },
       ],
     },
   },

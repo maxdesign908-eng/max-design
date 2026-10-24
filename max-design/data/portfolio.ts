@@ -83,6 +83,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "oh-belly",
         title: "Oh Belly",
         image: "/portfolio/branding/oh-belly.webp",
+        href: "/portfolio/oh-belly",
       },
       {
         id: "brainforce-digital",
@@ -246,6 +247,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "belsio-crm",
         title: "Belsio CRM",
         image: "/portfolio/ui-ux/belsio-crm.webp",
+        href: "/portfolio/belsio-crm",
       },
       {
         id: "pixelette-technologies",
