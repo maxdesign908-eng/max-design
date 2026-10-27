@@ -34,7 +34,7 @@ import { usePathname } from "next/navigation";
 const COMPANY = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
-  { label: "Protfolio", href: "/portfolio" },
+  { label: "Portfolio", href: "/portfolio" },
   { label: "About", href: "/about" },
   { label: "Blogs", href: "/blogs" },
   { label: "Contact", href: "/contact" },
