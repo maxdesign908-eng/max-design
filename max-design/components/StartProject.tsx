@@ -398,22 +398,22 @@ export default function StartProject() {
                   </div>
 
                   {/* buttons column: desktop = WhatsApp above Send (Send keeps its Figma spot), phone = Send above WhatsApp */}
-                  <div className="flex flex-none flex-col items-end gap-[14px] min-[901px]:gap-[calc(16*var(--u))]">
+                  <div className="flex flex-none flex-col items-end gap-[14px] min-[901px]:gap-[calc(16*var(--u))] [@media(max-width:560px)]:w-full [@media(max-width:560px)]:flex-row [@media(max-width:560px)]:items-start [@media(max-width:560px)]:justify-between [@media(max-width:560px)]:gap-[10px]">
                     {/* shared CtaButton, 211 x 56 (a click on it sends the form) */}
                     <div
                       onClickCapture={sendClick}
-                      className="relative order-1 flex flex-none flex-col items-end min-[901px]:order-2 min-[901px]:block"
+                      className="relative order-1 flex flex-none flex-col items-end min-[901px]:order-2 min-[901px]:block [@media(max-width:560px)]:order-2"
                     >
                       <CtaButton
                         href="#start-project"
                         label={status === "sending" ? "Sending…" : "Send Your Query"}
                         width={211}
-                        className="[--k:var(--u)] [@media(max-width:900px)]:[--k:1px] [@media(max-width:560px)]:w-full"
+                        className="[--k:var(--u)] [@media(max-width:900px)]:[--k:1px] [@media(max-width:560px)]:[--k:calc((100cqw_-_2*clamp(16px,5vw,96px)_-_10px)_/_422)]!"
                       />
                       <p
                         role="status"
                         aria-live="polite"
-                        className="m-0 mt-[10px] text-[length:14px] leading-[1.4] text-white/70 min-[901px]:absolute min-[901px]:top-full min-[901px]:right-0 min-[901px]:w-[calc(320*var(--u))] min-[901px]:text-right min-[901px]:text-[length:max(13px,calc(16*var(--u)))]"
+                        className="m-0 mt-[10px] text-[length:14px] leading-[1.4] text-white/70 [@media(max-width:560px)]:absolute [@media(max-width:560px)]:top-full [@media(max-width:560px)]:right-0 [@media(max-width:560px)]:w-[calc(100cqw-2*clamp(16px,5vw,96px))] [@media(max-width:560px)]:text-right min-[901px]:absolute min-[901px]:top-full min-[901px]:right-0 min-[901px]:w-[calc(320*var(--u))] min-[901px]:text-right min-[901px]:text-[length:max(13px,calc(16*var(--u)))]"
                       >
                         {status === "sent" && "Thank you! We will get back to you soon."}
                         {status === "error" && "Something went wrong. Please try again."}
@@ -425,7 +425,7 @@ export default function StartProject() {
                       label="Send on WhatsApp"
                       width={211}
                       onClick={whatsappClick}
-                      className="order-2 [--k:var(--u)] min-[901px]:order-1 [@media(max-width:900px)]:[--k:1px]"
+                      className="order-2 [--k:var(--u)] min-[901px]:order-1 [@media(max-width:900px)]:[--k:1px] [@media(max-width:560px)]:order-1 [@media(max-width:560px)]:[--k:calc((100cqw_-_2*clamp(16px,5vw,96px)_-_10px)_/_422)]!"
                     />
                   </div>
                 </div>
