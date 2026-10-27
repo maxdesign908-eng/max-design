@@ -94,21 +94,25 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "leafrooms",
         title: "Leafrooms",
         image: "/portfolio/branding/leafrooms.webp",
+        
       },
       {
         id: "bnu-bestival-edition",
         title: "BNU (Bestival Edition)",
         image: "/portfolio/branding/bnu-bestival-edition.webp",
+        href: "/portfolio/bnu-bestival-edition",
       },
       {
         id: "pixelette-technologies",
         title: "Pixelette Technologies",
         image: "/portfolio/branding/pixelette-technologies.webp",
+        href: "/portfolio/pixelette-brand-guidelines",
       },
       {
         id: "software-capital-llc",
         title: "Software Capital LLC",
         image: "/portfolio/branding/software-capital-llc.webp",
+         href: "/portfolio/software-capital-llc",
       },
       {
         id: "carmentis",
@@ -119,6 +123,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "jazzba",
         title: "Jazzba",
         image: "/portfolio/branding/jazzba.webp",
+        href: "/portfolio/jazbba",
       },
       {
         id: "highland-manor",
@@ -129,6 +134,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "galis-home",
         title: "Gali’s Home",
         image: "/portfolio/branding/galis-home.webp",
+         href: "/portfolio/galis-home",
       },
       {
         id: "osoujiyasan",
@@ -227,7 +233,7 @@ export const portfolioCategories: PortfolioCategory[] = [
       {
         id: "fusio-block-guard",
         title: "Fusio Block Guard",
-        image: "/portfolio/social-media/fusio-block-guard.webp",
+        image: "/portfolio/social-media/fusio-blockguard.webp",
       },
       {
         id: "akashic-knowing",
@@ -253,16 +259,19 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "pixelette-technologies",
         title: "Pixelette Technologies",
         image: "/portfolio/ui-ux/pixelette-technologies.webp",
+        href: "/portfolio/pixelette-technologies",
       },
       {
         id: "smart-contractor",
         title: "Smart Contractor",
         image: "/portfolio/ui-ux/smart-contractor.webp",
+        href: "/portfolio/smart-contractor",
       },
       {
         id: "legal-mind-ai",
         title: "Legal Mind AI",
         image: "/portfolio/ui-ux/legal-mind-ai.webp",
+        href: "/portfolio/legalmind-ai",
       },
       {
         id: "chain-legal",
@@ -274,11 +283,13 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "transact-secure",
         title: "Transact Secure",
         image: "/portfolio/ui-ux/transact-secure.webp",
+        href: "/portfolio/transact-secure",
       },
       {
         id: "health-predictor",
         title: "Health Predictor",
         image: "/portfolio/ui-ux/health-predictor.webp",
+        href: "/portfolio/health-predictor",
       },
       {
         id: "health-chain",
@@ -290,16 +301,20 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "credit-smart-ai",
         title: "Credit Smart AI",
         image: "/portfolio/ui-ux/credit-smart-ai.webp",
+        href: "/portfolio/credit-smart-ai",
       },
       {
         id: "law-ledger",
         title: "Law Ledger",
         image: "/portfolio/ui-ux/law-ledger.webp",
+        href: "/portfolio/law-ledger",
       },
+
       {
         id: "itmis",
         title: "ITMIS",
         image: "/portfolio/ui-ux/itmis.webp",
+        href: "/portfolio/itmis",
       },
     ],
   },
