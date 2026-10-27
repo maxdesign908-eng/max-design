@@ -140,16 +140,19 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "osoujiyasan",
         title: "Osoujiyasan",
         image: "/portfolio/branding/osoujiyasan.webp",
+        href: "/portfolio/osoujiyasan",
       },
       {
         id: "hernandez",
         title: "Hernandez",
         image: "/portfolio/branding/hernandez.webp",
+        href: "/portfolio/hernandez",
       },
       {
         id: "gem-and-glam",
         title: "Gem & Glam",
         image: "/portfolio/branding/gem-and-glam.webp",
+        href: "/portfolio/gem-and-glam",
       },
       {
         id: "brabalans",
@@ -160,11 +163,13 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "buffloom",
         title: "Buffloom",
         image: "/portfolio/branding/buffloom.webp",
+         href: "/portfolio/buffloom",
       },
       {
         id: "scent-of-sands",
         title: "Scent of Sands",
         image: "/portfolio/branding/scent-of-sands.webp",
+         href: "/portfolio/scent-of-sands",
       },
     ],
   },

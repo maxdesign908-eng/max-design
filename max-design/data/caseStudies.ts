@@ -405,6 +405,70 @@ export const caseStudies: CaseStudy[] = [
       ],
     },
   },
+
+   {
+    slug: "buffloom",
+    title: "Buffloom",
+    items: [],
+    longImage: {
+      alt: "Buffloom brand identity case study",
+      slices: [
+        { desktop: "/portfolio/buffloom/01.webp", mobile: "/portfolio/buffloom/01-m.webp", w: 1920, h: 1164, mw: 1170, mh: 709 },
+        { desktop: "/portfolio/buffloom/02.webp", mobile: "/portfolio/buffloom/02-m.webp", w: 1920, h: 559, mw: 1170, mh: 341 },
+        { desktop: "/portfolio/buffloom/03.webp", mobile: "/portfolio/buffloom/03-m.webp", w: 1920, h: 1164, mw: 1170, mh: 709 },
+        { desktop: "/portfolio/buffloom/04.webp", mobile: "/portfolio/buffloom/04-m.webp", w: 1920, h: 909, mw: 1170, mh: 554 },
+        { desktop: "/portfolio/buffloom/05.webp", mobile: "/portfolio/buffloom/05-m.webp", w: 1920, h: 909, mw: 1170, mh: 554 },
+        { desktop: "/portfolio/buffloom/06.webp", mobile: "/portfolio/buffloom/06-m.webp", w: 1920, h: 728, mw: 1170, mh: 444 },
+        { desktop: "/portfolio/buffloom/07.webp", mobile: "/portfolio/buffloom/07-m.webp", w: 1920, h: 1295, mw: 1170, mh: 789 },
+      ],
+    },
+  },
+
+  {
+    slug: "osoujiyasan",
+    title: "Osoujiyasan",
+    items: [],
+    longImage: {
+      alt: "Osoujiyasan brand identity case study",
+      slices: [
+        { desktop: "/portfolio/osoujiyasan/01.webp", mobile: "/portfolio/osoujiyasan/01-m.webp", w: 3840, h: 1331, mw: 1170, mh: 406 },
+        { desktop: "/portfolio/osoujiyasan/02.webp", mobile: "/portfolio/osoujiyasan/02-m.webp", w: 3840, h: 1310, mw: 1170, mh: 399 },
+        { desktop: "/portfolio/osoujiyasan/03.webp", mobile: "/portfolio/osoujiyasan/03-m.webp", w: 3840, h: 1296, mw: 1170, mh: 395 },
+        { desktop: "/portfolio/osoujiyasan/04.webp", mobile: "/portfolio/osoujiyasan/04-m.webp", w: 3840, h: 1265, mw: 1170, mh: 385 },
+        { desktop: "/portfolio/osoujiyasan/05.webp", mobile: "/portfolio/osoujiyasan/05-m.webp", w: 3840, h: 2096, mw: 1170, mh: 639 },
+      ],
+    },
+  },
+
+    {
+    slug: "scent-of-sands",
+    title: "Scent of Sands",
+    items: [],
+    longImage: {
+      alt: "Scent of Sands brand identity case study",
+      slices: [
+        { desktop: "/portfolio/scent-of-sands/01.webp", mobile: "/portfolio/scent-of-sands/01-m.webp", w: 1920, h: 1169, mw: 1170, mh: 712 },
+        { desktop: "/portfolio/scent-of-sands/02.webp", mobile: "/portfolio/scent-of-sands/02-m.webp", w: 1920, h: 1169, mw: 1170, mh: 712 },
+        { desktop: "/portfolio/scent-of-sands/03.webp", mobile: "/portfolio/scent-of-sands/03-m.webp", w: 1920, h: 1169, mw: 1170, mh: 712 },
+        { desktop: "/portfolio/scent-of-sands/04.webp", mobile: "/portfolio/scent-of-sands/04-m.webp", w: 1920, h: 1169, mw: 1170, mh: 712 },
+      ],
+    },
+  },
+  { slug: "hernandez", title: "Hernandez", items: [],
+  longImage: { alt: "Hernandez professional tree services brand identity case study", slices: [
+    { desktop: "/portfolio/hernandez/01.webp", mobile: "/portfolio/hernandez/01-m.webp", w: 2020, h: 1679, mw: 1170, mh: 972 },
+    { desktop: "/portfolio/hernandez/02.webp", mobile: "/portfolio/hernandez/02-m.webp", w: 2020, h: 1593, mw: 1170, mh: 923 },
+    { desktop: "/portfolio/hernandez/03.webp", mobile: "/portfolio/hernandez/03-m.webp", w: 2020, h: 1647, mw: 1170, mh: 954 },
+    { desktop: "/portfolio/hernandez/04.webp", mobile: "/portfolio/hernandez/04-m.webp", w: 2020, h: 2162, mw: 1170, mh: 1252 } ] } },
+
+     { slug: "gem-and-glam", title: "Gem & Glam", items: [],
+  longImage: { alt: "Gem & Glam jewelry and makeup brand identity case study", slices: [
+    { desktop: "/portfolio/gem-and-glam/01.webp", mobile: "/portfolio/gem-and-glam/01-m.webp", w: 3840, h: 1443, mw: 1170, mh: 440 },
+    { desktop: "/portfolio/gem-and-glam/02.webp", mobile: "/portfolio/gem-and-glam/02-m.webp", w: 3840, h: 1539, mw: 1170, mh: 469 },
+    { desktop: "/portfolio/gem-and-glam/03.webp", mobile: "/portfolio/gem-and-glam/03-m.webp", w: 3840, h: 1439, mw: 1170, mh: 438 },
+    { desktop: "/portfolio/gem-and-glam/04.webp", mobile: "/portfolio/gem-and-glam/04-m.webp", w: 3840, h: 1445, mw: 1170, mh: 440 },
+    { desktop: "/portfolio/gem-and-glam/05.webp", mobile: "/portfolio/gem-and-glam/05-m.webp", w: 3840, h: 2095, mw: 1170, mh: 638 },
+    { desktop: "/portfolio/gem-and-glam/06.webp", mobile: "/portfolio/gem-and-glam/06-m.webp", w: 3840, h: 2095, mw: 1170, mh: 638 } ] } },
 ];
 
 
