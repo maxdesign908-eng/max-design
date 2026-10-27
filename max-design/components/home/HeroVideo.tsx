@@ -79,7 +79,7 @@ export default function HeroVideo({ sources, poster, className }: Props) {
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="none"
         disablePictureInPicture
         disableRemotePlayback
         aria-hidden="true"
