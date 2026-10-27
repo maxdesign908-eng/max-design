@@ -469,6 +469,24 @@ export const caseStudies: CaseStudy[] = [
     { desktop: "/portfolio/gem-and-glam/04.webp", mobile: "/portfolio/gem-and-glam/04-m.webp", w: 3840, h: 1445, mw: 1170, mh: 440 },
     { desktop: "/portfolio/gem-and-glam/05.webp", mobile: "/portfolio/gem-and-glam/05-m.webp", w: 3840, h: 2095, mw: 1170, mh: 638 },
     { desktop: "/portfolio/gem-and-glam/06.webp", mobile: "/portfolio/gem-and-glam/06-m.webp", w: 3840, h: 2095, mw: 1170, mh: 638 } ] } },
+      {
+    slug: "bra-balans",
+    title: "Bra Balans",
+    items: [],
+    longImage: {
+      alt: "Bra Balans brand identity case study",
+      slices: [
+        { desktop: "/portfolio/bra-balans/01.webp", mobile: "/portfolio/bra-balans/01-m.webp", w: 3840, h: 3387, mw: 1170, mh: 1032 },
+        { desktop: "/portfolio/bra-balans/02.webp", mobile: "/portfolio/bra-balans/02-m.webp", w: 3840, h: 4953, mw: 1170, mh: 1509 },
+        { desktop: "/portfolio/bra-balans/03.webp", mobile: "/portfolio/bra-balans/03-m.webp", w: 3840, h: 5665, mw: 1170, mh: 1726 },
+        { desktop: "/portfolio/bra-balans/04.webp", mobile: "/portfolio/bra-balans/04-m.webp", w: 3840, h: 2675, mw: 1170, mh: 815 },
+        { desktop: "/portfolio/bra-balans/05.webp", mobile: "/portfolio/bra-balans/05-m.webp", w: 3840, h: 4170, mw: 1170, mh: 1271 },
+        { desktop: "/portfolio/bra-balans/06.webp", mobile: "/portfolio/bra-balans/06-m.webp", w: 3840, h: 4170, mw: 1170, mh: 1271 },
+        { desktop: "/portfolio/bra-balans/07.webp", mobile: "/portfolio/bra-balans/07-m.webp", w: 3840, h: 3734, mw: 1170, mh: 1137 },
+        { desktop: "/portfolio/bra-balans/08.webp", mobile: "/portfolio/bra-balans/08-m.webp", w: 3840, h: 4600, mw: 1170, mh: 1402 },
+      ],
+    },
+  },
 ];
 
 

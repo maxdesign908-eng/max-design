@@ -158,6 +158,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "brabalans",
         title: "Brabalans",
         image: "/portfolio/branding/brabalans.webp",
+        href: "/portfolio/bra-balans",
       },
       {
         id: "buffloom",
