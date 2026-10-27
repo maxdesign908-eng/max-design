@@ -177,15 +177,20 @@ function WhatsAppIcon() {
 }
 
 /* "Send on WhatsApp": same pill as the shared CtaButton (same size, white outline, dot, label, round icon on the right,
-   fill rises on hover) but in WhatsApp green and with the WhatsApp icon in the round part. CtaButton itself is not changed. */
+   fill rises on hover) but in WhatsApp green and with the WhatsApp icon in the round part. CtaButton itself is not changed.
+   Desktop (901px and wider): width = `width`, label 14.5.
+   Phone / tablet (900px and narrower): width = `mobileWidth`, label 16 (same size as "Send Your Query"; the longer
+   label needs the little extra width so it does not run under the round icon). */
 function WhatsAppCta({
   label,
   width,
+  mobileWidth,
   onClick,
   className,
 }: {
   label: string;
   width: number;
+  mobileWidth?: number;
   onClick: () => void;
   className?: string;
 }) {
@@ -193,8 +198,8 @@ function WhatsAppCta({
     <button
       type="button"
       onClick={onClick}
-      className={`group isolate flex [contain:layout] h-[calc(56*var(--k,1px))] w-[calc(var(--w)*var(--k,1px))] flex-none cursor-pointer items-center overflow-hidden rounded-[999px] border-[length:calc(0.573*var(--k,1px))] border-solid border-white bg-transparent py-0 pr-[calc(10.46*var(--k,1px))] pl-[calc(14.33*var(--k,1px))] text-white whitespace-nowrap transition-colors duration-300 outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#25D366] ${className ?? ""}`}
-      style={{ "--w": width } as CSSProperties}
+      className={`group isolate flex [contain:layout] h-[calc(56*var(--k,1px))] w-[calc(var(--w)*var(--k,1px))] [@media(max-width:900px)]:w-[calc(var(--wm)*var(--k,1px))] flex-none cursor-pointer items-center overflow-hidden rounded-[999px] border-[length:calc(0.573*var(--k,1px))] border-solid border-white bg-transparent py-0 pr-[calc(10.46*var(--k,1px))] pl-[calc(14.33*var(--k,1px))] text-white whitespace-nowrap transition-colors duration-300 outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#25D366] ${className ?? ""}`}
+      style={{ "--w": width, "--wm": mobileWidth ?? width } as CSSProperties}
     >
       {/* green fill that rises from the bottom */}
       <span
@@ -205,7 +210,7 @@ function WhatsAppCta({
         aria-hidden="true"
         className="relative z-10 h-[calc(5.73*var(--k,1px))] w-[calc(5.73*var(--k,1px))] flex-none rounded-[50%] bg-[#25D366] transition-colors duration-300 group-hover:bg-white group-focus-visible:bg-white"
       />
-      <span className="relative z-10 ml-[calc(9.17*var(--k,1px))] text-[length:calc(14.5*var(--k,1px))] leading-[normal] font-medium tracking-[-0.04em]">
+      <span className="relative z-10 ml-[calc(9.17*var(--k,1px))] text-[length:calc(14.5*var(--k,1px))] [@media(max-width:900px)]:text-[length:calc(16*var(--k,1px))] leading-[normal] font-medium tracking-[-0.04em]">
         {label}
       </span>
       <span
@@ -408,7 +413,7 @@ export default function StartProject() {
                         href="#start-project"
                         label={status === "sending" ? "Sending…" : "Send Your Query"}
                         width={211}
-                        className="[--k:var(--u)] [@media(max-width:900px)]:[--k:1px] [@media(max-width:560px)]:[--k:calc((100cqw_-_2*clamp(16px,5vw,96px)_-_10px)_/_422)]!"
+                        className="[--k:var(--u)] [@media(max-width:900px)]:[--k:1px] [@media(max-width:560px)]:[--k:calc((100cqw_-_2*clamp(16px,5vw,96px)_-_10px)_/_437)]!"
                       />
                       <p
                         role="status"
@@ -420,12 +425,13 @@ export default function StartProject() {
                       </p>
                     </div>
 
-                    {/* WhatsApp button: same look and size as Send Your Query, in WhatsApp green */}
+                    {/* WhatsApp button: same look as Send Your Query, in WhatsApp green (phone / tablet: label 16 like Send, 226 wide) */}
                     <WhatsAppCta
                       label="Send on WhatsApp"
                       width={211}
+                      mobileWidth={226}
                       onClick={whatsappClick}
-                      className="order-2 [--k:var(--u)] min-[901px]:order-1 [@media(max-width:900px)]:[--k:1px] [@media(max-width:560px)]:order-1 [@media(max-width:560px)]:[--k:calc((100cqw_-_2*clamp(16px,5vw,96px)_-_10px)_/_422)]!"
+                      className="order-2 [--k:var(--u)] min-[901px]:order-1 [@media(max-width:900px)]:[--k:1px] [@media(max-width:560px)]:order-1 [@media(max-width:560px)]:[--k:calc((100cqw_-_2*clamp(16px,5vw,96px)_-_10px)_/_437)]!"
                     />
                   </div>
                 </div>
