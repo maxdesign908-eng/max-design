@@ -87,7 +87,16 @@ export default function Hero() {
       />
 
       {/* Same media div + HeroVideo, wrapped by ScrollGrow */}
-     
+      <ScrollGrow className="absolute top-[calc(551*var(--u))] left-[calc(894*var(--u))] h-[calc(523.13*var(--u))] w-[calc(930*var(--u))] overflow-hidden bg-[#330101] [@media(max-width:900px)]:relative [@media(max-width:900px)]:top-auto [@media(max-width:900px)]:left-auto [@media(max-width:900px)]:mt-[36px] [@media(max-width:900px)]:aspect-[930/523.13] [@media(max-width:900px)]:h-auto [@media(max-width:900px)]:w-full [@media(max-width:900px)]:rounded-[12px]">
+        <HeroVideo
+          className="absolute inset-0 block h-full w-full object-cover"
+          sources={[
+            { src: "/video/intro.webm", type: "video/webm" },
+            { src: "/video/intro.mp4", type: "video/mp4" },
+          ]}
+          poster="/images/hero-video-poster.webp"
+        />
+      </ScrollGrow>
     </section>
   );
 }
