@@ -1,41 +1,54 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 /*
-  Full-screen intro loader for MAX design.
+  Loader for MAX design. It has TWO modes:
+
+  1) FIRST VISIT / REFRESH  -> full screen (covers everything, no navbar).
+  2) CLICKING AN INTERNAL LINK (Portfolio, Services, case studies ...) -> the same loader, but it
+     starts BELOW the navbar, so the navbar stays visible the whole time.
 
   HOW IT WORKS
-  - It is on screen from the very first paint (it is rendered on the server too, so the page
-    never flashes before it).
-  - The progress bar / % moves smoothly while the page loads and reaches 100% when the page
-    (window "load") is ready. It stays at least MIN_MS so it never just blinks, and it leaves
-    after MAX_MS even if something is very slow.
-  - Then it fades out and removes itself from the page.
-  - While it is visible the page cannot scroll. The scrollbar space is kept (scrollbar-gutter),
-    so the page does NOT jump left/right when the loader appears or leaves.
+  - Mode 1 waits for window "load" (at least MIN_MS, at most MAX_MS).
+  - Mode 2: a click on any internal link (<Link> or <a>) to a different page shows the loader
+    right away. When the new page is there (the pathname changes) it finishes and fades out.
+    It stays at least ROUTE_MIN_MS so it never just blinks, and leaves after ROUTE_MAX_MS.
+  - The progress bar / % moves smoothly and reaches 100% when the page is ready.
+  - While it is visible the page cannot scroll, and the page width never changes (no jump / zoom
+    when the loader appears or leaves).
+  - Also works for browser Back / Forward. For a button that uses router.push() (not a link) call
+        document.dispatchEvent(new Event("page-loader:start"));
+    right before router.push(...).
   - Needs /public/images/loader-icon.webp (your logo icon, square).
 
   Use it ONCE, in app/layout.tsx:  <Loader />  (see the bottom of this file).
 */
 
-const MIN_MS = 1800; // shortest time the loader stays (counted from the start of the page load)
-const MAX_MS = 6000; // never block the site longer than this
-const DONE_MS = 350; // pause on 100% before fading
+const MIN_MS = 1800; // first visit: shortest time the loader stays
+const MAX_MS = 6000; // first visit: never block the site longer than this
+const ROUTE_MIN_MS = 900; // link click: shortest time the loader stays
+const ROUTE_MAX_MS = 5000; // link click: never block longer than this
+const DONE_MS = 350; // pause on 100% before fading (first visit)
+const ROUTE_DONE_MS = 150; // pause on 100% before fading (link click)
 const FADE_MS = 700; // fade-out time
 
 const CSS = `
-  /* lock scroll without moving the page: the scrollbar space stays reserved */
-  html:has(.ld) { overflow: hidden; scrollbar-gutter: stable; background: #050505; }
+  /* first visit: lock scroll without moving the page (scrollbar space stays reserved).
+     On link clicks the scrollbar is not touched at all, so the page width never changes. */
+  html:has(.ld:not(.route)) { overflow: hidden; scrollbar-gutter: stable; background: #050505; }
 
   .ld {
     --red: #E71117;
     position: fixed; inset: 0; z-index: 10000; display: grid; place-items: center; overflow: hidden;
     background: #050505; color: #fff; font-family: Poppins, system-ui, sans-serif; letter-spacing: -0.04em;
-    animation: ldIn .35s ease .1s both;
+    animation: ldIn .35s ease .1s both; will-change: opacity;
   }
+  .ld.route { animation: ldIn .2s ease both; overscroll-behavior: contain; touch-action: none; }
+  .ld.route.out { animation: ldOut 450ms ease forwards; }  /* link click: plain fade, no zoom */
   .ld.out { animation: ldOut ${FADE_MS}ms ease forwards; pointer-events: none; }
-  .ld.out .ld-box { animation: ldBoxOut ${FADE_MS}ms cubic-bezier(.4,0,.2,1) forwards; }
+  .ld:not(.route).out .ld-box { animation: ldBoxOut ${FADE_MS}ms cubic-bezier(.4,0,.2,1) forwards; }
 
   /* soft dark edges */
   .ld::after {
@@ -131,23 +144,56 @@ const CSS = `
   }
 `;
 
+/* height of the navbar that is visible at the top of the screen right now (0 = no navbar -> full screen) */
+function visibleNavBottom(selector: string): number {
+  let bottom = 0;
+  document.querySelectorAll(selector).forEach((el) => {
+    const r = el.getBoundingClientRect();
+    const looksLikeNavbar =
+      r.width >= window.innerWidth * 0.5 && r.height <= 200 && r.top <= 24 && r.bottom > 0;
+    if (looksLikeNavbar) bottom = Math.max(bottom, Math.round(r.bottom));
+  });
+  return bottom;
+}
+
 type Phase = "loading" | "leaving" | "done";
 
 export default function Loader({
   logoSrc = "/images/loader-icon.webp",
+  navSelector = "header, nav",
 }: {
   /** the logo icon shown in the middle (square image, put the file in /public/images) */
   logoSrc?: string;
+  /** CSS selector of your navbar. On link clicks the loader starts right below it. */
+  navSelector?: string;
 }) {
+  const pathname = usePathname();
   const [phase, setPhase] = useState<Phase>("loading");
+  const [route, setRoute] = useState(false); // false = first visit (full screen), true = link click
+  const [top, setTop] = useState(0); // where the loader starts (below the navbar) on link clicks
   const fillRef = useRef<HTMLSpanElement>(null);
   const pctRef = useRef<HTMLSpanElement>(null);
+  const api = useRef<{ routeDone: () => void }>({ routeDone: () => {} });
+  const pathRef = useRef(pathname);
+
+  // block wheel / touch scrolling behind the loader (without touching the scrollbar)
+  const overlayRef = useCallback((el: HTMLDivElement | null) => {
+    if (!el) return;
+    const stop = (e: Event) => e.preventDefault();
+    el.addEventListener("wheel", stop, { passive: false });
+    el.addEventListener("touchmove", stop, { passive: false });
+  }, []);
 
   useEffect(() => {
-    let loaded = false;
-    let complete = false;
-    let p = 0;
     const timers: ReturnType<typeof setTimeout>[] = [];
+    let tick: ReturnType<typeof setInterval> | undefined;
+    let p = 0;
+    let complete = false;
+    let initialActive = true; // the first-visit loader is still showing
+    let routeActive = false; // a link-click loader is showing
+    let routeFinishing = false;
+    let routeStart = 0;
+    let loaded = false;
 
     // draw the progress straight into the DOM (no re-render every tick)
     const paint = (v: number) => {
@@ -156,48 +202,130 @@ export default function Loader({
     };
 
     // eases toward 92% while the page is still loading
-    const tick = setInterval(() => {
-      if (complete) return;
-      p += (92 - p) * 0.05;
-      paint(p);
-    }, 60);
+    const startTick = () => {
+      if (tick) clearInterval(tick);
+      p = 0;
+      complete = false;
+      paint(0);
+      tick = setInterval(() => {
+        if (complete) return;
+        p += (92 - p) * 0.05;
+        paint(p);
+      }, 60);
+    };
 
-    const finish = () => {
+    // go to 100%, pause, fade out, remove
+    const leave = (doneMs: number) => {
+      complete = true;
+      if (tick) clearInterval(tick);
+      paint(100);
+      timers.push(
+        setTimeout(() => {
+          setPhase("leaving");
+          timers.push(
+            setTimeout(() => {
+              setPhase("done");
+              initialActive = false;
+              routeActive = false;
+              routeFinishing = false;
+            }, FADE_MS),
+          );
+        }, doneMs),
+      );
+    };
+
+    /* ───── mode 1: first visit ───── */
+    startTick();
+    const finishInitial = () => {
       if (loaded) return;
       loaded = true;
       // performance.now() = time since the page started loading
       const wait = Math.max(0, MIN_MS - performance.now());
-      timers.push(
-        setTimeout(() => {
-          complete = true;
-          clearInterval(tick);
-          paint(100);
-          timers.push(
-            setTimeout(() => {
-              setPhase("leaving");
-              timers.push(setTimeout(() => setPhase("done"), FADE_MS));
-            }, DONE_MS),
-          );
-        }, wait),
-      );
+      timers.push(setTimeout(() => leave(DONE_MS), wait));
+    };
+    if (document.readyState === "complete") finishInitial();
+    else window.addEventListener("load", finishInitial, { once: true });
+    timers.push(setTimeout(finishInitial, MAX_MS));
+
+    /* ───── mode 2: click on an internal link ───── */
+    const routeDone = () => {
+      if (!routeActive || routeFinishing) return;
+      routeFinishing = true;
+      const wait = Math.max(0, ROUTE_MIN_MS - (performance.now() - routeStart));
+      timers.push(setTimeout(() => leave(ROUTE_DONE_MS), wait));
+    };
+    api.current = { routeDone };
+
+    // show the link-click loader (starts below the navbar; full screen if there is no navbar)
+    const begin = () => {
+      if (initialActive || routeActive) return;
+      routeActive = true;
+      routeFinishing = false;
+      routeStart = performance.now();
+      setTop(visibleNavBottom(navSelector));
+      setRoute(true);
+      setPhase("loading");
+      startTick();
+      timers.push(setTimeout(routeDone, ROUTE_MAX_MS));
     };
 
-    if (document.readyState === "complete") finish();
-    else window.addEventListener("load", finish, { once: true });
-    timers.push(setTimeout(finish, MAX_MS));
+    const onClick = (e: MouseEvent) => {
+      if (initialActive || routeActive) return;
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+      const a = (e.target as Element | null)?.closest?.("a[href]") as HTMLAnchorElement | null;
+      if (!a) return;
+      if (a.target && a.target !== "_self") return;
+      if (a.hasAttribute("download")) return;
+      if (a.getAttribute("rel")?.includes("external")) return;
+
+      let url: URL;
+      try {
+        url = new URL(a.href, window.location.href);
+      } catch {
+        return;
+      }
+      if (url.origin !== window.location.origin) return; // other website
+      if (url.pathname === window.location.pathname) return; // same page / only #hash
+
+      begin();
+    };
+
+    // browser Back / Forward buttons
+    const onPop = () => {
+      if (window.location.pathname !== pathRef.current) begin();
+    };
+
+    // manual trigger: document.dispatchEvent(new Event("page-loader:start"))
+    const onManual = () => begin();
+
+    document.addEventListener("click", onClick, true); // capture: works even if a link stops the click
+    window.addEventListener("popstate", onPop);
+    document.addEventListener("page-loader:start", onManual);
 
     return () => {
-      clearInterval(tick);
-      window.removeEventListener("load", finish);
+      if (tick) clearInterval(tick);
+      window.removeEventListener("load", finishInitial);
+      document.removeEventListener("click", onClick, true);
+      window.removeEventListener("popstate", onPop);
+      document.removeEventListener("page-loader:start", onManual);
       timers.forEach(clearTimeout);
     };
-  }, []);
+  }, [navSelector]);
+
+  // the new page is here -> finish the link-click loader
+  useEffect(() => {
+    pathRef.current = pathname;
+    api.current.routeDone();
+  }, [pathname]);
 
   if (phase === "done") return null;
 
   return (
     <div
-      className={`ld${phase === "leaving" ? " out" : ""}`}
+      ref={overlayRef}
+      className={`ld${route ? " route" : ""}${phase === "leaving" ? " out" : ""}`}
+      style={route ? { top } : undefined}
       role="status"
       aria-live="polite"
       aria-busy={phase === "loading"}
