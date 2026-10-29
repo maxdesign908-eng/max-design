@@ -13,20 +13,24 @@ import CtaButton from "./home/CtaButton";
     "What are you supposed to do?" 48px ... 43 under the divider      service pills ... 43 under it (30 high, gap 24)
     form grid ......... 119 under the pills, 1344 wide, 2 columns x 3 rows, gaps 62, every field 641 x 96.42
     "Your Budget" ..... 108 under the grid, 48px, 32 gap, then pills (30 high, gap 24)
-    details field ..... 35 under the budget, 1344 wide, with the "Send Your Query" button (211 x 56) at the right end
+    details field ..... 35 under the budget, fills the row and stops before the two buttons at the right end
 
   SIZES
   - 901px and wider: Figma sizes * var(--u) (1 --u = 1 Figma px, capped at 1920). Text never goes below
     12-14px, and the pill rows wrap to a second line instead of colliding when there is not enough room.
   - 561px - 900px: fluid sizes, the form grid keeps 2 columns.
-  - 560px and narrower: one column, the button is full width.
+  - 560px and narrower: one column, the two buttons share the full row width.
 
   The send button is the shared CtaButton (same red-fill hover). Change ENDPOINT to where the form should be sent.
 
   "Send on WhatsApp": checks the required fields (Name, Email), then opens
   https://wa.me/<WHATSAPP_NUMBER>?text=<the form details> in a new tab.
-  Desktop: it sits right above "Send Your Query" (the send button keeps its Figma position).
-  Phone / tablet: it sits right below "Send Your Query".
+  On EVERY screen size the two buttons sit side by side in one row: WhatsApp on the left, Send Your Query on the right.
+  The row is centre-aligned and both wrappers are exactly as tall as their button (the "Thank you" message is
+  absolutely positioned under the Send button on every screen size), so the two buttons are always on one line.
+
+  PILLS (services + budget): same hover as the CTA buttons - the red fill rises from the bottom. No transition-delay
+  and the border never changes width, so a click reacts at once and the pill never jumps.
 */
 
 const ENDPOINT = "/api/contact";
@@ -176,21 +180,21 @@ function WhatsAppIcon() {
   );
 }
 
-/* "Send on WhatsApp": same pill as the shared CtaButton (same size, white outline, dot, label, round icon on the right,
-   fill rises on hover) but in WhatsApp green and with the WhatsApp icon in the round part. CtaButton itself is not changed.
-   Desktop (901px and wider): width = `width`, label 14.5.
-   Phone / tablet (900px and narrower): width = `mobileWidth`, label 16 (same size as "Send Your Query"; the longer
-   label needs the little extra width so it does not run under the round icon). */
+/* "Send on WhatsApp": same pill as the shared CtaButton, in WhatsApp green with the WhatsApp icon in the round part.
+   Figma values used (all multiplied by var(--k), 1 --k = 1 Figma px):
+     pill ..... height 56, radius 76.8, border 0.57 white, padding 3.44 / 14.9, gap 10
+     label .... Poppins Medium 16, line-height 100%, letter-spacing -4%
+     circle ... 38 x 38, radius 19
+   Width: Send Your Query is 218 wide (its label box is 130). "Send on WhatsApp" is 20 longer at the same 16px size,
+   so this pill is 240 wide so the whole label fits. CtaButton itself is not changed. */
 function WhatsAppCta({
   label,
   width,
-  mobileWidth,
   onClick,
   className,
 }: {
   label: string;
   width: number;
-  mobileWidth?: number;
   onClick: () => void;
   className?: string;
 }) {
@@ -198,8 +202,8 @@ function WhatsAppCta({
     <button
       type="button"
       onClick={onClick}
-      className={`group isolate flex [contain:layout] h-[calc(56*var(--k,1px))] w-[calc(var(--w)*var(--k,1px))] [@media(max-width:900px)]:w-[calc(var(--wm)*var(--k,1px))] flex-none cursor-pointer items-center overflow-hidden rounded-[999px] border-[length:calc(0.573*var(--k,1px))] border-solid border-white bg-transparent py-0 pr-[calc(10.46*var(--k,1px))] pl-[calc(14.33*var(--k,1px))] text-white whitespace-nowrap transition-colors duration-300 outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#25D366] ${className ?? ""}`}
-      style={{ "--w": width, "--wm": mobileWidth ?? width } as CSSProperties}
+      className={`group isolate flex [contain:layout] h-[calc(56*var(--k,1px))] w-[calc(var(--w)*var(--k,1px))] flex-none cursor-pointer items-center gap-[calc(10*var(--k,1px))] overflow-hidden rounded-[calc(76.8*var(--k,1px))] border-[length:calc(0.57*var(--k,1px))] border-solid border-white bg-transparent px-[calc(14.9*var(--k,1px))] py-[calc(3.44*var(--k,1px))] text-white whitespace-nowrap transition-colors duration-300 outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#25D366] ${className ?? ""}`}
+      style={{ "--w": width } as CSSProperties}
     >
       {/* green fill that rises from the bottom */}
       <span
@@ -210,12 +214,12 @@ function WhatsAppCta({
         aria-hidden="true"
         className="relative z-10 h-[calc(5.73*var(--k,1px))] w-[calc(5.73*var(--k,1px))] flex-none rounded-[50%] bg-[#25D366] transition-colors duration-300 group-hover:bg-white group-focus-visible:bg-white"
       />
-      <span className="relative z-10 ml-[calc(9.17*var(--k,1px))] text-[length:calc(14.5*var(--k,1px))] [@media(max-width:900px)]:text-[length:calc(16*var(--k,1px))] leading-[normal] font-medium tracking-[-0.04em]">
+      <span className="relative z-10 text-[length:calc(16*var(--k,1px))] leading-[1] font-medium tracking-[-0.04em]">
         {label}
       </span>
       <span
         aria-hidden="true"
-        className="relative z-10 ml-auto grid h-[calc(38*var(--k,1px))] w-[calc(38*var(--k,1px))] flex-none place-items-center rounded-[50%] bg-[#25D366] text-white transition-colors duration-300 group-hover:bg-white group-hover:text-[#25D366] group-focus-visible:bg-white group-focus-visible:text-[#25D366]"
+        className="relative z-10 ml-auto grid h-[calc(38*var(--k,1px))] w-[calc(38*var(--k,1px))] flex-none place-items-center rounded-[calc(19*var(--k,1px))] bg-[#25D366] text-white transition-colors duration-300 group-hover:bg-white group-hover:text-[#25D366] group-focus-visible:bg-white group-focus-visible:text-[#25D366]"
       >
         <span className="block h-[calc(22*var(--k,1px))] w-[calc(22*var(--k,1px))]">
           <WhatsAppIcon />
@@ -225,19 +229,29 @@ function WhatsAppCta({
   );
 }
 
-/* outlined pill; the chosen one is filled red (#E71117) */
-function Pill({ label, on, onClick, delay }: { label: string; on: boolean; onClick: () => void; delay: number }) {
+/* outlined pill (services + budget). Hover: the red fill rises from the bottom (same effect as the CTA buttons);
+   the chosen pill stays red. The border is always 0.5px (only its colour changes), so the pill never changes size
+   when it is clicked, and there is no transition-delay, so a click reacts at once. */
+function Pill({ label, on, onClick }: { label: string; on: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
       aria-pressed={on}
       onClick={onClick}
-      style={{ transitionDelay: `${delay}ms` }}
-      className={`m-0 flex min-h-[30px] max-w-full cursor-pointer items-center justify-center rounded-[67px] border-solid px-[13px] py-[3px] text-[length:clamp(13px,3.4vw,15px)] leading-[24px] font-normal tracking-[-0.02em] text-white transition-[background-color,border-color,transform] duration-300 outline-none hover:border-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E71117] active:scale-95 min-[901px]:min-h-[max(26px,calc(30*var(--u)))] min-[901px]:px-[max(10px,calc(13*var(--u)))] min-[901px]:py-[calc(3*var(--u))] min-[901px]:text-[length:max(12px,calc(16*var(--u)))] min-[901px]:leading-[max(18px,calc(24*var(--u)))] min-[901px]:whitespace-nowrap ${
-        on ? "border-0 bg-[#E71117]" : "border-[0.5px] border-white/70 bg-transparent"
+      className={`group relative isolate m-0 flex min-h-[30px] max-w-full cursor-pointer items-center justify-center overflow-hidden rounded-[67px] border-[0.5px] border-solid px-[13px] py-[3px] text-[length:clamp(13px,3.4vw,15px)] leading-[24px] font-normal tracking-[-0.02em] text-white transition-[border-color,transform] duration-300 ease-out outline-none hover:border-[#E71117] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E71117] active:scale-95 min-[901px]:min-h-[max(26px,calc(30*var(--u)))] min-[901px]:px-[max(10px,calc(13*var(--u)))] min-[901px]:py-[calc(3*var(--u))] min-[901px]:text-[length:max(12px,calc(16*var(--u)))] min-[901px]:leading-[max(18px,calc(24*var(--u)))] min-[901px]:whitespace-nowrap ${
+        on ? "border-[#E71117]" : "border-white/70"
       }`}
     >
-      {label}
+      {/* red fill that rises from the bottom */}
+      <span
+        aria-hidden="true"
+        className={`pointer-events-none absolute top-0 left-0 z-0 h-[140%] w-full rounded-[50%_50%_0_0/28%_28%_0_0] bg-[#E71117] transition-transform duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] motion-reduce:transition-none ${
+          on
+            ? "-translate-y-[28.6%]"
+            : "translate-y-[72%] group-hover:-translate-y-[28.6%] group-focus-visible:-translate-y-[28.6%]"
+        }`}
+      />
+      <span className="relative z-10">{label}</span>
     </button>
   );
 }
@@ -362,8 +376,8 @@ export default function StartProject() {
                   aria-label="Services"
                   className="mt-[20px] flex flex-wrap gap-[12px] min-[901px]:mt-[calc(43*var(--u))] min-[901px]:gap-[max(10px,calc(24*var(--u)))]"
                 >
-                  {SERVICES.map((s, i) => (
-                    <Pill key={s} label={s} on={services.includes(s)} onClick={() => toggleService(s)} delay={blockIn ? 300 + i * 70 : 0} />
+                  {SERVICES.map((s) => (
+                    <Pill key={s} label={s} on={services.includes(s)} onClick={() => toggleService(s)} />
                   ))}
                 </div>
 
@@ -387,52 +401,53 @@ export default function StartProject() {
                     aria-label="Budget"
                     className="flex flex-wrap gap-[12px] min-[901px]:max-w-[calc(1033*var(--u))] min-[901px]:gap-[max(10px,calc(24*var(--u)))]"
                   >
-                    {BUDGETS.map((b, i) => (
-                      <Pill key={b} label={b} on={budget === b} onClick={() => setBudget((cur) => (cur === b ? null : b))} delay={blockIn ? 300 + i * 70 : 0} />
+                    {BUDGETS.map((b) => (
+                      <Pill key={b} label={b} on={budget === b} onClick={() => setBudget((cur) => (cur === b ? null : b))} />
                     ))}
                   </div>
                 </div>
 
-                {/* details field (1344 wide) with the buttons at the right end of the same row */}
+                {/* details field (fills the row) with the two buttons at the right end of the same row on desktop; below it on tablet / phone */}
                 <div className="mt-[40px] flex flex-col gap-[28px] min-[901px]:mt-[calc(34.6*var(--u))] min-[901px]:flex-row min-[901px]:items-end min-[901px]:justify-between min-[901px]:gap-[24px]">
                   <div
                     style={fade(450).style}
-                    className={`${fade(450).className} w-full min-[901px]:w-[calc(1344*var(--u))] min-[901px]:flex-none`}
+                    className={`${fade(450).className} w-full min-[901px]:min-w-0 min-[901px]:flex-1`}
                   >
                     <Line field={{ name: "details", label: "Share details about your project" }} tall />
                   </div>
 
-                  {/* buttons column: desktop = WhatsApp above Send (Send keeps its Figma spot), phone = Send above WhatsApp */}
-                  <div className="flex flex-none flex-col items-end gap-[14px] min-[901px]:gap-[calc(16*var(--u))] [@media(max-width:560px)]:w-full [@media(max-width:560px)]:flex-row [@media(max-width:560px)]:items-start [@media(max-width:560px)]:justify-between [@media(max-width:560px)]:gap-[10px]">
-                    {/* shared CtaButton, 211 x 56 (a click on it sends the form) */}
+                  {/* the two buttons: ONE row on every screen size (WhatsApp left, Send right), centre-aligned so they are always
+                      on the same line. On a phone the row is exactly as wide as the screen and both buttons shrink together. */}
+                  <div className="flex flex-none flex-row items-center justify-end gap-[10px] min-[901px]:gap-[calc(16*var(--u))] [@media(max-width:560px)]:w-full [@media(max-width:560px)]:justify-between">
+                    {/* WhatsApp button: same look as Send Your Query, in WhatsApp green (240 wide so the 16px label fits) */}
+                    <WhatsAppCta
+                      label="Send on WhatsApp"
+                      width={240}
+                      onClick={whatsappClick}
+                      className="order-1 [--k:var(--u)] [@media(max-width:900px)]:[--k:1px] [@media(max-width:560px)]:[--k:calc((100cqw_-_2*clamp(16px,5vw,96px)_-_10px)_/_458)]!"
+                    />
+
+                    {/* shared CtaButton, 218 x 56 (a click on it sends the form). The wrapper is a flex box that is exactly as tall as the
+                        button; the "Thank you" message below is absolutely positioned, so it never changes the row height. */}
                     <div
                       onClickCapture={sendClick}
-                      className="relative order-1 flex flex-none flex-col items-end min-[901px]:order-2 min-[901px]:block [@media(max-width:560px)]:order-2"
+                      className="relative order-2 flex flex-none items-center"
                     >
                       <CtaButton
                         href="#start-project"
                         label={status === "sending" ? "Sending…" : "Send Your Query"}
-                        width={211}
-                        className="[--k:var(--u)] [@media(max-width:900px)]:[--k:1px] [@media(max-width:560px)]:[--k:calc((100cqw_-_2*clamp(16px,5vw,96px)_-_10px)_/_437)]!"
+                        width={218}
+                        className="[--k:var(--u)] [@media(max-width:900px)]:[--k:1px] [@media(max-width:560px)]:[--k:calc((100cqw_-_2*clamp(16px,5vw,96px)_-_10px)_/_458)]!"
                       />
                       <p
                         role="status"
                         aria-live="polite"
-                        className="m-0 mt-[10px] text-[length:14px] leading-[1.4] text-white/70 [@media(max-width:560px)]:absolute [@media(max-width:560px)]:top-full [@media(max-width:560px)]:right-0 [@media(max-width:560px)]:w-[calc(100cqw-2*clamp(16px,5vw,96px))] [@media(max-width:560px)]:text-right min-[901px]:absolute min-[901px]:top-full min-[901px]:right-0 min-[901px]:w-[calc(320*var(--u))] min-[901px]:text-right min-[901px]:text-[length:max(13px,calc(16*var(--u)))]"
+                        className="pointer-events-none absolute top-full right-0 m-0 mt-[10px] w-max max-w-[calc(100cqw-2*clamp(16px,5vw,96px))] text-right text-[length:14px] leading-[1.4] text-white/70 min-[901px]:w-[calc(320*var(--u))] min-[901px]:max-w-none min-[901px]:text-[length:max(13px,calc(16*var(--u)))]"
                       >
                         {status === "sent" && "Thank you! We will get back to you soon."}
                         {status === "error" && "Something went wrong. Please try again."}
                       </p>
                     </div>
-
-                    {/* WhatsApp button: same look as Send Your Query, in WhatsApp green (phone / tablet: label 16 like Send, 226 wide) */}
-                    <WhatsAppCta
-                      label="Send on WhatsApp"
-                      width={211}
-                      mobileWidth={226}
-                      onClick={whatsappClick}
-                      className="order-2 [--k:var(--u)] min-[901px]:order-1 [@media(max-width:900px)]:[--k:1px] [@media(max-width:560px)]:order-1 [@media(max-width:560px)]:[--k:calc((100cqw_-_2*clamp(16px,5vw,96px)_-_10px)_/_437)]!"
-                    />
                   </div>
                 </div>
               </div>
