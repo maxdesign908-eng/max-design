@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import CustomCursor from "@/components/home/CustomCursor";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import Loader from "@/components/Loader";
 
 const poppins = localFont({
   src: [
@@ -44,6 +45,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={poppins.variable}>
       <body className="bg-black">
+        <Loader />
         <CustomCursor />
         {children}
         <WhatsAppButton />
