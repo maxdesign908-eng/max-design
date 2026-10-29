@@ -13,14 +13,17 @@ import { useCallback, useEffect, useRef, useState } from "react";
   HOW IT WORKS
   - Mode 1 waits for window "load" (at least MIN_MS, at most MAX_MS).
   - Mode 2: a click on any internal link (<Link> or <a>) to a different page shows the loader
-    right away. When the new page is there (the pathname changes) it finishes and fades out.
-    It stays at least ROUTE_MIN_MS so it never just blinks, and leaves after ROUTE_MAX_MS.
+    right away. It stays until the NEW PAGE IS READY: the new route is there AND its images /
+    videos / fonts at the top of the page have loaded. Then it finishes and fades out.
+    It stays at least ROUTE_MIN_MS so it never just blinks, waits for the page's images at most
+    READY_MAX_MS, and always leaves after ROUTE_MAX_MS.
   - The progress bar / % moves smoothly and reaches 100% when the page is ready.
   - While it is visible the page cannot scroll, and the page width never changes (no jump / zoom
     when the loader appears or leaves).
-  - Also works for browser Back / Forward. For a button that uses router.push() (not a link) call
-        document.dispatchEvent(new Event("page-loader:start"));
-    right before router.push(...).
+  - Also works for browser Back / Forward, and for buttons that use router.push() (those start
+    the loader a moment later, right when the new page appears, and it still waits for the images).
+  - fullScreenPaths: pages that have NO navbar (your long-image case studies). When you go TO one of
+    these pages the loader is full screen; everywhere else it starts below the navbar.
   - Needs /public/images/loader-icon.webp (your logo icon, square).
 
   Use it ONCE, in app/layout.tsx:  <Loader />  (see the bottom of this file).
@@ -28,8 +31,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 const MIN_MS = 1800; // first visit: shortest time the loader stays
 const MAX_MS = 6000; // first visit: never block the site longer than this
-const ROUTE_MIN_MS = 900; // link click: shortest time the loader stays
-const ROUTE_MAX_MS = 5000; // link click: never block longer than this
+const ROUTE_MIN_MS = 1000; // link click: shortest time the loader stays
+const ROUTE_MAX_MS = 12000; // link click: never block longer than this (safety)
+const READY_MAX_MS = 8000; // link click: how long to wait for the new page's images / video
 const DONE_MS = 350; // pause on 100% before fading (first visit)
 const ROUTE_DONE_MS = 150; // pause on 100% before fading (link click)
 const FADE_MS = 700; // fade-out time
@@ -156,16 +160,65 @@ function visibleNavBottom(selector: string): number {
   return bottom;
 }
 
+/* images / videos near the top of the page (not the loader): how many there are and how many are still loading */
+function mediaState(): { pending: number; total: number } {
+  let pending = 0;
+  let total = 0;
+  const vh = window.innerHeight;
+  document.querySelectorAll("img").forEach((img) => {
+    if (img.closest(".ld")) return;
+    if (!(img.currentSrc || img.getAttribute("src"))) return;
+    const r = img.getBoundingClientRect();
+    if (r.top < vh * 1.5 && r.bottom > 0) {
+      total++;
+      if (!img.complete) pending++;
+    }
+  });
+  document.querySelectorAll("video").forEach((v) => {
+    if (v.closest(".ld")) return;
+    const r = v.getBoundingClientRect();
+    if (r.top < vh * 1.5 && r.bottom > 0 && v.preload !== "none") {
+      total++;
+      if (v.readyState < 2) pending++;
+    }
+  });
+  if (document.fonts && document.fonts.status === "loading") pending++;
+  return { pending, total };
+}
+
+/* resolves when the new page has painted and its top images are loaded (or after maxMs) */
+function waitForPageReady(maxMs: number, isCancelled: () => boolean): Promise<void> {
+  return new Promise((resolve) => {
+    const start = performance.now();
+    let calm = 0; // nothing pending for 3 checks in a row = really ready
+    const check = () => {
+      if (isCancelled()) return resolve();
+      const { pending, total } = mediaState();
+      // a page that has no images yet may still be rendering them: give it up to 1.5s
+      const maybeStillRendering = total === 0 && performance.now() - start < 1500;
+      if (pending === 0 && !maybeStillRendering) calm++;
+      else calm = 0;
+      if (calm >= 3 || performance.now() - start > maxMs) return resolve();
+      setTimeout(check, 120);
+    };
+    // give React two frames to put the new page on screen first
+    requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(check, 80)));
+  });
+}
+
 type Phase = "loading" | "leaving" | "done";
 
 export default function Loader({
   logoSrc = "/images/loader-icon.webp",
   navSelector = "header, nav",
+  fullScreenPaths = [],
 }: {
   /** the logo icon shown in the middle (square image, put the file in /public/images) */
   logoSrc?: string;
   /** CSS selector of your navbar. On link clicks the loader starts right below it. */
   navSelector?: string;
+  /** pages WITHOUT a navbar, e.g. ["/portfolio/roche-melgar", ...]. Going to them shows the full-screen loader. */
+  fullScreenPaths?: string[];
 }) {
   const pathname = usePathname();
   const [phase, setPhase] = useState<Phase>("loading");
@@ -175,6 +228,8 @@ export default function Loader({
   const pctRef = useRef<HTMLSpanElement>(null);
   const api = useRef<{ routeDone: () => void }>({ routeDone: () => {} });
   const pathRef = useRef(pathname);
+  const fullRef = useRef(fullScreenPaths);
+  fullRef.current = fullScreenPaths;
 
   // block wheel / touch scrolling behind the loader (without touching the scrollbar)
   const overlayRef = useCallback((el: HTMLDivElement | null) => {
@@ -194,6 +249,9 @@ export default function Loader({
     let routeFinishing = false;
     let routeStart = 0;
     let loaded = false;
+    let disposed = false;
+    let safetyTimer: ReturnType<typeof setTimeout> | undefined;
+    let leaveTimers: ReturnType<typeof setTimeout>[] = [];
 
     // draw the progress straight into the DOM (no re-render every tick)
     const paint = (v: number) => {
@@ -219,10 +277,11 @@ export default function Loader({
       complete = true;
       if (tick) clearInterval(tick);
       paint(100);
-      timers.push(
+      if (safetyTimer) clearTimeout(safetyTimer);
+      leaveTimers.push(
         setTimeout(() => {
           setPhase("leaving");
-          timers.push(
+          leaveTimers.push(
             setTimeout(() => {
               setPhase("done");
               initialActive = false;
@@ -248,29 +307,49 @@ export default function Loader({
     timers.push(setTimeout(finishInitial, MAX_MS));
 
     /* ───── mode 2: click on an internal link ───── */
+    let routeId = 0; // changes on every new link click, so old waits can not finish a new loader
+
+    // the new route is here: wait for its images, then finish
     const routeDone = () => {
       if (!routeActive || routeFinishing) return;
       routeFinishing = true;
-      const wait = Math.max(0, ROUTE_MIN_MS - (performance.now() - routeStart));
-      timers.push(setTimeout(() => leave(ROUTE_DONE_MS), wait));
+      const id = routeId;
+      waitForPageReady(READY_MAX_MS, () => disposed || id !== routeId).then(() => {
+        if (disposed || id !== routeId) return;
+        const wait = Math.max(0, ROUTE_MIN_MS - (performance.now() - routeStart));
+        leaveTimers.push(setTimeout(() => leave(ROUTE_DONE_MS), wait));
+      });
     };
     api.current = { routeDone };
 
     // show the link-click loader (starts below the navbar; full screen if there is no navbar)
-    const begin = () => {
-      if (initialActive || routeActive) return;
+    const begin = (dest?: string) => {
+      if (initialActive) return;
+      if (routeActive && !routeFinishing) return; // already loading
+      // a new click while the old loader is still finishing/fading: start over
+      leaveTimers.forEach(clearTimeout);
+      leaveTimers = [];
+      if (safetyTimer) clearTimeout(safetyTimer);
+      routeId++;
       routeActive = true;
       routeFinishing = false;
       routeStart = performance.now();
-      setTop(visibleNavBottom(navSelector));
+      const d = (dest ?? "").replace(/\/+$/, "");
+      const noNavbarThere = !!d && fullRef.current.some((x: string) => x.replace(/\/+$/, "") === d);
+      setTop(noNavbarThere ? 0 : visibleNavBottom(navSelector));
       setRoute(true);
       setPhase("loading");
       startTick();
-      timers.push(setTimeout(routeDone, ROUTE_MAX_MS));
+      safetyTimer = setTimeout(() => {
+        // safety: leave even if the new page never reports ready
+        if (!routeActive) return;
+        routeFinishing = true;
+        leave(ROUTE_DONE_MS);
+      }, ROUTE_MAX_MS);
     };
 
     const onClick = (e: MouseEvent) => {
-      if (initialActive || routeActive) return;
+      if (initialActive || (routeActive && !routeFinishing)) return;
       if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
 
       const a = (e.target as Element | null)?.closest?.("a[href]") as HTMLAnchorElement | null;
@@ -288,16 +367,44 @@ export default function Loader({
       if (url.origin !== window.location.origin) return; // other website
       if (url.pathname === window.location.pathname) return; // same page / only #hash
 
-      begin();
+      begin(url.pathname);
     };
 
     // browser Back / Forward buttons
     const onPop = () => {
-      if (window.location.pathname !== pathRef.current) begin();
+      if (window.location.pathname !== pathRef.current) begin(window.location.pathname);
     };
 
-    // manual trigger: document.dispatchEvent(new Event("page-loader:start"))
-    const onManual = () => begin();
+    // manual trigger:
+    //   document.dispatchEvent(new CustomEvent("page-loader:start", { detail: { path: "/portfolio/x" } }))
+    // "committed" = the new page is already on screen (used by the router.push fallback below)
+    const onManual = (e: Event) => {
+      const d = (e as CustomEvent<{ path?: string; committed?: boolean }>).detail;
+      begin(d?.path);
+      if (d?.committed) routeDone();
+    };
+
+    // fallback for navigation that is NOT a link click (router.push in a button / card):
+    // Next calls history.pushState when the new page is shown, so start the loader right then.
+    const w = window as unknown as { __ldPush?: boolean };
+    if (!w.__ldPush) {
+      w.__ldPush = true;
+      const origPush = window.history.pushState;
+      window.history.pushState = function (this: History, ...args: Parameters<History["pushState"]>) {
+        const before = window.location.pathname;
+        const res = origPush.apply(this, args);
+        const after = window.location.pathname;
+        if (after !== before) {
+          // after the commit finished (never schedule React updates from inside it)
+          setTimeout(() => {
+            document.dispatchEvent(
+              new CustomEvent("page-loader:start", { detail: { path: after, committed: true } }),
+            );
+          }, 0);
+        }
+        return res;
+      };
+    }
 
     document.addEventListener("click", onClick, true); // capture: works even if a link stops the click
     window.addEventListener("popstate", onPop);
@@ -309,7 +416,10 @@ export default function Loader({
       document.removeEventListener("click", onClick, true);
       window.removeEventListener("popstate", onPop);
       document.removeEventListener("page-loader:start", onManual);
+      disposed = true;
       timers.forEach(clearTimeout);
+      leaveTimers.forEach(clearTimeout);
+      if (safetyTimer) clearTimeout(safetyTimer);
     };
   }, [navSelector]);
 
@@ -369,13 +479,19 @@ export default function Loader({
 
 /*
   ── app/layout.tsx ──────────────────────────────────────────
-  import Loader from "@/components/Loader";   // adjust the path to where you save this file
+  import Loader from "@/components/Loader";            // adjust to where you save this file
+  import { caseStudies } from "@/data/caseStudies";    // adjust to your data file
+
+  // case-study pages that show ONLY the long image (no navbar) -> full-screen loader when going there
+  const noNavbarPages = caseStudies
+    .filter((c) => c.longImage)
+    .map((c) => `/portfolio/${c.slug}`);
 
   export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
       <html lang="en">
         <body>
-          <Loader />
+          <Loader fullScreenPaths={noNavbarPages} />
           {children}
         </body>
       </html>
