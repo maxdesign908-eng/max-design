@@ -121,18 +121,21 @@ export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_T
     <article
       ref={ref}
       {...(playable
-        ? {
-            role: "button",
-            tabIndex: 0,
-            "aria-label": item.href ? `Open ${item.title}` : `Play ${item.title} video`,
-            onClick: () => onOpen!(item),
-            onKeyDown: (e: React.KeyboardEvent) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                onOpen!(item);
-              }
-            },
-          }
+        ? item.href
+          ? // Link card: the real <a> below handles keyboard + right click; a normal left click bubbles up to here (same onOpen as before)
+            { onClick: () => onOpen!(item) }
+          : {
+              role: "button",
+              tabIndex: 0,
+              "aria-label": `Play ${item.title} video`,
+              onClick: () => onOpen!(item),
+              onKeyDown: (e: React.KeyboardEvent) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onOpen!(item);
+                }
+              },
+            }
         : {})}
       style={
         {
@@ -149,7 +152,7 @@ export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_T
           transitionDelay: shown ? `${(index % 3) * 90}ms` : "0ms",
         } as React.CSSProperties
       }
-      className={`group @container relative w-full ${playable ? "cursor-pointer focus-visible:outline focus-visible:outline-white" : ""} overflow-hidden rounded-[14px] border-[0.53px] border-solid lg:rounded-[var(--r)] lg:border-[length:var(--bw)] ${cfg.borderCls} ${cfg.span ?? ""} bg-neutral-900 transition-[opacity,translate] duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+      className={`group @container relative w-full ${playable ? "cursor-pointer" : ""} ${playable && !item.href ? "focus-visible:outline focus-visible:outline-white" : ""} overflow-hidden rounded-[14px] border-[0.53px] border-solid lg:rounded-[var(--r)] lg:border-[length:var(--bw)] ${cfg.borderCls} ${cfg.span ?? ""} bg-neutral-900 transition-[opacity,translate] duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
         shown ? "translate-y-0 opacity-100" : "translate-y-[36px] opacity-0"
       }`}
     >
@@ -216,6 +219,25 @@ export default function PortfolioCard({ item, cardH = CARD_H, labelTop = LABEL_T
         <h3 className="absolute bottom-[4.46cqw] left-[3.5714cqw] h-[6.43cqw] text-[length:5.7143cqw] leading-[1.12] font-bold tracking-[-0.04em] whitespace-nowrap text-white uppercase lg:top-[var(--t)] lg:bottom-auto lg:left-[var(--l)] lg:h-[var(--h)] lg:text-[length:var(--fs)]">
           {item.title}
         </h3>
+      )}
+
+      {/* Real link over the whole card: right click -> "Open link in new tab", Ctrl/Cmd/Shift/middle click work like any link.
+          A plain left click is cancelled here and handled by the card's onClick (onOpen) exactly as before. */}
+      {item.href && (
+        <a
+          href={item.href}
+          aria-label={`Open ${item.title}`}
+          draggable={false}
+          onClick={(e) => {
+            if (!onOpen) return; // no onOpen: let the browser follow the link itself
+            if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+              e.stopPropagation(); // new tab / window: browser handles it, do not also run onOpen
+              return;
+            }
+            e.preventDefault(); // plain click: onOpen (on the card) does the navigation
+          }}
+          className="absolute inset-0 z-20 rounded-[inherit] focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-white"
+        />
       )}
     </article>
   );
