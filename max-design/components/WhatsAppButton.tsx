@@ -19,7 +19,7 @@ export default function WhatsAppButton() {
   return (
     <div
       className={`
-        fixed z-[9999]
+        fixed z-[9998]
         right-[max(14px,env(safe-area-inset-right))]
         bottom-[max(14px,env(safe-area-inset-bottom))]
         sm:right-[28px] sm:bottom-[28px]
