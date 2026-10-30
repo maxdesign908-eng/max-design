@@ -129,6 +129,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "highland-manor",
         title: "Highland Manor",
         image: "/portfolio/branding/highland-manor.webp",
+         href: "/portfolio/highland-manor",
       },
       {
         id: "galis-home",
