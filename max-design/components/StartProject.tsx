@@ -167,29 +167,34 @@ function Words({
   );
 }
 
-/* WhatsApp logo glyph: the glyph fills its whole 24 x 24 box (the old one filled only ~81% of it),
-   so when it is shown at 22.27 x 22.27 it is exactly that size. White via currentColor. */
+/* WhatsApp logo glyph, traced from the reference design (ring + tail + handset), so its stroke weight and shape are
+   the same as the design. It fills its whole 24 x 24 box, so shown at 22.27 x 22.27 it is exactly that size.
+   White via currentColor; even-odd fill makes the ring hollow and the handset solid again. */
 function WhatsAppIcon() {
   return (
     <svg
       viewBox="0 0 24 24"
       fill="currentColor"
+      fillRule="evenodd"
+      clipRule="evenodd"
       aria-hidden="true"
       className="block h-full w-full"
     >
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+      <path d="M1.01 23.94L0.66 24.00L0.49 23.96L0.24 23.76L0.09 23.59L0.00 23.42L0.00 23.34L0.38 22.30L0.66 21.22L1.57 18.70L1.67 17.92L1.60 17.66L1.27 17.06L1.12 16.55L0.64 15.43L0.25 13.71L0.11 12.42L0.11 11.48L0.19 10.45L0.57 8.52L1.01 7.28L1.41 6.50L2.16 5.21L2.82 4.35L3.43 3.66L4.29 2.84L5.41 1.99L6.10 1.56L6.45 1.43L7.62 0.83L9.38 0.32L10.67 0.06L11.79 0.00L13.16 0.05L14.73 0.31L15.16 0.40L16.52 0.83L17.30 1.17L18.09 1.61L18.35 1.82L19.30 2.42L20.59 3.51L21.72 4.87L22.15 5.47L22.32 5.81L22.58 6.15L22.98 6.93L23.75 9.07L23.85 9.67L24.00 11.48L23.98 12.68L23.85 13.97L23.70 14.70L23.40 15.77L22.99 16.72L22.55 17.58L22.06 18.35L20.89 19.90L20.15 20.59L19.56 21.06L18.44 21.87L17.66 22.36L16.82 22.73L15.62 23.16L13.78 23.57L13.00 23.65L11.97 23.68L10.33 23.56L8.43 23.14L6.87 22.51L6.44 22.40L6.10 22.38L5.58 22.44L5.23 22.54L4.11 22.89L3.59 23.10L2.56 23.39ZM13.28 21.62L13.86 21.56L14.47 21.45L15.59 21.10L16.71 20.60L17.23 20.31L17.95 19.81L18.79 19.13L19.73 18.21L20.55 17.06L21.31 15.69L21.41 15.43L21.75 14.23L22.04 12.68L22.05 11.48L22.00 10.96L21.74 9.33L21.35 8.13L20.99 7.35L20.51 6.53L19.73 5.51L18.66 4.43L18.27 4.09L17.86 3.83L17.57 3.59L16.88 3.16L16.11 2.79L14.90 2.37L13.86 2.15L12.57 2.00L11.79 1.99L10.76 2.05L8.94 2.46L8.08 2.76L6.53 3.59L5.58 4.36L4.72 5.16L4.28 5.64L3.78 6.32L3.41 6.93L2.97 7.78L2.63 8.64L2.48 9.24L2.22 10.02L2.11 10.88L2.10 11.74L2.19 13.37L2.30 13.96L2.58 14.92L2.85 15.52L3.11 16.20L3.40 16.81L3.68 17.25L3.88 17.75L3.71 18.61L3.38 19.38L3.12 20.33L3.06 20.84L3.08 20.93L3.16 21.00L3.42 20.99L4.03 20.82L4.89 20.65L6.18 20.21L6.44 20.17L6.87 20.29L7.65 20.69L8.60 21.10L9.72 21.46L11.10 21.65L12.31 21.66ZM15.76 17.42L15.24 17.49L14.55 17.33L13.61 17.06L12.61 16.72L11.65 16.29L10.91 15.86L10.34 15.43L9.55 14.76L8.66 13.88L7.83 12.85L7.05 11.70L6.55 10.71L6.26 9.85L6.22 9.24L6.26 8.64L6.32 8.39L6.59 7.70L7.13 6.92L7.38 6.75L7.94 6.50L8.43 6.39L8.69 6.41L8.86 6.48L9.21 6.84L9.82 8.21L10.07 8.68L10.18 9.24L10.15 9.59L10.07 9.90L9.45 10.79L9.41 10.96L9.45 11.22L9.89 11.96L10.24 12.39L11.45 13.56L12.57 14.30L13.17 14.49L13.52 14.55L13.78 14.50L14.04 14.35L14.62 13.71L15.07 13.32L15.24 13.26L15.42 13.26L15.59 13.30L16.02 13.51L16.45 13.63L16.80 13.86L17.32 14.09L17.99 14.57L18.08 14.74L18.12 14.92L18.11 15.34L18.01 15.69L17.75 16.21L17.23 16.74L16.54 17.14Z" />
     </svg>
   );
 }
 
 /* "Send on WhatsApp": same pill as the shared CtaButton, in WhatsApp green with the WhatsApp icon in the round part.
    Figma values used (all multiplied by var(--k), 1 --k = 1 Figma px):
-     pill ..... height 56, radius 76.8, border 0.57 white, padding 3.44 / 14.9, gap 10
+     pill ..... height 56, radius 76.8, border 0.57 white, padding-left 14.9, padding-right 8.68 (circle sits 9.25 from the
+                right edge, as in the design), padding-top / bottom 3.44, gap 10
      label .... Poppins Medium 16, line-height 100%, letter-spacing -4%
      circle ... 38 x 38, radius 19, background #40C451
      logo ..... 22.27 x 22.27, white, top 7.73 / left 7.76 inside the circle
-   Width: Send Your Query is 218 wide (its label box is 130). "Send on WhatsApp" is 20 longer at the same 16px size,
-   so this pill is 240 wide so the whole label fits. CtaButton itself is not changed. */
+   Width: Send Your Query is 218 wide (its label box is 130). "Send on WhatsApp" is 14 longer at the same 16px size,
+   so this pill is 234 wide: the whole label fits and the gap between label and circle stays ~11.5 like in the design.
+   CtaButton itself is not changed. */
 function WhatsAppCta({
   label,
   width,
@@ -205,7 +210,7 @@ function WhatsAppCta({
     <button
       type="button"
       onClick={onClick}
-      className={`group isolate flex [contain:layout] h-[calc(56*var(--k,1px))] w-[calc(var(--w)*var(--k,1px))] flex-none cursor-pointer items-center gap-[calc(10*var(--k,1px))] overflow-hidden rounded-[calc(76.8*var(--k,1px))] border-[length:calc(0.57*var(--k,1px))] border-solid border-white bg-transparent px-[calc(14.9*var(--k,1px))] py-[calc(3.44*var(--k,1px))] text-white whitespace-nowrap transition-colors duration-300 outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#25D366] ${className ?? ""}`}
+      className={`group isolate flex [contain:layout] h-[calc(56*var(--k,1px))] w-[calc(var(--w)*var(--k,1px))] flex-none cursor-pointer items-center gap-[calc(10*var(--k,1px))] overflow-hidden rounded-[calc(76.8*var(--k,1px))] border-[length:calc(0.57*var(--k,1px))] border-solid border-white bg-transparent pt-[calc(3.44*var(--k,1px))] pr-[calc(8.68*var(--k,1px))] pb-[calc(3.44*var(--k,1px))] pl-[calc(14.9*var(--k,1px))] text-white whitespace-nowrap transition-colors duration-300 outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#25D366] ${className ?? ""}`}
       style={{ "--w": width } as CSSProperties}
     >
       {/* green fill that rises from the bottom */}
@@ -423,12 +428,12 @@ export default function StartProject() {
                   {/* the two buttons: ONE row on every screen size (WhatsApp left, Send right), centre-aligned so they are always
                       on the same line. On a phone the row is exactly as wide as the screen and both buttons shrink together. */}
                   <div className="flex flex-none flex-row items-center justify-end gap-[10px] min-[901px]:gap-[calc(16*var(--u))] [@media(max-width:560px)]:w-full [@media(max-width:560px)]:justify-between">
-                    {/* WhatsApp button: same look as Send Your Query, in WhatsApp green (240 wide so the 16px label fits) */}
+                    {/* WhatsApp button: same look as Send Your Query, in WhatsApp green (234 wide so the 16px label fits) */}
                     <WhatsAppCta
                       label="Send on WhatsApp"
-                      width={240}
+                      width={234}
                       onClick={whatsappClick}
-                      className="order-1 [--k:var(--u)] [@media(max-width:900px)]:[--k:1px] [@media(max-width:560px)]:[--k:calc((100cqw_-_2*clamp(16px,5vw,96px)_-_10px)_/_458)]!"
+                      className="order-1 [--k:var(--u)] [@media(max-width:900px)]:[--k:1px] [@media(max-width:560px)]:[--k:calc((100cqw_-_2*clamp(16px,5vw,96px)_-_10px)_/_452)]!"
                     />
 
                     {/* shared CtaButton, 218 x 56 (a click on it sends the form). The wrapper is a flex box that is exactly as tall as the
@@ -441,7 +446,7 @@ export default function StartProject() {
                         href="#start-project"
                         label={status === "sending" ? "Sending…" : "Send Your Query"}
                         width={218}
-                        className="[--k:var(--u)] [@media(max-width:900px)]:[--k:1px] [@media(max-width:560px)]:[--k:calc((100cqw_-_2*clamp(16px,5vw,96px)_-_10px)_/_458)]!"
+                        className="[--k:var(--u)] [@media(max-width:900px)]:[--k:1px] [@media(max-width:560px)]:[--k:calc((100cqw_-_2*clamp(16px,5vw,96px)_-_10px)_/_452)]!"
                       />
                       <p
                         role="status"

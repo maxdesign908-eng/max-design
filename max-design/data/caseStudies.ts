@@ -540,6 +540,14 @@ export const caseStudies: CaseStudy[] = [
     { desktop: "/portfolio/highland-manor/17.webp", mobile: "/portfolio/highland-manor/17-m.webp", w: 3840, h: 2160, mw: 1170, mh: 658 },
     { desktop: "/portfolio/highland-manor/18.webp", mobile: "/portfolio/highland-manor/18-m.webp", w: 3840, h: 1500, mw: 1170, mh: 457 },
     { desktop: "/portfolio/highland-manor/19.webp", mobile: "/portfolio/highland-manor/19-m.webp", w: 3844, h: 2146, mw: 1170, mh: 653 } ] } },
+  { slug: "bnu-bestival-social-media", title: "BNU (Bestival Edition) Social Media", items: [],
+  longImage: { alt: "BNU Bestival Edition social media design case study", slices: [
+    { desktop: "/portfolio/bnu-bestival-social-media/01.webp", mobile: "/portfolio/bnu-bestival-social-media/01-m.webp", w: 3840, h: 2430, mw: 1170, mh: 740 },
+    { desktop: "/portfolio/bnu-bestival-social-media/02.webp", mobile: "/portfolio/bnu-bestival-social-media/02-m.webp", w: 3708, h: 2294, mw: 1170, mh: 724 },
+    { desktop: "/portfolio/bnu-bestival-social-media/03.webp", mobile: "/portfolio/bnu-bestival-social-media/03-m.webp", w: 1854, h: 1147, mw: 1170, mh: 724 },
+    { desktop: "/portfolio/bnu-bestival-social-media/04.webp", mobile: "/portfolio/bnu-bestival-social-media/04-m.webp", w: 3840, h: 2430, mw: 1170, mh: 740 },
+    { desktop: "/portfolio/bnu-bestival-social-media/05.webp", mobile: "/portfolio/bnu-bestival-social-media/05-m.webp", w: 3840, h: 2430, mw: 1170, mh: 740 },
+    { desktop: "/portfolio/bnu-bestival-social-media/06.webp", mobile: "/portfolio/bnu-bestival-social-media/06-m.webp", w: 3840, h: 3604, mw: 1170, mh: 1098 } ] } },
 ];
 
 

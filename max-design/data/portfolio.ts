@@ -186,6 +186,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "bnu-bestival-edition",
         title: "BNU (Bestival Edition)",
         image: "/portfolio/social-media/bnu-bestival-edition.webp",
+        href: "/portfolio/bnu-bestival-social-media",
       },
       {
         id: "jamswheel-on-deals",
