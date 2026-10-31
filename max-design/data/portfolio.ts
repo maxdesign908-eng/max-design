@@ -197,31 +197,37 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "brainforce-digital",
         title: "Brainforce Digital",
         image: "/portfolio/social-media/brainforce-digital.webp",
+        href: "/portfolio/brainforce-digital",
       },
       {
         id: "leafrooms",
         title: "Leafrooms",
         image: "/portfolio/social-media/leafrooms.webp",
+        href: "/portfolio/leafrooms",
       },
       {
         id: "swiftmount-solutions",
         title: "Swiftmount Solutions",
         image: "/portfolio/social-media/swiftmount-solutions.webp",
+        href: "/portfolio/swiftmount-solutions",
       },
       {
         id: "highland-manor",
         title: "Highland Manor",
         image: "/portfolio/social-media/highland-manor.webp",
+        href: "/portfolio/highland-manor-social-media",
       },
       {
         id: "pixelette-technologies",
         title: "Pixelette Technologies",
         image: "/portfolio/social-media/pixelette-technologies.webp",
+        href: "/portfolio/pixelette-technologies-social-media",
       },
       {
         id: "pixelette-marketing",
         title: "Pixelette Marketing",
         image: "/portfolio/social-media/pixelette-marketing.webp",
+        href: "/portfolio/pixelette-marketing-social-media",
       },
       {
         id: "pixelette-holdings",

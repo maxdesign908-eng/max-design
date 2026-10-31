@@ -548,6 +548,31 @@ export const caseStudies: CaseStudy[] = [
     { desktop: "/portfolio/bnu-bestival-social-media/04.webp", mobile: "/portfolio/bnu-bestival-social-media/04-m.webp", w: 3840, h: 2430, mw: 1170, mh: 740 },
     { desktop: "/portfolio/bnu-bestival-social-media/05.webp", mobile: "/portfolio/bnu-bestival-social-media/05-m.webp", w: 3840, h: 2430, mw: 1170, mh: 740 },
     { desktop: "/portfolio/bnu-bestival-social-media/06.webp", mobile: "/portfolio/bnu-bestival-social-media/06-m.webp", w: 3840, h: 3604, mw: 1170, mh: 1098 } ] } },
+  { slug: "brainforce-digital", title: "Brainforce Digital", items: [],
+  longImage: { alt: "Brainforce Digital social media design case study", slices: [
+    { desktop: "/portfolio/brainforce-digital/01.webp", mobile: "/portfolio/brainforce-digital/01-m.webp", w: 5913, h: 4447, mw: 1170, mh: 880 },
+    { desktop: "/portfolio/brainforce-digital/02.webp", mobile: "/portfolio/brainforce-digital/02-m.webp", w: 2957, h: 3709, mw: 1170, mh: 1468 },
+    { desktop: "/portfolio/brainforce-digital/03.webp", mobile: "/portfolio/brainforce-digital/03-m.webp", w: 2957, h: 2223, mw: 1170, mh: 880 } ] } },
+  { slug: "leafrooms", title: "Leafrooms", items: [],
+  longImage: { alt: "Leafrooms social media design case study", slices: [
+    { desktop: "/portfolio/leafrooms/01.webp", mobile: "/portfolio/leafrooms/01-m.webp", w: 2956, h: 2217, mw: 1170, mh: 878 },
+    { desktop: "/portfolio/leafrooms/02.webp", mobile: "/portfolio/leafrooms/02-m.webp", w: 2956, h: 2217, mw: 1170, mh: 878 },
+    { desktop: "/portfolio/leafrooms/03.webp", mobile: "/portfolio/leafrooms/03-m.webp", w: 2956, h: 2217, mw: 1170, mh: 878 },
+    { desktop: "/portfolio/leafrooms/04.webp", mobile: "/portfolio/leafrooms/04-m.webp", w: 2955, h: 1915, mw: 1170, mh: 758 } ] } },
+  { slug: "swiftmount-solutions", title: "Swiftmount Solutions", items: [],
+  longImage: { alt: "Swiftmount Solutions social media design case study", slices: [
+    { desktop: "/portfolio/swiftmount-solutions/01.webp", mobile: "/portfolio/swiftmount-solutions/01-m.webp", w: 2956, h: 2010, mw: 1170, mh: 796 },
+    { desktop: "/portfolio/swiftmount-solutions/02.webp", mobile: "/portfolio/swiftmount-solutions/02-m.webp", w: 2957, h: 2225, mw: 1170, mh: 880 },
+    { desktop: "/portfolio/swiftmount-solutions/03.webp", mobile: "/portfolio/swiftmount-solutions/03-m.webp", w: 2957, h: 2221, mw: 1170, mh: 879 } ] } },
+  { slug: "highland-manor-social-media", title: "Highland Manor Social Media", items: [],
+  longImage: { alt: "Highland Manor Qaziabad social media design case study", slices: [
+    { desktop: "/portfolio/highland-manor-social-media/01.webp", mobile: "/portfolio/highland-manor-social-media/01-m.webp", w: 2912, h: 3628, mw: 1170, mh: 1458 } ] } },
+  { slug: "pixelette-technologies-social-media", title: "Pixelette Technologies Social Media", items: [],
+  longImage: { alt: "Pixelette Technologies social media design case study", slices: [
+    { desktop: "/portfolio/pixelette-technologies-social-media/01.webp", mobile: "/portfolio/pixelette-technologies-social-media/01-m.webp", w: 2949, h: 1639, mw: 1170, mh: 650 } ] } },
+  { slug: "pixelette-marketing-social-media", title: "Pixelette Marketing Social Media", items: [],
+  longImage: { alt: "Pixelette Marketing social media design case study", slices: [
+    { desktop: "/portfolio/pixelette-marketing-social-media/01.webp", mobile: "/portfolio/pixelette-marketing-social-media/01-m.webp", w: 2979, h: 1644, mw: 1170, mh: 646 } ] } },
 ];
 
 
