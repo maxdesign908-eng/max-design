@@ -245,6 +245,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "carmentis",
         title: "Carmentis",
         image: "/portfolio/social-media/carmentis.webp",
+        href: "/portfolio/carmentis",
       },
       {
         id: "fusio-block-guard",

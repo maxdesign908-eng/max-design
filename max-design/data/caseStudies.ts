@@ -585,6 +585,11 @@ export const caseStudies: CaseStudy[] = [
   { slug: "akashic-knowing", title: "Akashic Knowing", items: [],
   longImage: { alt: "Akashic Knowing social media design case study", slices: [
     { desktop: "/portfolio/akashic-knowing/01.webp", mobile: "/portfolio/akashic-knowing/01-m.webp", w: 3009, h: 2432, mw: 990, mh: 2655 } ] } },
+  { slug: "carmentis", title: "Carmentis", items: [],
+  longImage: { alt: "Carmentis social media design case study", slices: [
+    { desktop: "/portfolio/carmentis/01.webp", mobile: "/portfolio/carmentis/01-m.webp", w: 2957, h: 2219, mw: 1170, mh: 878 },
+    { desktop: "/portfolio/carmentis/02.webp", mobile: "/portfolio/carmentis/02-m.webp", w: 2957, h: 2153, mw: 1170, mh: 852 },
+    { desktop: "/portfolio/carmentis/03.webp", mobile: "/portfolio/carmentis/03-m.webp", w: 2957, h: 2220, mw: 1170, mh: 878 } ] } },
 ];
 
 
