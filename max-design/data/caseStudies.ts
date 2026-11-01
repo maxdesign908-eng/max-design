@@ -566,13 +566,25 @@ export const caseStudies: CaseStudy[] = [
     { desktop: "/portfolio/swiftmount-solutions/03.webp", mobile: "/portfolio/swiftmount-solutions/03-m.webp", w: 2957, h: 2221, mw: 1170, mh: 879 } ] } },
   { slug: "highland-manor-social-media", title: "Highland Manor Social Media", items: [],
   longImage: { alt: "Highland Manor Qaziabad social media design case study", slices: [
-    { desktop: "/portfolio/highland-manor-social-media/01.webp", mobile: "/portfolio/highland-manor-social-media/01-m.webp", w: 2912, h: 3628, mw: 1170, mh: 1458 } ] } },
+    { desktop: "/portfolio/highland-manor-social-media/01.webp", mobile: "/portfolio/highland-manor-social-media/01-m.webp", w: 2912, h: 3628, mw: 1170, mh: 2404 } ] } },
   { slug: "pixelette-technologies-social-media", title: "Pixelette Technologies Social Media", items: [],
   longImage: { alt: "Pixelette Technologies social media design case study", slices: [
-    { desktop: "/portfolio/pixelette-technologies-social-media/01.webp", mobile: "/portfolio/pixelette-technologies-social-media/01-m.webp", w: 2949, h: 1639, mw: 1170, mh: 650 } ] } },
+    { desktop: "/portfolio/pixelette-technologies-social-media/01.webp", mobile: "/portfolio/pixelette-technologies-social-media/01-m.webp", w: 2949, h: 1639, mw: 990, mh: 3240 } ] } },
   { slug: "pixelette-marketing-social-media", title: "Pixelette Marketing Social Media", items: [],
   longImage: { alt: "Pixelette Marketing social media design case study", slices: [
-    { desktop: "/portfolio/pixelette-marketing-social-media/01.webp", mobile: "/portfolio/pixelette-marketing-social-media/01-m.webp", w: 2979, h: 1644, mw: 1170, mh: 646 } ] } },
+    { desktop: "/portfolio/pixelette-marketing-social-media/01.webp", mobile: "/portfolio/pixelette-marketing-social-media/01-m.webp", w: 2979, h: 1644, mw: 990, mh: 2142 } ] } },
+  { slug: "pixelette-holdings-social-media", title: "Pixelette Holdings Social Media", items: [],
+  longImage: { alt: "Pixelette Holdings social media design case study", slices: [
+    { desktop: "/portfolio/pixelette-holdings-social-media/01.webp", mobile: "/portfolio/pixelette-holdings-social-media/01-m.webp", w: 3011, h: 1644, mw: 990, mh: 2672 } ] } },
+  { slug: "pix-certified", title: "Pix Certified", items: [],
+  longImage: { alt: "Pix Certified social media design case study", slices: [
+    { desktop: "/portfolio/pix-certified/01.webp", mobile: "/portfolio/pix-certified/01-m.webp", w: 2979, h: 1642, mw: 990, mh: 2138 } ] } },
+  { slug: "fusio-blockguard", title: "Fusio Blockguard", items: [],
+  longImage: { alt: "Fusio Blockguard social media design case study", slices: [
+    { desktop: "/portfolio/fusio-blockguard/01.webp", mobile: "/portfolio/fusio-blockguard/01-m.webp", w: 2979, h: 1636, mw: 990, mh: 2700 } ] } },
+  { slug: "akashic-knowing", title: "Akashic Knowing", items: [],
+  longImage: { alt: "Akashic Knowing social media design case study", slices: [
+    { desktop: "/portfolio/akashic-knowing/01.webp", mobile: "/portfolio/akashic-knowing/01-m.webp", w: 3009, h: 2432, mw: 990, mh: 2655 } ] } },
 ];
 
 

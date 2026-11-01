@@ -233,11 +233,13 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "pixelette-holdings",
         title: "Pixelette Holdings",
         image: "/portfolio/social-media/pixelette-holdings.webp",
+        href: "/portfolio/pixelette-holdings-social-media",
       },
       {
         id: "pixelette-marketing-2",
         title: "Pixelette Marketing",
         image: "/portfolio/social-media/pixelette-marketing-2.webp",
+        href: "/portfolio/pix-certified",
       },
       {
         id: "carmentis",
@@ -248,11 +250,13 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "fusio-block-guard",
         title: "Fusio Block Guard",
         image: "/portfolio/social-media/fusio-blockguard.webp",
+        href: "/portfolio/fusio-blockguard",
       },
       {
         id: "akashic-knowing",
         title: "Akashic Knowing",
         image: "/portfolio/social-media/akashic-knowing.webp",
+        href: "/portfolio/akashic-knowing",
       },
     ],
   },
