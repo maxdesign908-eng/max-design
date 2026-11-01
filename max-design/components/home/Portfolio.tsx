@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { CSSProperties } from "react";
 import CtaButton from "./CtaButton";
 
@@ -29,24 +30,26 @@ type Work = {
   title: string;
   tags: string;
   src: string;
+  href: string; // case-study page this card opens
   w: number; // Figma width
   h: number; // Figma height
   titleShift?: number; // Figma px the title sits left of the card (OH BELLY: -2)
 };
 
 const row1: Work[] = [
-  { title: "JAMSWHEELS ON DEALS", tags: "Social Media, Web Development, Branding", src: "jamswheels-on-deals", w: 559, h: 803 },
-  { title: "ROCHE MELGAR", tags: "Social Media, Branding, AI Visuals", src: "roche-melgar", w: 560, h: 803 },
-  { title: "OH BELLY", tags: "Branding Identity", src: "oh-belly", w: 559, h: 803, titleShift: -2 },
+  { title: "JAMSWHEELS ON DEALS", tags: "Social Media, Web Development, Branding", src: "jamswheels-on-deals", href: "/portfolio/jams-wheel", w: 559, h: 803 },
+  { title: "ROCHE MELGAR", tags: "Social Media, Branding, AI Visuals", src: "roche-melgar", href: "/portfolio/roche-melgar", w: 560, h: 803 },
+  { title: "OH BELLY", tags: "Branding Identity", src: "oh-belly", href: "/portfolio/oh-belly", w: 559, h: 803, titleShift: -2 },
 ];
 const row2: Work[] = [
-  { title: "LEAFROOMS", tags: "Social Media", src: "leafrooms", w: 851, h: 876.08 },
-  { title: "GALI’S HOMES", tags: "Branding Identity", src: "galis-homes", w: 851, h: 875.08 },
+  { title: "LEAFROOMS", tags: "Social Media", src: "leafrooms", href: "/portfolio/leafrooms", w: 851, h: 876.08 },
+  { title: "GALI’S HOMES", tags: "Branding Identity", src: "galis-homes", href: "/portfolio/galis-home", w: 851, h: 875.08 },
 ];
 const banner: Work = {
   title: "BNU (BESTIVAL EDITION)",
   tags: "Event Branding, Social Media",
   src: "bnu-bestival-edition",
+  href: "/portfolio/bnu-bestival-edition",
   w: 1726,
   h: 802.31,
 };
@@ -76,9 +79,9 @@ const CSS = `
 
 /* one project: picture on top, big uppercase name under it */
 function Project({ work }: { work: Work }) {
-  const { title, tags, src, w, h, titleShift = 0 } = work;
+  const { title, tags, src, href, w, h, titleShift = 0 } = work;
   return (
-    <article className="group mx-auto w-full min-w-0 max-[767px]:max-w-[640px]">
+    <article className="group relative mx-auto w-full min-w-0 max-[767px]:max-w-[640px]">
       <div
         className="relative w-full motion-reduce:transition-none [@media(hover:hover)]:transition-transform [@media(hover:hover)]:duration-300 [@media(hover:hover)]:ease-out [@media(hover:hover)]:group-hover:-translate-y-[calc(6*var(--u))]"
         style={{ aspectRatio: `${w} / ${h}` }}
@@ -106,6 +109,15 @@ function Project({ work }: { work: Work }) {
       >
         {title}
       </h3>
+
+      {/* Real link over the whole card (picture + title): left click opens the page,
+          right click -> "Open link in new tab", Ctrl/Cmd/middle click work like any link. */}
+      <Link
+        href={href}
+        aria-label={`Open ${title.replace("’", "'")} case study`}
+        draggable={false}
+        className="absolute inset-0 z-10 rounded-[calc(14*var(--u))] focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-white"
+      />
     </article>
   );
 }
