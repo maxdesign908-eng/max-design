@@ -61,11 +61,11 @@ type Field = { name: string; label: string; type?: string; required?: boolean };
 
 /* order is row by row: left, right, left, right ... */
 const FIELDS: Field[] = [
-  { name: "name", label: "Name", required: true },
-  { name: "email", label: "Email", type: "email", required: true },
-  { name: "company", label: "Company name" },
-  { name: "phone", label: "Phone Number", type: "tel" },
-  { name: "source", label: "How did you hear about us" },
+  { name: "name", label: "Name*", required: true },
+  { name: "email", label: "Email*", type: "email", required: true },
+  { name: "company", label: "Company name*" },
+  { name: "phone", label: "Phone Number*", type: "tel" },
+  { name: "source", label: "How did you hear about us*" },
 ];
 
 /* browser autofill paints inputs light blue with dark text: keep them black with white text */
