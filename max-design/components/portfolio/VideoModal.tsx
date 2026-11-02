@@ -6,8 +6,8 @@ import type { PortfolioItem } from "@/data/portfolio";
 
 /**
  * Pop-up video player.
- * Card par click -> video screen ke upar aati hai, peeche ka poora page blur ho jata hai.
- * Band karne ke liye: X button, backdrop par click, ya Esc.
+ * Click on a card -> video opens over the screen, the whole page behind is blurred.
+ * Close with: X button, click on the backdrop, or Esc.
  */
 export default function VideoModal({
   item,
@@ -16,7 +16,7 @@ export default function VideoModal({
   item: PortfolioItem | null;
   onClose: () => void;
 }) {
-  const [mounted, setMounted] = useState(false); // portal tabhi jab browser me ho
+  const [mounted, setMounted] = useState(false); // portal only in the browser
   const [visible, setVisible] = useState(false); // fade/scale animation
   const [nat, setNat] = useState<{ w: number; h: number } | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -34,7 +34,7 @@ export default function VideoModal({
       return;
     }
     const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden"; // peeche ka page scroll na ho
+    document.body.style.overflow = "hidden"; // no scrolling behind the pop-up
     const raf = requestAnimationFrame(() => setVisible(true));
     closeRef.current?.focus();
     const onKey = (e: KeyboardEvent) => {
@@ -50,7 +50,10 @@ export default function VideoModal({
 
   if (!mounted || !item || !src) return null;
 
-  // modalCropTop: video ke upar se kitna hissa (0 se 1) chhupana hai. 0 = kuch nahi.
+  // Cards that are real videos (item.video) get NO poster. AI Ads image cards keep their image as poster.
+  const poster = item.poster ?? (item.video ? undefined : item.image);
+
+  // modalCropTop: how much to hide from the top of the video (0 to 1). 0 = nothing.
   const crop = item.modalCropTop ?? 0;
   const ratio = nat ? nat.w / (nat.h * (1 - crop)) : 9 / 16 / (1 - crop);
 
@@ -87,7 +90,7 @@ export default function VideoModal({
       </button>
 
       {crop > 0 ? (
-        // Is video ke upar ka thora hissa (kaali patti) chhupana hai: wrapper upar se `crop` hissa kaat deta hai
+        // Hides a thin part from the top of the video (black strip): the wrapper cuts `crop` from the top
         <div
           onClick={(e) => e.stopPropagation()}
           className={`relative overflow-hidden rounded-[14px] bg-black shadow-[0_30px_80px_rgba(0,0,0,0.6)] transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
@@ -98,7 +101,7 @@ export default function VideoModal({
           <video
             key={src}
             src={src}
-            poster={item.poster ?? item.image}
+            poster={poster}
             controls
             autoPlay
             playsInline
@@ -111,7 +114,7 @@ export default function VideoModal({
         <video
           key={src}
           src={src}
-          poster={item.poster ?? item.image}
+          poster={poster}
           controls
           autoPlay
           playsInline

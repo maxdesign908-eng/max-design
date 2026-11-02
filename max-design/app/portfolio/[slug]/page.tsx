@@ -4,11 +4,12 @@ import Footer from "@/components/home/Footer";
 import Navbar from "@/components/home/Navbar";
 import CaseStudyView from "../CaseStudyView";
 import LongImageView from "../LongImageView";
+import CaseStudyVideoGrid, { VIDEO_BG } from "../CaseStudyVideoGrid";
 import { caseStudies, getCaseStudy } from "@/data/caseStudies";
 
 type Params = { params: Promise<{ slug: string }> };
 
-// Ye pages build ke waqt hi ban jate hain (data/caseStudies.ts me jitne project hain)
+// These pages are built at build time (one per project in data/caseStudies.ts)
 export function generateStaticParams() {
   return caseStudies.map((c) => ({ slug: c.slug }));
 }
@@ -26,11 +27,16 @@ export default async function CaseStudyPage({ params }: Params) {
   const study = getCaseStudy(slug);
   if (!study) notFound();
 
-  // Lambi image wala project (jaise Roche Melgar): sirf image, navbar / footer nahi
+  // Long image project: image only (no navbar / footer), then videos right below it if any
   if (study.longImage) {
+    const videos = study.items.filter((i) => i.video);
     return (
-      <main className="min-h-screen bg-black text-white">
+      <main
+        className="min-h-screen text-white"
+        style={{ background: videos.length > 0 ? VIDEO_BG : "#000" }}
+      >
         <LongImageView study={study} />
+        {videos.length > 0 && <CaseStudyVideoGrid items={videos} />}
       </main>
     );
   }

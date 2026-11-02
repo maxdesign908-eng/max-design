@@ -590,14 +590,13 @@ export const caseStudies: CaseStudy[] = [
     { desktop: "/portfolio/carmentis/01.webp", mobile: "/portfolio/carmentis/01-m.webp", w: 2957, h: 2219, mw: 1170, mh: 878 },
     { desktop: "/portfolio/carmentis/02.webp", mobile: "/portfolio/carmentis/02-m.webp", w: 2957, h: 2153, mw: 1170, mh: 852 },
     { desktop: "/portfolio/carmentis/03.webp", mobile: "/portfolio/carmentis/03-m.webp", w: 2957, h: 2220, mw: 1170, mh: 878 } ] } },
-  { slug: "jams-wheel-social-media", title: "Jams Wheels On Deals Social Media", items: [
-    { id: "video-1", title: "Jams Wheels On Deals Video 1", image: "/portfolio/jams-wheel-social-media/video-1.webp", modalVideo: "/portfolio/jams-wheel-social-media/video-1.webm", labelInImage: true, variant: "csmall" },
-    { id: "video-2", title: "Jams Wheels On Deals Video 2", image: "/portfolio/jams-wheel-social-media/video-2.webp", modalVideo: "/portfolio/jams-wheel-social-media/video-2.webm", labelInImage: true, variant: "csmall" },
-    { id: "video-3", title: "Jams Wheels On Deals Video 3", image: "/portfolio/jams-wheel-social-media/video-3.webp", modalVideo: "/portfolio/jams-wheel-social-media/video-3.webm", labelInImage: true, variant: "csmall" },
-    { id: "video-4", title: "Jams Wheels On Deals Video 4", image: "/portfolio/jams-wheel-social-media/video-4.webp", modalVideo: "/portfolio/jams-wheel-social-media/video-4.webm", labelInImage: true, variant: "csmall" },
-    { id: "video-5", title: "Jams Wheels On Deals Video 5", image: "/portfolio/jams-wheel-social-media/video-5.webp", modalVideo: "/portfolio/jams-wheel-social-media/video-5.webm", labelInImage: true, variant: "csmall" },
-    { id: "video-6", title: "Jams Wheels On Deals Video 6", image: "/portfolio/jams-wheel-social-media/video-6.webp", modalVideo: "/portfolio/jams-wheel-social-media/video-6.webm", labelInImage: true, variant: "csmall" },
-  ],
+  { slug: "jams-wheel-social-media", title: "Jams Wheels On Deals Social Media",
+  items: [1, 2, 3, 4, 5, 6].map((n) => ({
+    id: `video-${n}`,
+    title: `Jams Wheels On Deals Video ${n}`,
+    image: "", // no poster; empty string only to satisfy the PortfolioItem type
+    video: `/portfolio/jams-wheel-social-media/video-${n}.webm`,
+  })),
   longImage: { alt: "Jams Wheels On Deals social media design case study", slices: [
     { desktop: "/portfolio/jams-wheel-social-media/01.webp", mobile: "/portfolio/jams-wheel-social-media/01-m.webp", w: 5274, h: 6504, mw: 1170, mh: 1443 } ] } },
 ];
