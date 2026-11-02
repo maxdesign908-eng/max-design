@@ -192,6 +192,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "jamswheel-on-deals",
         title: "Jamswheel on Deals",
         image: "/portfolio/social-media/jamswheel-on-deals.webp",
+        href: "/portfolio/jams-wheel-social-media",
       },
       {
         id: "brainforce-digital",
