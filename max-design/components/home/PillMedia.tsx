@@ -19,7 +19,7 @@ export default function PillMedia({ className = "" }: { className?: string }) {
           from { transform: rotate(0deg); }
         }
       `}</style>
-      <span className="absolute top-[-118.548%] left-[-0.1174%] h-[343.548%] w-[101.878%] origin-[49.101%_60.775%] animate-[pillMotion_4.62s_cubic-bezier(0.6,0.5,1,1)_both] bg-[url('/images/hero-pill-media.png')] bg-[length:100%_100%] bg-no-repeat [transform:rotate(-21.295deg)] will-change-transform motion-reduce:animate-none" />
+      <span className="absolute top-[-118.548%] left-[-0.1174%] h-[343.548%] w-[101.878%] origin-[49.101%_60.775%] animate-[pillMotion_4.62s_cubic-bezier(0.6,0.5,1,1)_both] bg-[url('/images/hero-pill-media.webp')] bg-[length:100%_100%] bg-no-repeat [transform:rotate(-21.295deg)] will-change-transform motion-reduce:animate-none" />
     </span>
   );
 }

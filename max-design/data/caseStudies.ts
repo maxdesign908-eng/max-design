@@ -32,7 +32,7 @@ export type CaseStudy = {
 
 export const caseStudies: CaseStudy[] = [
   {
-    slug: "jams-wheel",
+    slug: "jams-wheel-ai",
     title: "Jams Wheels On Deals",
     badge: "Creative Ads, Powered by AI",
     gridOffset: -11,
@@ -590,7 +590,7 @@ export const caseStudies: CaseStudy[] = [
     { desktop: "/portfolio/carmentis/01.webp", mobile: "/portfolio/carmentis/01-m.webp", w: 2957, h: 2219, mw: 1170, mh: 878 },
     { desktop: "/portfolio/carmentis/02.webp", mobile: "/portfolio/carmentis/02-m.webp", w: 2957, h: 2153, mw: 1170, mh: 852 },
     { desktop: "/portfolio/carmentis/03.webp", mobile: "/portfolio/carmentis/03-m.webp", w: 2957, h: 2220, mw: 1170, mh: 878 } ] } },
-  { slug: "jams-wheel-social-media", title: "Jams Wheels On Deals Social Media",
+  { slug: "jams-wheel", title: "Jams Wheels On Deals",
   items: [1, 2, 3, 4, 5, 6].map((n) => ({
     id: `video-${n}`,
     title: `Jams Wheels On Deals Video ${n}`,

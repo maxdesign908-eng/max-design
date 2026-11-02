@@ -78,6 +78,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "jamswheel-on-deals",
         title: "Jamswheel on Deals",
         image: "/portfolio/branding/jamswheel-on-deals.webp",
+        href: "/portfolio/jams-wheel",
       },
       {
         id: "oh-belly",
@@ -89,12 +90,13 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "brainforce-digital",
         title: "Brainforce Digital",
         image: "/portfolio/branding/brainforce-digital.webp",
+        href: "/portfolio/brainforce-digital",
       },
       {
         id: "leafrooms",
         title: "Leafrooms",
         image: "/portfolio/branding/leafrooms.webp",
-        
+         href: "/portfolio/leafrooms",
       },
       {
         id: "bnu-bestival-edition",
@@ -118,6 +120,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "carmentis",
         title: "Carmentis",
         image: "/portfolio/branding/carmentis.webp",
+        href: "/portfolio/carmentis"
       },
       {
         id: "jazzba",
@@ -192,7 +195,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "jamswheel-on-deals",
         title: "Jamswheel on Deals",
         image: "/portfolio/social-media/jamswheel-on-deals.webp",
-        href: "/portfolio/jams-wheel-social-media",
+        href: "/portfolio/jams-wheel",
       },
       {
         id: "brainforce-digital",
@@ -391,7 +394,7 @@ export const portfolioCategories: PortfolioCategory[] = [
         id: "jams-wheels-on-deals",
         title: "Jams Wheeels on Deals",
         image: "/portfolio/ai-ad-creatives/jams-wheels-on-deals.webp",
-        href: "/portfolio/jams-wheel",
+        href: "/portfolio/jams-wheel-ai",
         variant: "wide",
       },
     ],
