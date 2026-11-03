@@ -1,6 +1,8 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
+import { faqs as ITEMs } from "@/data/faqs";
+
 
 /*
   "Good Questions. Clear Answers." block. Figma: left 97 on the 1920 page.
