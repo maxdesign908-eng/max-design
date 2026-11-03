@@ -43,35 +43,40 @@ body {
 /* ===== MAX Design custom scrollbar (desktop) ===== */
 
 /* Chrome, Edge, Safari, Opera */
+/* ───────── Scrollbar: slim floating red ───────── */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 
-/* light, subtle track so the red bar stands out */
+/* track blends with the black page */
 ::-webkit-scrollbar-track {
-  background: #141414;
+  background: #0a0a0a;
 }
 
-/* slim, bright red thumb with a lit centre (the transparent border makes it thinner and floating) */
+/* thumb: the 3px transparent border makes the visible bar only 4px, floating in the track */
 ::-webkit-scrollbar-thumb {
   min-height: 60px;
-  border: 2px solid transparent;
+  border: 3px solid transparent;
   border-radius: 999px;
   background-clip: padding-box;
-  background-image: linear-gradient(90deg, #ff3b44 0%, #e71117 50%, #b30a10 100%);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  background-image: linear-gradient(180deg, #ff3b44 0%, #e71117 50%, #b30a10 100%);
+  transition: border-width 0.2s ease;
 }
 
+/* on hover the bar grows a little (4px -> 6px) and gets brighter */
 ::-webkit-scrollbar-thumb:hover {
-  background-image: linear-gradient(90deg, #ff6068 0%, #ff1e2d 50%, #d10d15 100%);
+  border-width: 2px;
+  background-image: linear-gradient(180deg, #ff6068 0%, #ff1e2d 50%, #d10d15 100%);
 }
 
+/* while dragging: deeper red */
 ::-webkit-scrollbar-thumb:active {
-  background-image: linear-gradient(90deg, #e71117 0%, #c40d14 50%, #8f0509 100%);
+  border-width: 2px;
+  background-image: linear-gradient(180deg, #e71117 0%, #c40d14 50%, #8f0509 100%);
 }
 
-/* remove the little arrow buttons at the top and bottom */
+/* remove the little arrow buttons */
 ::-webkit-scrollbar-button {
   display: none;
   width: 0;
@@ -79,13 +84,13 @@ body {
 }
 
 ::-webkit-scrollbar-corner {
-  background: #141414;
+  background: #0a0a0a;
 }
 
 /* Firefox only. Chrome 121+ would ignore the styles above if it saw these, so they are fenced off. */
 @supports not selector(::-webkit-scrollbar) {
   html {
     scrollbar-width: thin;
-    scrollbar-color: #e71117 #141414;
+    scrollbar-color: #e71117 #0a0a0a;
   }
 }
