@@ -26,18 +26,10 @@ import { usePathname } from "next/navigation";
     social icons .... top 530, 25 x 25, 6 apart
     copyright ....... top 795, Poppins 16 (Bold "max" + Regular), tracking -8%
 
-  The wordmark (MAX picture + "design") is a link to the home page.
-  The moving logo (video) is a link to the website (same URL as the copyright link).
-
-  CUSTOM CURSOR: CustomCursor sets data-cursor-hot="true" on a link when the red cursor shape
-  touches it, so the hover look of the links and social icons is mirrored with [data-cursor-hot="true"].
-
   FONT: the "design" word needs Poppins weight 200 (ExtraLight). With next/font:
       Poppins({ subsets: ["latin"], weight: ["200", "300", "400", "500", "700"] })
   VIDEO: /videos/logo.mp4 is the same file as in the About section.
 */
-
-const SITE_URL = "https://www.maxdesign.agency";
 
 const COMPANY = [
   { label: "Home", href: "/" },
@@ -83,8 +75,8 @@ const CSS = `
   .ft ul { list-style: none; margin: 0; padding: 0; }
   .ft a { color: inherit; text-decoration: none; }
 
-  /* wordmark: MAX picture + the word "design" (the whole thing is a link to home) */
-  .ft-mark { display: block; position: absolute; top: var(--top); left: calc(97 * var(--m)); width: calc(1724 * var(--m)); height: calc(290 * var(--m)); }
+  /* wordmark: MAX picture + the word "design" */
+  .ft-mark { position: absolute; top: var(--top); left: calc(97 * var(--m)); width: calc(1724 * var(--m)); height: calc(290 * var(--m)); }
   .ft-max { position: absolute; top: calc(1 * var(--m)); left: 0; width: calc(818 * var(--m)); height: calc(204.7 * var(--m)); }
   .ft-max img { display: block; width: 100%; height: 100%; }
   .ft-design {
@@ -99,18 +91,17 @@ const CSS = `
   .ft-col h2 { margin: 0; font-size: var(--h); line-height: var(--hl); height: var(--hl); font-weight: 400; letter-spacing: -0.08em; white-space: nowrap; }
   .ft .ft-body { margin-top: max(10px, calc(31 * var(--u))); display: flex; flex-direction: column; gap: max(10px, calc(16 * var(--u))); }
   .ft a.ft-link { display: block; font-size: var(--l); line-height: var(--ll); font-weight: 400; letter-spacing: -0.08em; color: rgba(255,255,255,0.5); white-space: nowrap; transition: color .25s; }
-  .ft a.ft-link:hover, .ft a.ft-link:focus-visible, .ft a.ft-link[data-cursor-hot="true"] { color: #fff; outline: none; }
+  .ft a.ft-link:hover, .ft a.ft-link:focus-visible { color: #fff; outline: none; }
   .ft-addr { margin: 0; font-style: normal; font-size: var(--l); line-height: max(22px, calc(35 * var(--u))); font-weight: 400; letter-spacing: -0.08em; color: rgba(255,255,255,0.5); }
   .ft-addr span { display: block; white-space: nowrap; }
 
   .ft-soc { display: flex; gap: max(5px, calc(6 * var(--u))); margin: 0; }
   .ft-soc a { display: grid; place-items: center; width: var(--i); height: var(--i); border-radius: max(3px, calc(4 * var(--u))); background: #E71117; transition: background .25s; }
-  .ft-soc a:hover, .ft-soc a:focus-visible, .ft-soc a[data-cursor-hot="true"] { background: #ff1e2d; outline: none; }
+  .ft-soc a:hover, .ft-soc a:focus-visible { background: #ff1e2d; outline: none; }
   .ft-soc svg { width: 62%; height: 62%; display: block; }
 
-  /* moving logo (same video + blend as the About section). The link carries the position and the blend, the video just fills it. */
-  .ft-logo { display: block; position: absolute; top: calc(397 * var(--u) + var(--top)); left: calc(1372 * var(--u)); width: calc(300 * var(--u)); height: calc(300 * var(--u)); mix-blend-mode: screen; z-index: 1; }
-  .ft-logo video { display: block; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+  /* moving logo (same video + blend as the About section) */
+  .ft-logo { position: absolute; top: calc(397 * var(--u) + var(--top)); left: calc(1372 * var(--u)); width: calc(300 * var(--u)); height: calc(300 * var(--u)); object-fit: contain; mix-blend-mode: screen; pointer-events: none; z-index: 1; }
 
   .ft-copy { position: absolute; top: calc(795 * var(--u) + var(--top) + var(--ext)); left: calc(95 * var(--u)); margin: 0; height: calc(24 * var(--u)); min-height: 20px; display: flex; align-items: center; font-size: var(--c); line-height: 1; letter-spacing: -0.08em; font-weight: 400; white-space: nowrap; }
   .ft-copy b { font-weight: 700; }
@@ -201,13 +192,13 @@ export default function Footer() {
       <style>{CSS}</style>
 
       <div className="ft">
-        {/* wordmark: MAX picture + "design" (links to home) */}
-        <Link className="ft-mark" href="/" aria-label="MAX design — home" onClick={goHome}>
+        {/* wordmark: MAX picture + "design" */}
+        <div className="ft-mark" aria-label="Max Design" role="img">
           <div className="ft-max" aria-hidden="true">
             <Image src="/images/footer/max.webp" alt="" width={819} height={205} unoptimized priority />
           </div>
           <p className="ft-design" aria-hidden="true">design</p>
-        </Link>
+        </div>
 
         <div className="ft-line" aria-hidden="true" />
 
@@ -251,24 +242,23 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* the moving logo: same video and blend mode as the About section, now a link to the site */}
-        <a className="ft-logo" href={SITE_URL} aria-label="MAX design website">
-          <video
-            src="/videos/logo.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            aria-hidden="true"
-          />
-        </a>
+        {/* the moving logo: same video and blend mode as the About section */}
+        <video
+          className="ft-logo"
+          src="/videos/logo.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-hidden="true"
+        />
 
-        <p className="ft-copy">
-          <a href={SITE_URL}>
-            <b>max</b>design
-          </a>
-          <span>&nbsp;| 2026. All rights reserved</span>
-        </p>
+       <p className="ft-copy">
+  <a href="https://www.maxdesign.agency">
+    <b>max</b>design
+  </a>
+  <span>&nbsp;| 2026. All rights reserved</span>
+</p>
       </div>
     </footer>
   );

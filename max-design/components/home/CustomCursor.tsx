@@ -8,12 +8,37 @@ const INTERACTIVE =
 const TEXT_FIELD =
   'input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]), textarea, [contenteditable="true"]';
 
+const ATTR = "data-cursor-hot";
+const HOT = `[${ATTR}="true"]`;
+
 // Visible cursor box, relative to the real pointer position.
-// (27x30 svg, shape is ~22.6px wide inside it, wrapper is offset -20 / -26.5)
 const BOX = { left: -17.8, top: -26.5, width: 22.6, height: 30 };
 
 const SHAPE =
   "M37.62 0.00 L34.06 0.00 L34.00 0.38 L33.62 0.75 L32.38 1.25 L31.81 1.75 L30.88 2.25 L30.00 2.94 L27.94 4.12 L27.25 4.69 L26.31 5.12 L23.94 6.81 L23.31 7.06 L22.38 7.81 L21.56 8.12 L20.81 8.75 L19.88 9.25 L17.69 10.81 L15.31 12.12 L14.56 12.75 L12.31 14.12 L11.38 14.88 L10.56 15.19 L9.75 15.81 L7.38 17.25 L6.62 17.88 L5.81 18.25 L5.00 18.88 L4.56 19.06 L3.44 20.00 L2.25 21.38 L1.75 22.38 L1.31 22.94 L0.69 24.50 L0.31 24.88 L0.00 24.94 L0.00 30.50 L0.50 30.75 L0.81 31.38 L1.25 33.94 L1.81 35.44 L2.19 37.56 L2.81 39.38 L3.12 41.31 L3.88 43.62 L4.12 45.31 L4.69 46.75 L5.25 49.75 L6.06 51.50 L7.19 52.44 L7.31 52.94 L10.56 52.94 L10.56 52.69 L10.94 52.31 L11.56 52.06 L12.94 51.81 L15.00 51.06 L16.31 50.81 L18.19 50.06 L19.75 49.81 L21.62 49.06 L22.94 48.81 L25.00 48.06 L26.31 47.81 L28.19 47.06 L29.69 46.81 L30.75 46.31 L32.25 45.88 L34.69 44.06 L36.69 41.38 L37.19 39.81 L37.69 38.75 L37.94 37.31 L38.12 31.00 L38.75 23.62 L38.75 21.25 L38.88 20.50 L38.94 16.00 L39.25 9.50 L39.62 8.19 L39.62 7.31 L39.94 6.88 L39.94 3.38 L39.38 2.94 L38.75 1.38 L37.69 0.44Z";
+
+/* ───────── hover mirroring ─────────
+   Copies every `:hover` rule in the page's stylesheets and swaps `:hover`
+   for `[data-cursor-hot="true"]`, so the cursor touching an element looks
+   exactly like a real hover (Tailwind hover:, group-hover:, plain CSS...). */
+function ruleToText(rule: CSSRule): string {
+  if (rule instanceof CSSStyleRule) {
+    const sel = rule.selectorText;
+    if (!sel.includes(":hover") || sel.includes(ATTR)) return "";
+    return `${sel.split(":hover").join(HOT)}{${rule.style.cssText}}`;
+  }
+
+  const inner = (rule as CSSGroupingRule).cssRules;
+  if (inner && inner.length && !(rule instanceof CSSKeyframesRule)) {
+    let body = "";
+    for (const r of Array.from(inner)) body += ruleToText(r);
+    if (!body) return "";
+    const head = rule.cssText.slice(0, rule.cssText.indexOf("{"));
+    return `${head}{${body}}`;
+  }
+
+  return "";
+}
 
 export default function CustomCursor() {
   const [enabled, setEnabled] = useState(false);
@@ -27,6 +52,61 @@ export default function CustomCursor() {
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);
   }, []);
+
+  // Keep a copy of all :hover styles keyed to [data-cursor-hot].
+  useEffect(() => {
+    if (!enabled) return;
+
+    const gen = document.createElement("style");
+    gen.setAttribute("data-cursor-generated", "true");
+    document.head.appendChild(gen);
+
+    let last = "";
+    let timer = 0;
+
+    const sync = () => {
+      let out = "";
+      for (const sheet of Array.from(document.styleSheets)) {
+        if (sheet.ownerNode === gen) continue;
+        try {
+          for (const r of Array.from(sheet.cssRules)) out += ruleToText(r);
+        } catch {
+          // cross-origin stylesheet, cannot be read
+        }
+      }
+      if (out !== last) {
+        last = out;
+        gen.textContent = out;
+      }
+    };
+
+    const schedule = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(sync, 120);
+    };
+
+    sync();
+
+    const observer = new MutationObserver((records) => {
+      const own = (n: Node) => n === gen || n.parentNode === gen;
+      if (records.every((r) => own(r.target))) return;
+      schedule();
+    });
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+
+    window.addEventListener("load", schedule);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(timer);
+      window.removeEventListener("load", schedule);
+      gen.remove();
+    };
+  }, [enabled]);
 
   useEffect(() => {
     const el = box.current;
@@ -48,12 +128,24 @@ export default function CustomCursor() {
     let lastTime = 0;
 
     let hot: Element | null = null; // element the cursor is "touching"
+    let hotChain: Element[] = []; // that element + its parents (like real :hover)
     let pointerEl: Element | null = null; // element under the real pointer
 
     const setHot = (next: Element | null) => {
       if (next === hot) return;
-      hot?.removeAttribute("data-cursor-hot");
-      next?.setAttribute("data-cursor-hot", "true");
+
+      hotChain.forEach((n) => n.removeAttribute(ATTR));
+      hotChain = [];
+
+      if (next) {
+        let n: Element | null = next;
+        while (n && n !== document.documentElement) {
+          n.setAttribute(ATTR, "true");
+          hotChain.push(n);
+          n = n.parentElement;
+        }
+      }
+
       hot = next;
       el.dataset.hover = next ? "true" : "false";
     };
