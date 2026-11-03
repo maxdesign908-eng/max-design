@@ -1,6 +1,15 @@
 "use client";
 
-import { Fragment, useEffect, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
+import {
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type FormEvent,
+  type KeyboardEvent,
+  type ReactNode,
+} from "react";
 
 /*
   "Start your Project" page (Figma 1920 wide). Everything below the navbar.
@@ -30,6 +39,10 @@ import { Fragment, useEffect, useRef, useState, type CSSProperties, type FormEve
 
   PILLS (services + budget): same hover as the CTA buttons - the red fill rises from the bottom. No transition-delay
   and the border never changes width, so a click reacts at once and the pill never jumps.
+
+  "HOW DID YOU HEAR ABOUT US" is a custom drop-down (SourceSelect): same line-field look as the other fields, a white panel
+  with round pills (like the Contact block). A hidden input named "source" carries the value, so the submit and the
+  WhatsApp message read it from FormData exactly like before.
 */
 
 const ENDPOINT = "/api/contact";
@@ -57,15 +70,24 @@ const BUDGETS = [
   "More than $5000",
 ];
 
+/* options of the "How did you hear about us" drop-down */
+const SOURCES = [
+  "Google",
+  "Facebook",
+  "Instagram",
+  "Email",
+  "Referred by someone",
+  "Other",
+];
+
 type Field = { name: string; label: string; type?: string; required?: boolean };
 
-/* order is row by row: left, right, left, right ... */
+/* order is row by row: left, right, left, right ... (the "How did you hear about us" drop-down comes after these) */
 const FIELDS: Field[] = [
   { name: "name", label: "Name*", required: true },
   { name: "email", label: "Email*", type: "email", required: true },
   { name: "company", label: "Company name*" },
   { name: "phone", label: "Phone Number*", type: "tel" },
-  { name: "source", label: "How did you hear about us*" },
 ];
 
 /* browser autofill paints inputs light blue with dark text: keep them black with white text */
@@ -320,10 +342,148 @@ function Line({ field, tall }: { field: Field; tall?: boolean }) {
   );
 }
 
+/* "How did you hear about us" drop-down: same look as the Line fields (label on top, writing line at the bottom that turns red),
+   the panel is white with round pills like the Contact block. A hidden input named "source" carries the value,
+   so FormData (submit + WhatsApp) finds it exactly like a normal input. */
+function SourceSelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const wrap = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const list = useRef<HTMLUListElement>(null);
+
+  // close when clicking anywhere else
+  useEffect(() => {
+    if (!open) return;
+    const close = (e: PointerEvent) => {
+      if (!wrap.current?.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("pointerdown", close);
+    return () => document.removeEventListener("pointerdown", close);
+  }, [open]);
+
+  // when it opens, move focus to the chosen option (or the first one)
+  useEffect(() => {
+    if (!open) return;
+    const items = list.current?.querySelectorAll<HTMLButtonElement>("button");
+    items?.[Math.max(0, SOURCES.indexOf(value))]?.focus();
+  }, [open, value]);
+
+  function onListKey(e: KeyboardEvent<HTMLUListElement>) {
+    const items = Array.from(list.current?.querySelectorAll<HTMLButtonElement>("button") ?? []);
+    const i = items.indexOf(document.activeElement as HTMLButtonElement);
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      items[(i + 1) % items.length]?.focus();
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      items[(i - 1 + items.length) % items.length]?.focus();
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      setOpen(false);
+      trigger.current?.focus();
+    } else if (e.key === "Tab") {
+      setOpen(false);
+    }
+  }
+
+  return (
+    <div
+      ref={wrap}
+      className="relative flex h-[88px] w-full flex-col border-b border-white/[0.26] transition-colors duration-300 focus-within:border-[#E71117] min-[901px]:h-[max(64px,calc(96.42*var(--u)))]"
+    >
+      <span
+        id="sp-source-label"
+        className="flex h-[24px] items-center text-[length:15px] leading-none font-normal tracking-[-0.04em] text-white min-[901px]:h-[max(18px,calc(24*var(--u)))] min-[901px]:text-[length:max(12px,calc(16*var(--u)))]"
+      >
+        How did you hear about us*
+      </span>
+
+      <input type="hidden" name="source" value={value} />
+
+      <button
+        ref={trigger}
+        id="sp-source"
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls="sp-source-list"
+        aria-labelledby="sp-source-label sp-source"
+        onClick={() => setOpen((o) => !o)}
+        onKeyDown={(e) => {
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            setOpen(true);
+          }
+        }}
+        className={`absolute bottom-0 left-0 m-0 flex h-[48px] w-full cursor-pointer items-center justify-between gap-[8px] border-0 bg-transparent p-0 text-left text-[length:16px] outline-none min-[901px]:h-[max(28px,calc(47.89*var(--u)))] min-[901px]:text-[length:max(14px,calc(18*var(--u)))] ${
+          value ? "text-white" : "text-white/50"
+        }`}
+      >
+        <span className="min-w-0 truncate">{value || "Select an option"}</span>
+        <svg
+          viewBox="0 0 14 8"
+          fill="none"
+          aria-hidden="true"
+          className={`h-[8px] w-[14px] shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+        >
+          <path d="M1 1l6 6 6-6" stroke="white" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+
+      {/* panel: white, 7 padding, round pills */}
+      <ul
+        ref={list}
+        id="sp-source-list"
+        role="listbox"
+        aria-labelledby="sp-source-label"
+        aria-hidden={!open}
+        onKeyDown={onListKey}
+        className={`absolute top-[calc(100%+8px)] left-0 z-30 m-0 flex w-full list-none flex-col gap-[10px] rounded-[6px] bg-white p-[7px] shadow-[0_12px_32px_rgba(0,0,0,0.45)] transition-[opacity,transform] duration-200 ease-out min-[901px]:gap-[max(8px,calc(12*var(--u)))] ${
+          open ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-[6px] opacity-0"
+        }`}
+      >
+        {SOURCES.map((opt) => {
+          const selected = opt === value;
+          return (
+            <li key={opt} role="presentation" className="m-0 p-0">
+              <button
+                type="button"
+                role="option"
+                aria-selected={selected}
+                tabIndex={open ? 0 : -1}
+                onClick={() => {
+                  onChange(opt);
+                  setOpen(false);
+                  trigger.current?.focus();
+                }}
+                className={`group relative isolate flex h-[40px] w-full cursor-pointer items-center overflow-hidden rounded-full border border-solid px-[16px] text-left text-[length:15px] leading-none font-medium tracking-[-0.04em] outline-none transition-[color,border-color] duration-300 hover:border-[#E71117] hover:text-white focus-visible:border-[#E71117] focus-visible:text-white min-[901px]:h-[max(40px,calc(46*var(--u)))] min-[901px]:text-[length:max(14px,calc(16*var(--u)))] ${
+                  selected ? "border-[#E71117] text-white" : "border-black text-black"
+                }`}
+              >
+                {/* red fill that rises from the bottom (same effect as the pills and CTA buttons) */}
+                <span
+                  aria-hidden="true"
+                  className={`pointer-events-none absolute top-0 left-0 z-0 h-[140%] w-full rounded-[50%_50%_0_0/28%_28%_0_0] bg-[#E71117] transition-transform duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] motion-reduce:transition-none ${
+                    selected
+                      ? "-translate-y-[28.6%]"
+                      : "translate-y-[72%] group-hover:-translate-y-[28.6%] group-focus-visible:-translate-y-[28.6%]"
+                  }`}
+                />
+                <span className="relative z-10">{opt}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
 export default function StartProject() {
   const [blockRef, blockIn] = useInView<HTMLDivElement>(0.1);
   const [services, setServices] = useState<string[]>(["Branding"]);
   const [budget, setBudget] = useState<string | null>(null);
+  const [source, setSource] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -345,6 +505,7 @@ export default function StartProject() {
       form.reset();
       setServices([]);
       setBudget(null);
+      setSource("");
       setStatus("sent");
     } catch {
       setStatus("error");
@@ -422,14 +583,16 @@ export default function StartProject() {
                   ))}
                 </div>
 
-                {/* form grid: 1344 wide, 2 columns x 3 rows, gaps 62 */}
+                {/* form grid: 1344 wide, 2 columns x 3 rows, gaps 62.
+                    relative z-20: the open "How did you hear about us" panel must stay above the budget pills below */}
                 <div
                   style={fade(350).style}
-                  className={`${fade(350).className} mt-[40px] grid w-full grid-cols-1 gap-[24px] min-[561px]:grid-cols-2 min-[561px]:gap-x-[32px] min-[901px]:mt-[calc(119*var(--u))] min-[901px]:w-[calc(1344*var(--u))] min-[901px]:gap-x-[calc(62*var(--u))] min-[901px]:gap-y-[calc(62*var(--u))]`}
+                  className={`${fade(350).className} relative z-20 mt-[40px] grid w-full grid-cols-1 gap-[24px] min-[561px]:grid-cols-2 min-[561px]:gap-x-[32px] min-[901px]:mt-[calc(119*var(--u))] min-[901px]:w-[calc(1344*var(--u))] min-[901px]:gap-x-[calc(62*var(--u))] min-[901px]:gap-y-[calc(62*var(--u))]`}
                 >
                   {FIELDS.map((f) => (
                     <Line key={f.name} field={f} />
                   ))}
+                  <SourceSelect value={source} onChange={setSource} />
                 </div>
 
                 {/* budget */}

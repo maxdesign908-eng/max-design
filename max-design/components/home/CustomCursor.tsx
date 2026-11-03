@@ -11,8 +11,9 @@ const TEXT_FIELD =
 const ATTR = "data-cursor-hot";
 const HOT = `[${ATTR}="true"]`;
 
-// Visible cursor box, relative to the real pointer position.
-const BOX = { left: -17.8, top: -26.5, width: 22.6, height: 30 };
+// Visible cursor shape is 30px tall (top: -26.5). Only the TOP 50% (15px) selects.
+// The bottom half of the cursor does nothing.
+const BOX = { left: -17.8, top: -26.5, width: 22.6, height: 15 };
 
 const SHAPE =
   "M37.62 0.00 L34.06 0.00 L34.00 0.38 L33.62 0.75 L32.38 1.25 L31.81 1.75 L30.88 2.25 L30.00 2.94 L27.94 4.12 L27.25 4.69 L26.31 5.12 L23.94 6.81 L23.31 7.06 L22.38 7.81 L21.56 8.12 L20.81 8.75 L19.88 9.25 L17.69 10.81 L15.31 12.12 L14.56 12.75 L12.31 14.12 L11.38 14.88 L10.56 15.19 L9.75 15.81 L7.38 17.25 L6.62 17.88 L5.81 18.25 L5.00 18.88 L4.56 19.06 L3.44 20.00 L2.25 21.38 L1.75 22.38 L1.31 22.94 L0.69 24.50 L0.31 24.88 L0.00 24.94 L0.00 30.50 L0.50 30.75 L0.81 31.38 L1.25 33.94 L1.81 35.44 L2.19 37.56 L2.81 39.38 L3.12 41.31 L3.88 43.62 L4.12 45.31 L4.69 46.75 L5.25 49.75 L6.06 51.50 L7.19 52.44 L7.31 52.94 L10.56 52.94 L10.56 52.69 L10.94 52.31 L11.56 52.06 L12.94 51.81 L15.00 51.06 L16.31 50.81 L18.19 50.06 L19.75 49.81 L21.62 49.06 L22.94 48.81 L25.00 48.06 L26.31 47.81 L28.19 47.06 L29.69 46.81 L30.75 46.31 L32.25 45.88 L34.69 44.06 L36.69 41.38 L37.19 39.81 L37.69 38.75 L37.94 37.31 L38.12 31.00 L38.75 23.62 L38.75 21.25 L38.88 20.50 L38.94 16.00 L39.25 9.50 L39.62 8.19 L39.62 7.31 L39.94 6.88 L39.94 3.38 L39.38 2.94 L38.75 1.38 L37.69 0.44Z";
@@ -38,6 +39,21 @@ function ruleToText(rule: CSSRule): string {
   }
 
   return "";
+}
+
+/* Only elements the visitor can really see and click count.
+   (closed drop-down options are invisible but still sit on top of the form buttons) */
+function usable(node: Element): boolean {
+  if (node.closest('[aria-hidden="true"]')) return false;
+  if ((node as HTMLButtonElement).disabled) return false;
+
+  const cs = getComputedStyle(node);
+  return (
+    cs.pointerEvents !== "none" &&
+    cs.visibility !== "hidden" &&
+    cs.display !== "none" &&
+    Number(cs.opacity) > 0.01
+  );
 }
 
 export default function CustomCursor() {
@@ -148,11 +164,33 @@ export default function CustomCursor() {
 
       hot = next;
       el.dataset.hover = next ? "true" : "false";
+
+      // The real pointer is not over this element (only the cursor shape is),
+      // so fire the "mouse enter" ourselves. This makes onMouseEnter handlers
+      // (like the About tabs) run, the same as a real hover.
+      if (next && next !== pointerEl && next.isConnected) {
+        try {
+          next.dispatchEvent(
+            new MouseEvent("mouseover", {
+              bubbles: true,
+              cancelable: true,
+              view: window,
+              clientX: currentX,
+              clientY: currentY,
+              relatedTarget: null,
+            })
+          );
+        } catch {
+          // a page handler failed, the cursor must keep working
+        }
+      }
     };
 
-    // Find the interactive element that overlaps the visible cursor shape.
+    // Find the interactive element that overlaps the top half of the cursor shape.
     const findHot = (): Element | null => {
-      if (pointerEl && pointerEl.isConnected) return pointerEl;
+      if (pointerEl && pointerEl.isConnected && usable(pointerEl)) {
+        return pointerEl;
+      }
 
       const l = currentX + BOX.left;
       const t = currentY + BOX.top;
@@ -166,7 +204,7 @@ export default function CustomCursor() {
         const rect = node.getBoundingClientRect();
         const w = Math.min(r, rect.right) - Math.max(l, rect.left);
         const h = Math.min(b, rect.bottom) - Math.max(t, rect.top);
-        if (w > 0 && h > 0 && w * h > bestArea) {
+        if (w > 0 && h > 0 && w * h > bestArea && usable(node)) {
           best = node;
           bestArea = w * h;
         }
@@ -255,9 +293,12 @@ export default function CustomCursor() {
     // If the cursor visually touches an element but the real pointer is
     // slightly outside it, send the click to that element.
     const handleClick = (e: MouseEvent) => {
-      if (!e.isTrusted || !hot) return;
+      if (!e.isTrusted || !hot || !hot.isConnected) return;
+      if ((hot as HTMLButtonElement).disabled) return;
+
       const t = e.target as Node | null;
       if (t && hot.contains(t)) return;
+
       e.preventDefault();
       e.stopPropagation();
       (hot as HTMLElement).click();
