@@ -253,9 +253,12 @@ export default function Footer() {
           aria-hidden="true"
         />
 
-        <p className="ft-copy">
-          <b>max</b>design | 2026. All rights reserved
-        </p>
+       <p className="ft-copy">
+  <a href="https://www.maxdesign.agency">
+    <b>max</b>design
+  </a>
+  <span>&nbsp;| 2026. All rights reserved</span>
+</p>
       </div>
     </footer>
   );
