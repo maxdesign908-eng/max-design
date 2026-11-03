@@ -31,6 +31,9 @@ import {
     button ......... 681 x 56, full round, #E71117, text Medium 16
     popover ........ 300 wide, white, 7 padding, pills 46 high with 16 between
 
+  Drop-down options (Service / Budget): same hover as the pills on the "Start your Project" page - the red fill rises
+  from the bottom, the text turns white and the border turns red. The chosen option stays red.
+
   Background: the red-glass picture, 3817 x 2147, turned 180deg, blur 12 (Figma 24), opacity 1.
   I fitted it on your screenshot (0.9998 match), so top / left are relative to this section.
 
@@ -372,13 +375,20 @@ function Select({
                   onOpenChange(false);
                   trigger.current?.focus();
                 }}
-                className={`flex h-[max(40px,calc(46*var(--u)))] w-full cursor-pointer items-center rounded-full border border-black px-[max(14px,calc(16*var(--u)))] text-left text-[length:var(--ps)] leading-none font-medium tracking-[-0.04em] outline-none transition-colors duration-150 focus-visible:bg-black/[0.06] ${
-                  selected
-                    ? "bg-black text-white"
-                    : "bg-white text-black hover:bg-black/[0.06]"
+                className={`group relative isolate flex h-[max(40px,calc(46*var(--u)))] w-full cursor-pointer items-center overflow-hidden rounded-full border border-solid px-[max(14px,calc(16*var(--u)))] text-left text-[length:var(--ps)] leading-none font-medium tracking-[-0.04em] outline-none transition-[color,border-color] duration-300 hover:border-[#E71117] hover:text-white focus-visible:border-[#E71117] focus-visible:text-white ${
+                  selected ? "border-[#E71117] text-white" : "border-black text-black"
                 }`}
               >
-                {opt}
+                {/* red fill that rises from the bottom (same effect as the pills on the Start your Project page) */}
+                <span
+                  aria-hidden="true"
+                  className={`pointer-events-none absolute top-0 left-0 z-0 h-[140%] w-full rounded-[50%_50%_0_0/28%_28%_0_0] bg-[#E71117] transition-transform duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] motion-reduce:transition-none ${
+                    selected
+                      ? "-translate-y-[28.6%]"
+                      : "translate-y-[72%] group-hover:-translate-y-[28.6%] group-focus-visible:-translate-y-[28.6%]"
+                  }`}
+                />
+                <span className="relative z-10">{opt}</span>
               </button>
             </li>
           );
