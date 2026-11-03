@@ -7,15 +7,13 @@ import WhatWeBuild from "@/components/home/WhatWeBuild";
 export default function ServicesPage() {
   return (
     <>
-      <div className="w-full bg-black">
-        <Navbar />
-      </div>
+      <Navbar />
 
       <main className="min-h-screen bg-black text-white">
         <WhatWeBuild />
         <LogoMarquee />
-         <Contact/>
-         <Footer />
+        <Contact />
+        <Footer />
       </main>
     </>
   );

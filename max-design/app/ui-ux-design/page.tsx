@@ -7,9 +7,9 @@ import UiDesign from "@/components/services/UIDesign";
 export default function UiUxPage() {
   return (
     <>
-      <div className="w-full bg-black">
+     
         <Navbar />
-      </div>
+    
 
       <main className="min-h-screen bg-black text-white">
         <UiDesign/>

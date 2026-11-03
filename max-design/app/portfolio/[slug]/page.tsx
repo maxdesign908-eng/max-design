@@ -43,9 +43,9 @@ export default async function CaseStudyPage({ params }: Params) {
 
   return (
     <>
-      <div className="w-full bg-black">
+
         <Navbar />
-      </div>
+    
 
       <main className="min-h-screen bg-black text-white">
         <CaseStudyView study={study} />

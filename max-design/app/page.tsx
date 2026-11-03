@@ -25,9 +25,8 @@ export default function Home() {
   return (
     <>
       <JsonLd data={faqSchema} />
-
-      <HomeStage>
         <Navbar />
+      <HomeStage>
         <Hero />
       </HomeStage>
       

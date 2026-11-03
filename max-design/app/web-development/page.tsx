@@ -8,9 +8,7 @@ import Webdevelopment from "@/components/services/Webdevelopment";
 export default function WebDevelopmentPage() {
   return (
     <>
-      <div className="w-full bg-black">
         <Navbar />
-      </div>
 
       <main className="min-h-screen bg-black text-white">
         <Webdevelopment/>

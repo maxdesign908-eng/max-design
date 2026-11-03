@@ -8,9 +8,9 @@ import ContactService from "@/components/services/ContactService";
 export default function BrandPage() {
   return (
     <>
-      <div className="w-full bg-black">
+      
         <Navbar />
-      </div>
+      
 
       <main className="min-h-screen bg-black text-white">
         <BrandDesign/>

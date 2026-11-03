@@ -36,7 +36,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <div className="@container w-full bg-black [--u:calc(min(100cqw,1920px)_/_1920)] [--k:var(--u)] [@media(max-width:900px)]:[--k:1px]">
+    <div className="@container sticky top-0 z-50 w-full bg-black [--u:calc(min(100cqw,1920px)_/_1920)] [--k:var(--u)] [@media(max-width:900px)]:[--k:1px]">
       <header className="relative z-[1] w-full">
         <div className="mx-auto box-border flex h-[calc(98*var(--k))] w-[calc(1728*var(--k))] items-center justify-between py-[calc(21*var(--k))] [@media(max-width:900px)]:h-[72px] [@media(max-width:900px)]:w-[min(1728px,100%_-_2_*_clamp(16px,5vw,96px))] [@media(max-width:900px)]:py-[12px]">
 

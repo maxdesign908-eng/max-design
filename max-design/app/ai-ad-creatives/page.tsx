@@ -8,9 +8,9 @@ import Aiadcreatives from "@/components/services/Aiadcreatives";
 export default function AiAdCreativesPage() {
   return (
     <>
-      <div className="w-full bg-black">
+      
         <Navbar />
-      </div>
+    
 
       <main className="min-h-screen bg-black text-white">
         <Aiadcreatives/>

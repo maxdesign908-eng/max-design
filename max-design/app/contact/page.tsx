@@ -8,9 +8,8 @@ import StartProject from "@/components/StartProject";
 export default function ContactPage() {
   return (
     <>
-      <div className="w-full bg-black">
         <Navbar />
-      </div>
+      
 
       <main className="min-h-screen bg-black text-white">
         <StartProject/>

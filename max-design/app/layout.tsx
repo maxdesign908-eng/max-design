@@ -74,6 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={poppins.variable}>
       <body className="bg-black">
+        
         <JsonLd data={organizationSchema} />
         <JsonLd data={websiteSchema} />
         <CustomCursor />
