@@ -37,6 +37,10 @@ import {
   "Book A Call Directly": a next/link to /book-a-call (like the links in your Navbar), so the
   browser does not reload the page.
 
+  CUSTOM CURSOR: CustomCursor sets data-cursor-hot="true" on a link / button when the red
+  cursor shape touches it, so the hover look of "Book A Call Directly", "Send Your Query" and
+  "Send on WhatsApp" is mirrored with data-[cursor-hot=true]: (and group-data-[cursor-hot=true]:).
+
   "Send on WhatsApp": checks the same required fields, then opens
   https://wa.me/<number>?text=<the form details> in a new tab.
 */
@@ -633,7 +637,7 @@ export default function Contact({
                 className={`btn mt-[max(32px,calc(59*var(--u)))] flex h-[max(48px,calc(56*var(--u)))] w-full cursor-pointer items-center justify-center rounded-full px-[16px] text-center text-white transition-colors duration-300 outline-none focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-white disabled:cursor-wait disabled:opacity-80 ${
                   status === "error"
                     ? "bg-[#9d0d12]"
-                    : "bg-[#E71117] hover:bg-[#ff1e2d]"
+                    : "bg-[#E71117] hover:bg-[#ff1e2d] data-[cursor-hot=true]:bg-[#ff1e2d]"
                 }`}
               >
                 {buttonText}
@@ -643,9 +647,9 @@ export default function Contact({
               <button
                 type="button"
                 onClick={onWhatsApp}
-                className="btn group mt-[max(14px,calc(20*var(--u)))] flex h-[max(48px,calc(56*var(--u)))] w-full cursor-pointer items-center justify-center gap-[max(8px,calc(10*var(--u)))] rounded-full border border-[#25D366] px-[16px] text-center text-white transition-colors duration-300 outline-none hover:bg-[#25D366] focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-white"
+                className="btn group mt-[max(14px,calc(20*var(--u)))] flex h-[max(48px,calc(56*var(--u)))] w-full cursor-pointer items-center justify-center gap-[max(8px,calc(10*var(--u)))] rounded-full border border-[#25D366] px-[16px] text-center text-white transition-colors duration-300 outline-none hover:bg-[#25D366] data-[cursor-hot=true]:bg-[#25D366] focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-white"
               >
-                <span className="text-[#25D366] transition-colors duration-300 group-hover:text-white">
+                <span className="text-[#25D366] transition-colors duration-300 group-hover:text-white group-data-[cursor-hot=true]:text-white">
                   <WhatsAppIcon />
                 </span>
                 Send on WhatsApp
@@ -666,7 +670,7 @@ export default function Contact({
               </p>
               <Link
                 href={callHref}
-                className="text-[length:var(--ks)] leading-[1.3] font-normal tracking-[-0.04em] whitespace-nowrap text-[#E71117] underline decoration-1 underline-offset-[4px] transition-colors duration-300 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-[4px] focus-visible:outline-[#ff1e2d]"
+                className="text-[length:var(--ks)] leading-[1.3] font-normal tracking-[-0.04em] whitespace-nowrap text-[#E71117] underline decoration-1 underline-offset-[4px] transition-colors duration-300 hover:text-white data-[cursor-hot=true]:text-white focus-visible:outline-2 focus-visible:outline-offset-[4px] focus-visible:outline-[#ff1e2d]"
               >
                 Book A Call Directly
               </Link>

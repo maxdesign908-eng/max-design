@@ -78,7 +78,7 @@ export default function Navbar() {
                   <Link
                     href={href}
                     onClick={() => setOpen(false)}
-                    className="inline-block pb-[calc(2*var(--k))] text-[length:calc(18*var(--k))] leading-[normal] font-normal text-white whitespace-nowrap no-underline transition-[color] duration-200 ease-[ease] [&:hover]:text-(color:--color-accent) [@media(max-width:900px)]:block [@media(max-width:900px)]:py-[16px] [@media(max-width:900px)]:text-[length:22px]"
+                    className="inline-block pb-[calc(2*var(--k))] text-[length:calc(18*var(--k))] leading-[normal] font-normal text-white whitespace-nowrap no-underline transition-[color] duration-200 ease-[ease] [&:hover]:text-(color:--color-accent) data-[cursor-hot=true]:text-(color:--color-accent) [@media(max-width:900px)]:block [@media(max-width:900px)]:py-[16px] [@media(max-width:900px)]:text-[length:22px]"
                   >
                     {label}
                   </Link>
