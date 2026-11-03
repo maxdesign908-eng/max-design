@@ -26,10 +26,14 @@ import { usePathname } from "next/navigation";
     social icons .... top 530, 25 x 25, 6 apart
     copyright ....... top 795, Poppins 16 (Bold "max" + Regular), tracking -8%
 
+  The moving logo (video) is a link to the website (same URL as the copyright link).
+
   FONT: the "design" word needs Poppins weight 200 (ExtraLight). With next/font:
       Poppins({ subsets: ["latin"], weight: ["200", "300", "400", "500", "700"] })
   VIDEO: /videos/logo.mp4 is the same file as in the About section.
 */
+
+const SITE_URL = "https://www.maxdesign.agency";
 
 const COMPANY = [
   { label: "Home", href: "/" },
@@ -100,8 +104,9 @@ const CSS = `
   .ft-soc a:hover, .ft-soc a:focus-visible { background: #ff1e2d; outline: none; }
   .ft-soc svg { width: 62%; height: 62%; display: block; }
 
-  /* moving logo (same video + blend as the About section) */
-  .ft-logo { position: absolute; top: calc(397 * var(--u) + var(--top)); left: calc(1372 * var(--u)); width: calc(300 * var(--u)); height: calc(300 * var(--u)); object-fit: contain; mix-blend-mode: screen; pointer-events: none; z-index: 1; }
+  /* moving logo (same video + blend as the About section). The link carries the position and the blend, the video just fills it. */
+  .ft-logo { display: block; position: absolute; top: calc(397 * var(--u) + var(--top)); left: calc(1372 * var(--u)); width: calc(300 * var(--u)); height: calc(300 * var(--u)); mix-blend-mode: screen; z-index: 1; }
+  .ft-logo video { display: block; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
 
   .ft-copy { position: absolute; top: calc(795 * var(--u) + var(--top) + var(--ext)); left: calc(95 * var(--u)); margin: 0; height: calc(24 * var(--u)); min-height: 20px; display: flex; align-items: center; font-size: var(--c); line-height: 1; letter-spacing: -0.08em; font-weight: 400; white-space: nowrap; }
   .ft-copy b { font-weight: 700; }
@@ -242,23 +247,24 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* the moving logo: same video and blend mode as the About section */}
-        <video
-          className="ft-logo"
-          src="/videos/logo.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          aria-hidden="true"
-        />
+        {/* the moving logo: same video and blend mode as the About section, now a link to the site */}
+        <a className="ft-logo" href={SITE_URL} aria-label="MAX design website">
+          <video
+            src="/videos/logo.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            aria-hidden="true"
+          />
+        </a>
 
-       <p className="ft-copy">
-  <a href="https://www.maxdesign.agency">
-    <b>max</b>design
-  </a>
-  <span>&nbsp;| 2026. All rights reserved</span>
-</p>
+        <p className="ft-copy">
+          <a href={SITE_URL}>
+            <b>max</b>design
+          </a>
+          <span>&nbsp;| 2026. All rights reserved</span>
+        </p>
       </div>
     </footer>
   );
