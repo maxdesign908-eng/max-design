@@ -64,6 +64,8 @@ const SERVICES: Service[] = [
   },
 ];
 
+
+
 /* Same hover effect as the CTA button: a red fill rises from the bottom of the pill (no red outline),
    the dot and the arrow circle turn white, the arrow turns red and tilts 45deg. */
 function ArrowPill({ active }: { active: boolean }) {
@@ -121,6 +123,12 @@ function ArrowPill({ active }: { active: boolean }) {
 export default function WhatWeBuild() {
   const [active, setActive] = useState(0);
 
+  // Desktop with a mouse: send the original lossless images (maximum sharpness).
+// Phones / tablets keep the optimized, lighter version (better PageSpeed).
+const [sharp, setSharp] = useState(false);
+useEffect(() => {
+  setSharp(window.matchMedia("(min-width: 821px) and (hover: hover)").matches);
+}, []);
   // entrance animation: starts once, when the section is scrolled into view
   const sectionRef = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(false);
@@ -267,17 +275,18 @@ export default function WhatWeBuild() {
           {/* Service images */}
           <div className="absolute top-148 right-24 left-24 h-574 overflow-hidden rounded-[calc(18*var(--spacing))] max-[820px]:relative max-[820px]:top-0 max-[820px]:right-0 max-[820px]:left-0 max-[820px]:mt-16 max-[820px]:aspect-[851/574] max-[820px]:h-auto">
             {SERVICES.map((service, i) => (
-              <Image
-                key={service.image}
-                src={service.image}
-                alt={i === active ? service.alt : ""}
-                fill
-                sizes="(max-width: 820px) 100vw, 860px"
-                priority={i === 0}
-                className={`object-cover transition-[opacity,scale] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
-                  i === active ? "scale-100 opacity-100" : "scale-[1.07] opacity-0"
-                }`}
-              />
+       <Image
+  key={service.image}
+  src={service.image}
+  alt={i === active ? service.alt : ""}
+  fill
+  unoptimized={sharp}
+  quality={95}
+  sizes="(max-width: 820px) 100vw, 50vw"
+  className={`object-cover transition-[opacity,scale] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+    i === active ? "scale-100 opacity-100" : "scale-[1.07] opacity-0"
+  }`}
+/>
             ))}
           </div>
         </div>
