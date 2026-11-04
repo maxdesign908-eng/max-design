@@ -27,6 +27,28 @@ export default function WhatsAppButton() {
         ${visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0 pointer-events-none"}
       `}
     >
+      {/* Floating + breathing animation (self-contained, no extra config needed) */}
+      <style>{`
+        @keyframes maxWhatsappFloat {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50%      { transform: translateY(-12px) scale(1.12); }
+        }
+        @keyframes maxWhatsappGlow {
+          0%, 100% { opacity: 0.25; transform: scale(0.8); }
+          50%      { opacity: 0.6;  transform: scale(1.35); }
+        }
+        .max-whatsapp-float {
+          animation: maxWhatsappFloat 3s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+        }
+        .max-whatsapp-glow {
+          animation: maxWhatsappGlow 3s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .max-whatsapp-float,
+          .max-whatsapp-glow { animation: none; }
+        }
+      `}</style>
+
       <a
         href={whatsappUrl}
         target="_blank"
@@ -38,10 +60,19 @@ export default function WhatsAppButton() {
           transition-transform duration-300 ease-out
           hover:-translate-y-1 hover:scale-105
           active:translate-y-0 active:scale-95
-          focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#25D366]/50
+          focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-red-500/50
           focus-visible:rounded-full
         "
       >
+        {/* Soft pulsing red glow behind the bot */}
+        <span
+          aria-hidden="true"
+          className="
+            max-whatsapp-glow pointer-events-none absolute inset-0
+            rounded-full bg-red-500/50 blur-xl
+          "
+        />
+
         <Image
           src="/bot.png"
           alt="MAX Design chat"
@@ -49,6 +80,7 @@ export default function WhatsAppButton() {
           height={136}
           priority
           className="
+            max-whatsapp-float relative
             h-full w-full select-none object-contain
             drop-shadow-[0_8px_14px_rgba(0,0,0,0.45)]
             transition-[filter] duration-300
