@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 const NUMBER = "923394011842";
-const MESSAGE = "Hi! 👋 Thank you for reaching out to us. How can we help you today?";
+const MESSAGE = "Hi! I'm interested in your business services and would like to discuss a possible collaboration.";
 
 export default function WhatsAppButton() {
   const [visible, setVisible] = useState(false);
