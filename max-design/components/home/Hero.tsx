@@ -56,7 +56,7 @@ export default function Hero() {
         }
       `}</style>
 
-      <h1 className="absolute top-[calc(182*var(--u))] left-[calc(84*var(--u))] m-0 w-[calc(1682.93*var(--u))] text-[length:calc(164.85*var(--u))] leading-[calc(170.34*var(--u))] font-medium tracking-[-0.04em] text-white uppercase [@media(max-width:900px)]:static [@media(max-width:900px)]:w-full [@media(max-width:900px)]:text-[length:var(--fs)] [@media(max-width:900px)]:leading-[1.033]">
+      <h1 className="absolute top-[calc(82*var(--u))] left-[calc(84*var(--u))] m-0 w-[calc(1682.93*var(--u))] text-[length:calc(164.85*var(--u))] leading-[calc(170.34*var(--u))] font-medium tracking-[-0.04em] text-white uppercase [@media(max-width:900px)]:static [@media(max-width:900px)]:w-full [@media(max-width:900px)]:text-[length:var(--fs)] [@media(max-width:900px)]:leading-[1.033]">
         <span className="block overflow-hidden">
           <span className="animate-[lineUp_1.1s_cubic-bezier(0.16,1,0.3,1)_both] motion-reduce:animate-none [animation-delay:100ms] block whitespace-nowrap [@media(max-width:900px)]:whitespace-normal">
             Design That LEAVE
