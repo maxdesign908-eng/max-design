@@ -17,9 +17,11 @@ import CtaButton from "./CtaButton";
 
   Vertical rhythm (Figma px, taken from your numbers):
     space above the heading 108 (so it does not touch the section above)
-    heading frame 236  ->  80  ->  row 1 cards (803)  ->  42.79  ->  title (45)  ->  84
-    ->  row 2 cards (876 / 875)  ->  42.79  ->  title (45)  ->  98.35  ->  banner (802.31)
-    ->  42.79  ->  title (45)  ->  126  ->  "View All Projects" button (56)
+    heading frame 236  ->  80  ->  row 1 cards (803)  ->  42.79  ->  title (36)  ->  88.2
+    ->  row 2 cards (876 / 875)  ->  42.79  ->  title (36)  ->  108
+    ->  banner (802.31)  ->  42.79  ->  title (36)  ->  135.2  ->  "View All Projects" button (56)
+
+  Project titles: Poppins Bold 32px, line-height 112%, letter-spacing -4%, uppercase.
 
   The card images are your exported frames: the white tag, the rounded corners (14px) and the
   0.53px white outline are already inside the image files, so every card keeps its exact
@@ -33,13 +35,13 @@ type Work = {
   href: string; // case-study page this card opens
   w: number; // Figma width
   h: number; // Figma height
-  titleShift?: number; // Figma px the title sits left of the card (OH BELLY: -2)
+  titleShift?: number; // Figma px the title sits right (+) / left (-) of the card's left edge
 };
 
 const row1: Work[] = [
   { title: "JAMSWHEELS ON DEALS", tags: "Social Media, Web Development, Branding", src: "jamswheels-on-deals", href: "/portfolio/jams-wheel", w: 559, h: 803 },
-  { title: "ROCHE MELGAR", tags: "Social Media, Branding, AI Visuals", src: "roche-melgar", href: "/portfolio/roche-melgar", w: 560, h: 803 },
-  { title: "OH BELLY", tags: "Branding Identity", src: "oh-belly", href: "/portfolio/oh-belly", w: 559, h: 803, titleShift: -2 },
+  { title: "ROCHE MELGAR", tags: "Social Media, Branding, AI Visuals", src: "roche-melgar", href: "/portfolio/roche-melgar", w: 560, h: 803, titleShift: 8 },
+  { title: "OH BELLY", tags: "Branding Identity", src: "oh-belly", href: "/portfolio/oh-belly", w: 559, h: 803 },
 ];
 const row2: Work[] = [
   { title: "LEAFROOMS", tags: "Social Media", src: "leafrooms", href: "/portfolio/leafrooms", w: 851, h: 876.08 },
@@ -60,14 +62,14 @@ const CSS = `
     --u: calc(min(100cqw, 1920px) / 1920);
     --k: var(--u);
     --hs: max(40px, calc(80 * var(--u)));   /* heading */
-    --ts: calc(48 * var(--u));              /* project titles */
+    --ts: calc(32 * var(--u));              /* project titles */
     --pad: 0px;
   }
   @media (max-width: 767px) {
     .wf {
       --k: 1px;
       --hs: clamp(40px, 11.5cqw, 72px);
-      --ts: clamp(22px, 7cqw, 40px);
+      --ts: 32px;
       --pad: clamp(16px, 5cqw, 48px);
     }
   }
@@ -104,7 +106,7 @@ function Project({ work }: { work: Work }) {
         </span>
       </div>
       <h3
-        className="m-0 mt-[calc(42.79*var(--u))] ml-[calc(var(--shift,0)*var(--u))] text-[length:var(--ts)] leading-[0.9375] font-medium tracking-[-0.0833em] whitespace-nowrap text-white uppercase max-[767px]:mt-[14px] max-[767px]:ml-0 max-[767px]:whitespace-normal"
+        className="m-0 mt-[calc(42.79*var(--u))] ml-[calc(var(--shift,0)*var(--k))] [font-family:var(--font-poppins,Poppins),sans-serif] text-[length:var(--ts)] leading-[1.12] font-bold tracking-[-0.04em] whitespace-nowrap text-white uppercase max-[767px]:mt-[14px] max-[767px]:whitespace-normal"
         style={{ "--shift": titleShift } as CSSProperties}
       >
         {title}
@@ -188,19 +190,19 @@ export default function Portfolio() {
         </div>
 
         {/* ───────── row 2: two big cards ───────── */}
-        <div className="mt-[calc(83.99*var(--u))] grid grid-cols-2 items-start gap-x-[calc(24*var(--u))] max-[767px]:mt-[36px] max-[767px]:grid-cols-1 max-[767px]:gap-y-[36px]">
+        <div className="mt-[calc(88.2*var(--u))] grid grid-cols-2 items-start gap-x-[calc(24*var(--u))] max-[767px]:mt-[36px] max-[767px]:grid-cols-1 max-[767px]:gap-y-[36px]">
           {row2.map((work) => (
             <Project key={work.src} work={work} />
           ))}
         </div>
 
         {/* ───────── banner ───────── */}
-        <div className="mt-[calc(98.35*var(--u))] max-[767px]:mt-[36px]">
+        <div className="mt-[calc(108*var(--u))] max-[767px]:mt-[36px]">
           <Project work={banner} />
         </div>
 
         {/* ───────── button ───────── */}
-        <div className="mt-[calc(126.07*var(--u))] flex justify-center max-[767px]:mt-[48px]">
+        <div className="mt-[calc(135.2*var(--u))] flex justify-center max-[767px]:mt-[48px]">
           <CtaButton href="/portfolio" label="View All Projects" width={207} />
         </div>
       </div>
