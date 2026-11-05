@@ -75,7 +75,7 @@ export default function Hero() {
         </span>
       </h1>
 
-      <p className="animate-[fadeUp_0.9s_cubic-bezier(0.22,1,0.36,1)_both] motion-reduce:animate-none [animation-delay:700ms] absolute top-[calc(718*var(--u))] left-[calc(94*var(--u))] m-0 w-[calc(797.71*var(--u))] text-[length:calc(38*var(--u))] leading-[calc(59.19*var(--u))] font-normal tracking-[-0.04em] text-white [@media(max-width:900px)]:static [@media(max-width:900px)]:mt-[28px] [@media(max-width:900px)]:w-full [@media(max-width:900px)]:max-w-[40ch] [@media(max-width:900px)]:text-[length:clamp(17px,4.6vw,30px)] [@media(max-width:900px)]:leading-[1.55]">
+      <p className="animate-[fadeUp_0.9s_cubic-bezier(0.22,1,0.36,1)_both] motion-reduce:animate-none [animation-delay:700ms] absolute top-[calc(618*var(--u))] left-[calc(94*var(--u))] m-0 w-[calc(797.71*var(--u))] text-[length:calc(38*var(--u))] leading-[calc(59.19*var(--u))] font-normal tracking-[-0.04em] text-white [@media(max-width:900px)]:static [@media(max-width:900px)]:mt-[28px] [@media(max-width:900px)]:w-full [@media(max-width:900px)]:max-w-[40ch] [@media(max-width:900px)]:text-[length:clamp(17px,4.6vw,30px)] [@media(max-width:900px)]:leading-[1.55]">
         Building brands from the ground up with strategy, creativity, and a clear purpose.
       </p>
 
@@ -83,7 +83,7 @@ export default function Hero() {
         href="/contact"
         label="Let’s Connect"
         width={189}
-        className="animate-[fadeUp_0.9s_cubic-bezier(0.22,1,0.36,1)_both] motion-reduce:animate-none [animation-delay:850ms] absolute top-[calc(860*var(--u))] left-[calc(96*var(--u))] [@media(max-width:900px)]:static [@media(max-width:900px)]:mt-[28px] [@media(max-width:900px)]:w-full [@media(max-width:900px)]:max-w-[360px] [@media(max-width:900px)]:[--k:1.1px]"
+        className="animate-[fadeUp_0.9s_cubic-bezier(0.22,1,0.36,1)_both] motion-reduce:animate-none [animation-delay:850ms] absolute top-[calc(760*var(--u))] left-[calc(96*var(--u))] [@media(max-width:900px)]:static [@media(max-width:900px)]:mt-[28px] [@media(max-width:900px)]:w-full [@media(max-width:900px)]:max-w-[360px] [@media(max-width:900px)]:[--k:1.1px]"
       />
 
       {/* Same media div + HeroVideo, wrapped by ScrollGrow */}
