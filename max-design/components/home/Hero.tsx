@@ -66,7 +66,7 @@ export default function Hero() {
           <span className="animate-[lineUp_1.1s_cubic-bezier(0.16,1,0.3,1)_both] motion-reduce:animate-none [animation-delay:250ms] flex items-start whitespace-nowrap [@media(max-width:900px)]:flex-wrap">
           <PillMedia className="mt-[calc(24.66*var(--u))] ml-[calc(12*var(--u))] h-[calc(124*var(--u))] w-[calc(852*var(--u))] flex-none [@media(max-width:900px)]:mt-[0.2em] [@media(max-width:900px)]:mb-[0.04em] [@media(max-width:900px)]:ml-0 [@media(max-width:900px)]:h-[0.752em] [@media(max-width:900px)]:w-[5.168em]" />
           <span className="relative top-[calc(6*var(--u))] ml-[calc(47*var(--u))] [@media(max-width:900px)]:top-0 [@media(max-width:900px)]:ml-0">
-            a LASTING
+            a LASTINGgggggg
           </span>
         </span>
         </span>
