@@ -69,7 +69,7 @@ const CSS = `
     .wf {
       --k: 1px;
       --hs: clamp(40px, 11.5cqw, 72px);
-      --ts: 32px;
+      --ts: clamp(18px, 5.6cqw, 24px);
       --pad: clamp(16px, 5cqw, 48px);
     }
   }
