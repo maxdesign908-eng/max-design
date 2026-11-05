@@ -8,6 +8,7 @@
 <head>
   <meta charset="utf-8"/>
   <title>XML Sitemap</title>
+  <link rel="icon" type="image/png" href="/icon.png"/>
   <style>
     body{margin:0;background:#fff;color:#222;font-family:Helvetica,Arial,sans-serif;font-size:13px;padding:30px 16px}
     .wrap{max-width:1000px;margin:0 auto}
